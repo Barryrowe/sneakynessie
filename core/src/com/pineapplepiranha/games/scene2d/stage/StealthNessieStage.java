@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
+import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.actor.Cover;
@@ -34,6 +35,8 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_Y = ViewportUtil.VP_HEIGHT/2;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
     private static float MAX_COVER = 10;
+    private static float MAX_PATROLS = 5;
+
     private static float DEPTH_HEIGHT = 20f;
 
     //Actor Groups
@@ -59,7 +62,7 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE));
         addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
 
-
+        initializePatrolers();
         initializeCover();
 
 
@@ -87,6 +90,19 @@ public class StealthNessieStage extends BaseStage {
             Cover c = new Cover(x, y, 90f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
             availableCover.add(c);
             addActor(c);
+        }
+    }
+
+    private void initializePatrolers(){
+        Random rand = new Random(System.currentTimeMillis());
+        for(int i=0;i<MAX_PATROLS;i++){
+            float x = rand.nextInt((int)MAX_X);
+            float y = rand.nextInt((int)MAX_Y);
+
+            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
+            Patroler p = new Patroler(x, y, 50f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT), 50f);
+            patrolers.add(p);
+            addActor(p);
         }
     }
 
@@ -158,6 +174,15 @@ public class StealthNessieStage extends BaseStage {
                     }
                 }else{
                     player.setZIndex(c.getZIndex() + 1);
+                }
+            }
+        }
+
+        if(!player.isHiding){
+            for(Patroler p:patrolers){
+                if(p.visionBox.overlaps(player.collider)){
+                    gameProcessor.changeToScreen(SneakyNessieGame.MENU);
+                    break;
                 }
             }
         }
