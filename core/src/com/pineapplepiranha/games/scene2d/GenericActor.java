@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenActor;
 
 /**
@@ -17,6 +18,10 @@ public class GenericActor extends KasetagenActor {
 
     protected TextureRegion textureRegion;
     public Rectangle collider;
+
+    public Vector2 velocity = new Vector2(0f, 0f);
+
+    protected float rotationSpeed = 0f;
 
     public GenericActor(float x, float y, float width, float height, TextureRegion textureRegion, Color color){
         super();
@@ -47,10 +52,28 @@ public class GenericActor extends KasetagenActor {
         collider.setHeight(getHeight());
     }
 
+    protected void adjustRotation(float delta){
+        setRotation(getRotation() + (rotationSpeed * delta));
+    }
+
+    public void setRotationSpeed(float newSpeed){
+        rotationSpeed = newSpeed;
+    }
+
+    public void adjustPosition(float delta){
+        float curX = getX();
+        float curY = getY();
+        float newX = curX + (velocity.x * delta);
+        float newY = curY + (velocity.y * delta);
+        setPosition(newX, newY);
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
         adjustCollidingBox(delta);
+        adjustRotation(delta);
+        adjustPosition(delta);
     }
 
     @Override

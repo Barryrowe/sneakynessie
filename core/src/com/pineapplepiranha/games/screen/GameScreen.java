@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.delegate.IStageManager;
-import com.pineapplepiranha.games.scene2d.BaseStage;
+import com.pineapplepiranha.games.scene2d.stage.BaseStage;
 import com.pineapplepiranha.games.scene2d.GenericActor;
+import com.pineapplepiranha.games.scene2d.stage.StealthNessieStage;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
@@ -22,7 +23,7 @@ import com.pineapplepiranha.games.util.ViewportUtil;
  * Time: 1:05 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CityPuzzleScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
+public class GameScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
 
     protected IGameProcessor gameProcessor;
 
@@ -31,13 +32,19 @@ public class CityPuzzleScreen extends ApplicationAdapter implements Screen, Inpu
     private Music bgMusic;
 
 
-    public CityPuzzleScreen(IGameProcessor delegate){
+    public GameScreen(IGameProcessor delegate){
         gameProcessor = delegate;
-        //TODO: Replace with Stage Implementation!!
-        stage = new BaseStage();
+
+        stage = new StealthNessieStage(gameProcessor);
 
         bgMusic = gameProcessor.getAssetManager().get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
+
+        TextureRegion circle = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CIRCLE, AssetsUtil.TEXTURE));
+        GenericActor bgActor = new GenericActor(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, circle, Color.RED);
+        bgActor.setRotationSpeed(2f);
+        stage.addActor(bgActor);
+
         bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE));
         stage.addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
 
@@ -53,7 +60,7 @@ public class CityPuzzleScreen extends ApplicationAdapter implements Screen, Inpu
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override

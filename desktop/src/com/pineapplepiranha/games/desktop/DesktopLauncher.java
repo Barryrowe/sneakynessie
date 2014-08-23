@@ -2,7 +2,7 @@ package com.pineapplepiranha.games.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.pineapplepiranha.games.CityLightsGame;
+import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
 public class DesktopLauncher {
@@ -10,6 +10,6 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = ViewportUtil.VP_WIDTH;
         config.height = ViewportUtil.VP_HEIGHT;
-		new LwjglApplication(new CityLightsGame(), config);
+		new LwjglApplication(new SneakyNessieGame(), config);
 	}
 }

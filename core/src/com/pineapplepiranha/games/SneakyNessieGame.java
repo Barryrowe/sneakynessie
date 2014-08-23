@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
-import com.pineapplepiranha.games.screen.CityMenuScreen;
-import com.pineapplepiranha.games.screen.CityPuzzleScreen;
+import com.pineapplepiranha.games.screen.GameScreen;
+import com.pineapplepiranha.games.screen.MenuScreen;
 import com.pineapplepiranha.games.util.AssetsUtil;
 
-public class CityLightsGame extends Game implements IGameProcessor {
+public class SneakyNessieGame extends Game implements IGameProcessor {
 
-    private static final String CITY_LIGHTS_DATA_NAME = "CityLightsGame";
+    private static final String CITY_LIGHTS_DATA_NAME = "SneakyNessieGame";
 
     public static final String MENU = "menu";
     public static final String OPTIONS = "options";
@@ -24,8 +24,8 @@ public class CityLightsGame extends Game implements IGameProcessor {
 
     protected AssetManager assetManager;
 
-    private CityMenuScreen menu;
-    private CityPuzzleScreen gameScreen;
+    private MenuScreen menu;
+    private GameScreen gameScreen;
 
     @Override
     public void create () {
@@ -59,6 +59,8 @@ public class CityLightsGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE);
+
+        assetManager.load(AssetsUtil.CIRCLE, AssetsUtil.TEXTURE);
     }
 
 
@@ -72,7 +74,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
     public void changeToScreen(String screenName) {
         if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
-                menu = new CityMenuScreen(this);
+                menu = new MenuScreen(this);
             }
 
             setScreen(menu);
@@ -81,7 +83,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
         }else if(GAME.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
             if(gameScreen == null){
-                gameScreen = new CityPuzzleScreen(this);
+                gameScreen = new GameScreen(this);
             }
 
             setScreen(gameScreen);

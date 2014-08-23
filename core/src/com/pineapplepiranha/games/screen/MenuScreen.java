@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.pineapplepiranha.games.CityLightsGame;
+import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.delegate.IStageManager;
-import com.pineapplepiranha.games.scene2d.BaseStage;
+import com.pineapplepiranha.games.scene2d.stage.BaseStage;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.util.AssetsUtil;
 
@@ -27,7 +27,7 @@ import com.pineapplepiranha.games.util.AssetsUtil;
  * Time: 12:34 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CityMenuScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
+public class MenuScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
 
         protected IGameProcessor gameProcessor;
 
@@ -38,7 +38,7 @@ public class CityMenuScreen extends ApplicationAdapter implements Screen, InputP
 
 
         private Music bgMusic;
-        public CityMenuScreen(IGameProcessor delegate){
+        public MenuScreen(IGameProcessor delegate){
             this.gameProcessor = delegate;
             stage = new BaseStage();
 
@@ -52,15 +52,15 @@ public class CityMenuScreen extends ApplicationAdapter implements Screen, InputP
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    bgMusic.stop();;
+                    bgMusic.stop();
                     Actor btn = event.getListenerActor();
 
                     if(btn == startGameButton){
-                        gameProcessor.changeToScreen(CityLightsGame.GAME);
+                        gameProcessor.changeToScreen(SneakyNessieGame.GAME);
 
                     }
                     else if (btn == optionsButton){
-                        gameProcessor.changeToScreen(CityLightsGame.OPTIONS);
+                        gameProcessor.changeToScreen(SneakyNessieGame.OPTIONS);
                     }
 
                     Gdx.app.log("Menu Item Clicked", "Clicked");

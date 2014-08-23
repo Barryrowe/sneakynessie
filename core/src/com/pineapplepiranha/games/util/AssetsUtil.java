@@ -34,6 +34,7 @@ public class AssetsUtil {
     //Images
     public static final String TITLE_SCREEN = "images/bg_city.png";
     public static final String CITYSCAPE = "images/cityscape.png";
+    public static final String CIRCLE = "images/windrose.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
