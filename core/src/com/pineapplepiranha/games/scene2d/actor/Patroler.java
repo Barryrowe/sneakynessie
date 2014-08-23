@@ -24,10 +24,17 @@ public class Patroler extends DepthActor{
 
     public Rectangle visionBox;
 
+
+    private Vector2 initialPos;
+    private float minX, maxX;
+
     public Patroler(float x, float y, float width, float height, TextureRegion tr, int depthPos, float range){
         super(x, y, width, height, tr, depthPos);
         setColor(Color.BLUE);
-        velocity = new Vector2(0f, 0f);
+        initialPos = new Vector2(x, y);
+        minX = x + (width/2) - range;
+        maxX = x + (width/2) + range;
+        velocity = new Vector2(20f, 0f);
         this.depthPos = depthPos;
         this.range = range;
         this.visionBox = new Rectangle(x-(width*2), y, width*2, height);
@@ -37,6 +44,16 @@ public class Patroler extends DepthActor{
     public void act(float delta) {
         super.act(delta);
         //Adjust visionBox
+
+        if(getX() >= maxX || getX() <= minX){
+            velocity.x *= -1;
+        }
+        setPosition(getX() + (velocity.x * delta), getY());
+        if(velocity.x >= 0){
+            visionBox.setX(getX()+getWidth());
+        }else{
+            visionBox.setX(getX() - (getWidth()*2));
+        }
     }
 
     @Override
