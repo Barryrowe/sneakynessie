@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -66,13 +68,15 @@ public class StealthNessieStage extends BaseStage {
         initializeCover();
 
 
-        TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.NESSIE, AssetsUtil.TEXTURE));
-        tr.flip(true, false);
+        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
+        player = new Player(0f, 5f, 200f, 195f, walking);
         TextureRegion hidingTr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
         hidingTr.flip(true, false);
-        player = new Player(0f, 5f, 200f, 195f, tr);
         player.setHidingTexture(hidingTr);
-
+        TextureRegion tr = atlas.findRegion("nessie/Still");
+        tr.flip(true, false);
+        player.setNormalTexture(tr);
         addActor(player);
 
 
@@ -127,6 +131,7 @@ public class StealthNessieStage extends BaseStage {
                     player.speed = player.speed*2f;
                     player.setXVelocity(player.velocity.x*2f);
                     player.setYVelocity(player.velocity.y*2f);
+                    player.animation.setFrameDuration(player.animation.getFrameDuration()/2f);
                 }
 
                 return true;
@@ -150,6 +155,7 @@ public class StealthNessieStage extends BaseStage {
                     player.speed = player.speed/2f;
                     player.setXVelocity(player.velocity.x/2f);
                     player.setYVelocity(player.velocity.y/2f);
+                    player.animation.setFrameDuration(player.animation.getFrameDuration()*2f);
                 }
 
                 return true;
@@ -169,9 +175,7 @@ public class StealthNessieStage extends BaseStage {
                     c.setZIndex(player.getZIndex()+1);
                     float playerCenter = player.getX()+(player.getWidth()/2);
                     float coverCenter = c.getX() + (c.getWidth()/2);
-                    if(playerCenter > coverCenter-20f && playerCenter < coverCenter+20f){
-                        player.isHiding = true;
-                    }
+                    player.isHiding = true;
                 }else{
                     player.setZIndex(c.getZIndex() + 1);
                 }
