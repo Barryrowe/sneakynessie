@@ -40,14 +40,6 @@ public class GameScreen extends ApplicationAdapter implements Screen, InputProce
         bgMusic = gameProcessor.getAssetManager().get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
 
-        TextureRegion circle = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CIRCLE, AssetsUtil.TEXTURE));
-        GenericActor bgActor = new GenericActor(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, circle, Color.RED);
-        bgActor.setRotationSpeed(2f);
-        stage.addActor(bgActor);
-
-        bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE));
-        stage.addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
-
 
         bgMusic.setLooping(true);
         bgMusic.play();

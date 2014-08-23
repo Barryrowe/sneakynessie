@@ -13,7 +13,7 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  */
 public class Player extends GenericActor{
 
-    public float speed = 20f;
+    public float speed = 250f;
 
     private float keyFrameTotal = 0f;
     public Animation animation;
