@@ -34,7 +34,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MIN_X = 1f;
     private static float MAX_X = ViewportUtil.VP_WIDTH*5;
     private static float MIN_Y = 1f;
-    private static float MAX_Y = ViewportUtil.VP_HEIGHT/2;
+    private static float MAX_Y = ViewportUtil.VP_HEIGHT/3;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
     private static float MAX_COVER = 10;
     private static float MAX_PATROLS = 5;
@@ -57,6 +57,8 @@ public class StealthNessieStage extends BaseStage {
         initializePatrolers(am);
         initializeCover(am);
 
+        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE));
+        addActor(new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.PURPLE));
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
@@ -65,9 +67,13 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion normalTr = atlas.findRegion("nessie/Still");
         normalTr.flip(true, false);
 
-        player = new Player(0f, 5f, 200f, 195f, walking);
+        TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
+        disguisedTr.flip(true, false);
+
+        player = new Player(0f, 5f, 150f, 150f, walking);
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
+        player.disguisedTexture = disguisedTr;
         addActor(player);
 
         initializeInputListeners();
@@ -127,6 +133,13 @@ public class StealthNessieStage extends BaseStage {
                     player.animation.setFrameDuration(player.animation.getFrameDuration()/2f);
                 }
 
+
+                if(Input.Keys.SPACE == keycode){
+                    if(!player.isHiding){
+                        player.isDisguised = !player.isDisguised;
+                    }
+                }
+
                 return true;
             }
 
@@ -175,7 +188,7 @@ public class StealthNessieStage extends BaseStage {
             }
         }
 
-        if(!player.isHiding){
+        if(!player.isHiding && !player.isDisguised){
             for(Patroler p:patrolers){
                 if(p.visionBox.overlaps(player.collider)){
                     gameProcessor.changeToScreen(SneakyNessieGame.MENU);

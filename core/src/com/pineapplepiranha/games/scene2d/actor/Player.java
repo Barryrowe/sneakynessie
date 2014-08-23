@@ -21,15 +21,17 @@ public class Player extends DepthActor{
     //THIS IS GROSS!!!
     private static float BUFFER = 20f;
 
-    public float speed = 250f;
+    public float speed = 180f;
 
     private float keyFrameTotal = 0f;
     public Animation animation = null;
 
     public TextureRegion hidingTexture;
     public TextureRegion normalTexture;
+    public TextureRegion disguisedTexture;
 
     public boolean isHiding = false;
+    public boolean isDisguised = false;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
         super(x+BUFFER, y+BUFFER, width-BUFFER*2, height-(BUFFER*2), tr, 0);
@@ -52,50 +54,67 @@ public class Player extends DepthActor{
     }
 
     @Override
+    public void adjustPosition(float delta) {
+        if(!isDisguised){
+            super.adjustPosition(delta);
+        }
+    }
+
+    @Override
     public void act(float delta) {
         super.act(delta);
 
-        if(velocity.x == 0.0f && velocity.y == 0.0f){
-            //
-            if(isHiding){
-                textureRegion = hidingTexture;
-            }else {
-                textureRegion = normalTexture;
-            }
-            keyFrameTotal = 0f;
-        }else if(animation != null){
-            textureRegion = animation.getKeyFrame(keyFrameTotal, true);
-            if(velocity.x < 0f){
-                textureRegion.flip(true, false);
-                Gdx.app.log("NESSIE", "ANIMATION FLIP!");
-            }
-            Gdx.app.log("NESSIE", "KeyFrame: " + keyFrameTotal);
-            keyFrameTotal += delta;
-        }
 
-        if(velocity.x > 0.0f){
-            if(!textureRegion.isFlipX()){
-                textureRegion.flip(true, false);
-            }
+        if(isDisguised){
+            //Draw Disguised and return
 
-            if(!hidingTexture.isFlipX()){
-                hidingTexture.flip(true, false);
+            if(disguisedTexture != null){
+                textureRegion = disguisedTexture;
             }
-
-            if(!normalTexture.isFlipX()){
-                normalTexture.flip(true, false);
-            }
-        }else if(velocity.x < 0.0f){
-            if(textureRegion.isFlipX()){
-                textureRegion.flip(true, false);
+            return;
+        }else{
+            if(velocity.x == 0.0f && velocity.y == 0.0f){
+                //
+                if(isHiding){
+                    textureRegion = hidingTexture;
+                }else {
+                    textureRegion = normalTexture;
+                }
+                keyFrameTotal = 0f;
+            }else if(animation != null){
+                textureRegion = animation.getKeyFrame(keyFrameTotal, true);
+                if(velocity.x < 0f){
+                    textureRegion.flip(true, false);
+                    Gdx.app.log("NESSIE", "ANIMATION FLIP!");
+                }
+                Gdx.app.log("NESSIE", "KeyFrame: " + keyFrameTotal);
+                keyFrameTotal += delta;
             }
 
-            if(hidingTexture.isFlipX()){
-                hidingTexture.flip(true, false);
-            }
+            if(velocity.x > 0.0f){
+                if(!textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
 
-            if(normalTexture.isFlipX()){
-                normalTexture.flip(true, false);
+                if(!hidingTexture.isFlipX()){
+                    hidingTexture.flip(true, false);
+                }
+
+                if(!normalTexture.isFlipX()){
+                    normalTexture.flip(true, false);
+                }
+            }else if(velocity.x < 0.0f){
+                if(textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
+
+                if(hidingTexture.isFlipX()){
+                    hidingTexture.flip(true, false);
+                }
+
+                if(normalTexture.isFlipX()){
+                    normalTexture.flip(true, false);
+                }
             }
         }
     }
