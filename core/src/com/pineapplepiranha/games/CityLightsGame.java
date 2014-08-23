@@ -57,6 +57,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
 
         assetManager.load(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE);
     }
 

@@ -3,9 +3,11 @@ package com.pineapplepiranha.games.screen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.delegate.IStageManager;
 import com.pineapplepiranha.games.scene2d.BaseStage;
@@ -26,6 +28,7 @@ public class CityPuzzleScreen extends ApplicationAdapter implements Screen, Inpu
 
     private Stage stage;
     private TextureRegion bgTextureRegion;
+    private Music bgMusic;
 
 
     public CityPuzzleScreen(IGameProcessor delegate){
@@ -33,9 +36,14 @@ public class CityPuzzleScreen extends ApplicationAdapter implements Screen, Inpu
         //TODO: Replace with Stage Implementation!!
         stage = new BaseStage();
 
+        bgMusic = gameProcessor.getAssetManager().get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
+        bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
         bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE));
         stage.addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
 
+
+        bgMusic.setLooping(true);
+        bgMusic.play();
     }
 
     @Override
