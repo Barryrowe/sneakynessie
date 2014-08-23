@@ -9,6 +9,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.screen.CityMenuScreen;
+import com.pineapplepiranha.games.screen.CityPuzzleScreen;
 import com.pineapplepiranha.games.util.AssetsUtil;
 
 public class CityLightsGame extends Game implements IGameProcessor {
@@ -24,7 +25,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
     protected AssetManager assetManager;
 
     private CityMenuScreen menu;
-    //private CityPuzzleScreen gameScreen;
+    private CityPuzzleScreen gameScreen;
 
     @Override
     public void create () {
@@ -56,6 +57,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
 
         assetManager.load(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE);
     }
 
 
@@ -77,12 +79,12 @@ public class CityLightsGame extends Game implements IGameProcessor {
 
         }else if(GAME.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
-//            if(gameScreen == null){
-//                gameScreen = new CityPuzzleScreen(this);
-//            }
-//
-//            setScreen(gameScreen);
-//            Gdx.input.setInputProcessor(gameScreen.getStage());
+            if(gameScreen == null){
+                gameScreen = new CityPuzzleScreen(this);
+            }
+
+            setScreen(gameScreen);
+            Gdx.input.setInputProcessor(gameScreen.getStage());
         }
     }
 

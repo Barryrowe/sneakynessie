@@ -60,7 +60,7 @@ public class CityMenuScreen extends ApplicationAdapter implements Screen, InputP
 
                     }
                     else if (btn == optionsButton){
-                        //gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
+                        gameProcessor.changeToScreen(CityLightsGame.OPTIONS);
                     }
 
                     Gdx.app.log("Menu Item Clicked", "Clicked");
