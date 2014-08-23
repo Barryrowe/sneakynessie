@@ -1,0 +1,20 @@
+
+animations.png
+size: 1004,865
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Nessi-Pattern
+  rotate: false
+  xy: 0, 0
+  size: 800, 863
+  orig: 800, 863
+  offset: 0, 0
+  index: -1
+Nessi-Teal
+  rotate: false
+  xy: 802, 668
+  size: 200, 195
+  orig: 200, 195
+  offset: 0, 0
+  index: -1
