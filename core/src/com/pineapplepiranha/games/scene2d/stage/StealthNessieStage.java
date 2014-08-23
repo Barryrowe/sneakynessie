@@ -17,6 +17,8 @@ import com.pineapplepiranha.games.scene2d.actor.Player;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
+import java.util.Random;
+
 /**
  * Created with IntelliJ IDEA.
  * User: barry
@@ -31,7 +33,8 @@ public class StealthNessieStage extends BaseStage {
     private static float MIN_Y = 1f;
     private static float MAX_Y = ViewportUtil.VP_HEIGHT/2;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
-
+    private static float MAX_COVER = 10;
+    private static float DEPTH_HEIGHT = 20f;
 
     //Actor Groups
     public LevelBackground background;
@@ -43,6 +46,8 @@ public class StealthNessieStage extends BaseStage {
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
         AssetManager am = gameProcessor.getAssetManager();
+        availableCover = new Array<Cover>();
+        patrolers = new Array<Patroler>();
 
         //TextureAtlas atlas = am.get(AssetUtils.ANIMATIONS, AssetsUtil.TEXTURE_ATLAS);
 
@@ -55,14 +60,32 @@ public class StealthNessieStage extends BaseStage {
         addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
 
 
+        initializeCover();
 
-        player = new Player(0f, 5f, 40f, 30f, null);
+
+        TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
+        player = new Player(0f, 5f, 40f, 30f, tr);
+
         addActor(player);
 
 
 
         initializeInputListeners();
     }
+
+    private void initializeCover(){
+        Random rand = new Random(System.currentTimeMillis());
+        for(int i=0;i<MAX_COVER;i++){
+            float x = rand.nextInt((int)MAX_X);
+            float y = rand.nextInt((int)MAX_Y);
+
+            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
+            Cover c = new Cover(x, y, 30f, 30f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
+            availableCover.add(c);
+            addActor(c);
+        }
+    }
+
 
     private void initializeInputListeners(){
         this.addListener(new InputListener(){
@@ -117,6 +140,18 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        for(Cover c:availableCover){
+            if(player.collider.overlaps(c.collider)){
+                if(player.getY() > c.getY()){
+                    c.setZIndex(player.getZIndex()+1);
+                }else{
+                    player.setZIndex(c.getZIndex() + 1);
+                }
+            }
+        }
+        float y = player.getY();
+        player.depthPos = (int)Math.floor(MAX_Y-y/DEPTH_HEIGHT);
 
         if(player.getX() < MIN_X){
             player.setX(MIN_X);

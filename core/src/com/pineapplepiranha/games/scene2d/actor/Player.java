@@ -2,6 +2,7 @@ package com.pineapplepiranha.games.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 
 /**
@@ -11,15 +12,22 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  * Time: 11:03 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Player extends GenericActor{
+public class Player extends DepthActor{
 
     public float speed = 250f;
 
     private float keyFrameTotal = 0f;
     public Animation animation;
 
+    public Player(float x, float y, float width, float height, TextureRegion tr){
+        super(x, y, width, height, tr, 0);
+        setColor(Color.YELLOW);
+        animation = null;
+    }
+
     public Player(float x, float y, float width, float height, Animation anim){
-        super(x, y, width, height, Color.YELLOW);
+        super(x, y, width, height, 0);
+        setColor(Color.YELLOW);
         animation = anim;
     }
 
@@ -47,8 +55,4 @@ public class Player extends GenericActor{
     public void setVelocity(float x, float y){
         velocity.set(x, y);
     }
-
-
-
-
 }
