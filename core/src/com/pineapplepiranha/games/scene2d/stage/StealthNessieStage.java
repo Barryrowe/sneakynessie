@@ -63,8 +63,12 @@ public class StealthNessieStage extends BaseStage {
         initializeCover();
 
 
-        TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
-        player = new Player(0f, 5f, 40f, 30f, tr);
+        TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.NESSIE, AssetsUtil.TEXTURE));
+        tr.flip(true, false);
+        TextureRegion hidingTr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
+        hidingTr.flip(true, false);
+        player = new Player(0f, 5f, 200f, 195f, tr);
+        player.setHidingTexture(hidingTr);
 
         addActor(player);
 
@@ -80,7 +84,7 @@ public class StealthNessieStage extends BaseStage {
             float y = rand.nextInt((int)MAX_Y);
 
             TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
-            Cover c = new Cover(x, y, 30f, 30f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
+            Cover c = new Cover(x, y, 90f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
             availableCover.add(c);
             addActor(c);
         }
@@ -127,7 +131,7 @@ public class StealthNessieStage extends BaseStage {
                 }
 
                 if(Input.Keys.SHIFT_LEFT == keycode){
-                      player.speed = player.speed/2f;
+                    player.speed = player.speed/2f;
                     player.setXVelocity(player.velocity.x/2f);
                     player.setYVelocity(player.velocity.y/2f);
                 }
@@ -141,10 +145,17 @@ public class StealthNessieStage extends BaseStage {
     public void act(float delta) {
         super.act(delta);
 
+        player.isHiding = false;
         for(Cover c:availableCover){
+
             if(player.collider.overlaps(c.collider)){
                 if(player.getY() > c.getY()){
                     c.setZIndex(player.getZIndex()+1);
+                    float playerCenter = player.getX()+(player.getWidth()/2);
+                    float coverCenter = c.getX() + (c.getWidth()/2);
+                    if(playerCenter > coverCenter-20f && playerCenter < coverCenter+20f){
+                        player.isHiding = true;
+                    }
                 }else{
                     player.setZIndex(c.getZIndex() + 1);
                 }

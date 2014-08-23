@@ -37,7 +37,8 @@ public class AssetsUtil {
     public static final String CIRCLE = "images/windrose.png";
     public static final String TREE_1 = "images/tree-1.png";
     public static final String TREE_2 = "images/tree-2.png";
-
+    public static final String NESSIE_PTRN = "images/Nessi-Pattern.png";
+    public static final String NESSIE = "images/Nessi-Teal.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";

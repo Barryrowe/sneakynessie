@@ -1,5 +1,6 @@
 package com.pineapplepiranha.games.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,11 +18,17 @@ public class Player extends DepthActor{
     public float speed = 250f;
 
     private float keyFrameTotal = 0f;
-    public Animation animation;
+    public Animation animation = null;
+
+    public TextureRegion hidingTexture;
+    public TextureRegion normalTexture;
+
+    public boolean isHiding = false;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
         super(x, y, width, height, tr, 0);
         setColor(Color.YELLOW);
+        normalTexture = tr;
         animation = null;
     }
 
@@ -38,7 +45,25 @@ public class Player extends DepthActor{
             keyFrameTotal += delta;
 
             textureRegion = animation.getKeyFrame(keyFrameTotal);
-            if(velocity.x < 0){
+            if(velocity.x < 0f){
+                textureRegion.flip(true, false);
+                Gdx.app.log("NESSIE", "ANIMATION FLIP!");
+            }
+        }
+
+        if(isHiding){
+            textureRegion = hidingTexture;
+        }else{
+            textureRegion = normalTexture;
+        }
+
+
+        if(velocity.x > 0.0f){
+            if(!textureRegion.isFlipX()){
+                textureRegion.flip(true, false);
+            }
+        }else if(velocity.x < 0.0f){
+            if(textureRegion.isFlipX()){
                 textureRegion.flip(true, false);
             }
         }
@@ -52,7 +77,7 @@ public class Player extends DepthActor{
         velocity.y = vel;
     }
 
-    public void setVelocity(float x, float y){
-        velocity.set(x, y);
+    public void setHidingTexture(TextureRegion tr){
+        hidingTexture = tr;
     }
 }

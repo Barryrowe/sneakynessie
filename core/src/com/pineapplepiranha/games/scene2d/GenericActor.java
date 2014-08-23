@@ -68,12 +68,17 @@ public class GenericActor extends KasetagenActor {
         setPosition(newX, newY);
     }
 
+
+    public void adjustOrigin(float delta){
+        setOrigin(getX()+(getWidth()/2), getY()+(getHeight()/2));
+    }
     @Override
     public void act(float delta) {
         super.act(delta);
         adjustCollidingBox(delta);
         adjustRotation(delta);
         adjustPosition(delta);
+        adjustOrigin(delta);
     }
 
     @Override

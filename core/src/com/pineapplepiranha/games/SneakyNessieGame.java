@@ -43,7 +43,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
                 isInitialized = true;
             }
 
-            Gdx.gl.glClearColor(.16f, .14f, .13f, 1);
+            Gdx.gl.glClearColor(0f, 0f, 0f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             super.render();
@@ -61,6 +61,8 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.NESSIE, AssetsUtil.TEXTURE);
 
         assetManager.load(AssetsUtil.CIRCLE, AssetsUtil.TEXTURE);
     }
