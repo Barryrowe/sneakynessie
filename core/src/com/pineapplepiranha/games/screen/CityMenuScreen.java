@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.pineapplepiranha.games.CityLightsGame;
+import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.delegate.IStageManager;
 import com.pineapplepiranha.games.scene2d.BaseStage;
@@ -41,9 +42,9 @@ public class CityMenuScreen extends ApplicationAdapter implements Screen, InputP
             this.gameProcessor = delegate;
             stage = new BaseStage();
 
-//            bgMusic = delegate.getAssetManager().get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
-//            bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
-//            bgMusic.play();
+            bgMusic = delegate.getAssetManager().get(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
+            bgMusic.setVolume(delegate.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
+            bgMusic.play();
 
 
             ClickListener listener = new ClickListener()

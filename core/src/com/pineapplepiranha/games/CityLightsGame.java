@@ -54,7 +54,10 @@ public class CityLightsGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_12, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+
+        assetManager.load(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
     }
+
 
     //IGameProcessor
     @Override
@@ -106,7 +109,7 @@ public class CityLightsGame extends Game implements IGameProcessor {
     @Override
     public float getStoredFloat(String key) {
         Preferences preferences = Gdx.app.getPreferences(CITY_LIGHTS_DATA_NAME);
-        float value = -1f;
+        float value = 1f;
         if(preferences.contains(key)){
             value = preferences.getFloat(key);
         }

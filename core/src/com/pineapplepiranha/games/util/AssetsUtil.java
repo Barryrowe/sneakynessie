@@ -32,11 +32,14 @@ public class AssetsUtil {
     public static final String DEFAULT_SKIN = "uiskin.json";
 
     //Images
-    public static final String TITLE_SCREEN = "badlogic.jpg";
+    public static final String TITLE_SCREEN = "images/bg_city.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
     public static final String COURIER_FONT_18 = "fonts/courier-new-bold-18.fnt";
     public static final String COURIER_FONT_32 = "fonts/courier-new-bold-32.fnt";
     public static final String COURIER_FONT_IMG = "fonts/courier-new-bold.png";
+
+    //Music
+    public static final String BG_MUSIC = "music/robowack.mp3";
 }
