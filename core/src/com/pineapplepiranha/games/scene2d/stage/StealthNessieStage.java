@@ -13,10 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
-import com.pineapplepiranha.games.scene2d.actor.Cover;
-import com.pineapplepiranha.games.scene2d.actor.LevelBackground;
-import com.pineapplepiranha.games.scene2d.actor.Patroler;
-import com.pineapplepiranha.games.scene2d.actor.Player;
+import com.pineapplepiranha.games.scene2d.actor.*;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
@@ -39,6 +36,8 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_COVER = 10;
     private static float MAX_PATROLS = 5;
 
+    private static float ICON_SIZE = 50f;
+
     private static float DEPTH_HEIGHT = 20f;
 
     //Actor Groups
@@ -46,6 +45,7 @@ public class StealthNessieStage extends BaseStage {
     public Array<Cover> availableCover;
     public Array<Patroler> patrolers;
     public Player player;
+    public DisguiseIndicator disguiseIndicator;
 
 
     public StealthNessieStage(IGameProcessor gameProcessor){
@@ -75,6 +75,11 @@ public class StealthNessieStage extends BaseStage {
         player.setNormalTexture(normalTr);
         player.disguisedTexture = disguisedTr;
         addActor(player);
+
+
+        TextureRegion maskIcon = new TextureRegion(am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE));
+        disguiseIndicator = new DisguiseIndicator(ViewportUtil.VP_WIDTH - (ICON_SIZE*2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*2), ICON_SIZE, ICON_SIZE, maskIcon);
+        addActor(disguiseIndicator);
 
         initializeInputListeners();
     }
@@ -173,14 +178,17 @@ public class StealthNessieStage extends BaseStage {
     public void act(float delta) {
         super.act(delta);
 
+        float cameraRight = getCamera().position.x + (getCamera().viewportWidth/2);
+        float cameraTop = getCamera().position.y + (getCamera().viewportHeight/2);
+
+        disguiseIndicator.setPosition(cameraRight-ICON_SIZE, cameraTop-ICON_SIZE);
+
         player.isHiding = false;
         for(Cover c:availableCover){
 
             if(player.collider.overlaps(c.collider)){
                 if(player.getY() > c.getY()){
                     c.setZIndex(player.getZIndex()+1);
-                    float playerCenter = player.getX()+(player.getWidth()/2);
-                    float coverCenter = c.getX() + (c.getWidth()/2);
                     player.isHiding = true;
                 }else{
                     player.setZIndex(c.getZIndex() + 1);
