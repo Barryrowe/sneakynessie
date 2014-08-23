@@ -54,57 +54,50 @@ public class StealthNessieStage extends BaseStage {
         availableCover = new Array<Cover>();
         patrolers = new Array<Patroler>();
 
-        //TextureAtlas atlas = am.get(AssetUtils.ANIMATIONS, AssetsUtil.TEXTURE_ATLAS);
-
-        TextureRegion circle = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CIRCLE, AssetsUtil.TEXTURE));
-        GenericActor bgActor = new GenericActor(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, circle, Color.RED);
-        bgActor.setRotationSpeed(2f);
-        addActor(bgActor);
-
-        TextureRegion bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.CITYSCAPE, AssetsUtil.TEXTURE));
-        addActor(new GenericActor(0f, ViewportUtil.VP_HEIGHT/2, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT/2, bgTextureRegion, Color.YELLOW));
-
-        initializePatrolers();
-        initializeCover();
+        initializePatrolers(am);
+        initializeCover(am);
 
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
-        player = new Player(0f, 5f, 200f, 195f, walking);
-        TextureRegion hidingTr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
+        TextureRegion hidingTr = new TextureRegion(am.get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
         hidingTr.flip(true, false);
+        TextureRegion normalTr = atlas.findRegion("nessie/Still");
+        normalTr.flip(true, false);
+
+        player = new Player(0f, 5f, 200f, 195f, walking);
         player.setHidingTexture(hidingTr);
-        TextureRegion tr = atlas.findRegion("nessie/Still");
-        tr.flip(true, false);
-        player.setNormalTexture(tr);
+        player.setNormalTexture(normalTr);
         addActor(player);
-
-
 
         initializeInputListeners();
     }
 
-    private void initializeCover(){
+    private void initializeCover(AssetManager am){
         Random rand = new Random(System.currentTimeMillis());
         for(int i=0;i<MAX_COVER;i++){
             float x = rand.nextInt((int)MAX_X);
             float y = rand.nextInt((int)MAX_Y);
 
-            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
+            TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
             Cover c = new Cover(x, y, 90f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
             availableCover.add(c);
             addActor(c);
         }
     }
 
-    private void initializePatrolers(){
-        Random rand = new Random(System.currentTimeMillis());
+    private void initializePatrolers(AssetManager am){
+        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
+        TextureRegion flashlightTexture = new TextureRegion(am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE));
+        Random rand = new Random(System.currentTimeMillis()*System.currentTimeMillis());
         for(int i=0;i<MAX_PATROLS;i++){
             float x = rand.nextInt((int)MAX_X);
             float y = rand.nextInt((int)MAX_Y);
 
-            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
-            Patroler p = new Patroler(x, y, 50f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT), 50f);
+
+            Patroler p = new Patroler(x, y, 50f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT), ViewportUtil.VP_WIDTH);
+            p.setFlashlightTextureRegion(flashlightTexture);
+
             patrolers.add(p);
             addActor(p);
         }
