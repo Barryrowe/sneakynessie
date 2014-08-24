@@ -49,19 +49,26 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_DISGUISE = 3;
     private static int NO_TREES_ZONE = 1400;
     private static float MOON_PARALLAX_RATIO = 1f/1.05f;
+    private static float DISTANT_PARALLAX_RATIO = 1f/2.5f;
     private static float FAR_PARALLAX_RATIO = 1f/5f;
     private static float NEAR_PARALLAX_RATIO = 1f/10f;
+
+    //Stars
+    private static float STAR_TWINKLE_RATE = 1f/3f;
+    private static int MAX_STARS = 20;
+    private static float STAR_SIZE = 30f;
 
     private static float ICON_SIZE = 50f;
 
     private static float DEPTH_HEIGHT = 20f;
 
-    private static Vector2 playerPos, farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos;
+    private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos;
 
     static {
         playerPos = new Vector2(10f, 10f);
-        farParallaxPos = new Vector2(500f, 140f);
-        nearParallaxPos = new Vector2(600f, 140f);
+        distantParalaxPos = new Vector2(700f, -50f);
+        farParallaxPos = new Vector2(500f, 130f);
+        nearParallaxPos = new Vector2(600f, 130f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/3)*2);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
     }
@@ -73,6 +80,7 @@ public class StealthNessieStage extends BaseStage {
     public Array<Cover> availableCover;
     public Array<Patroler> patrolers;
     public Array<Disguise> disguises;
+    public Array<AnimatedActor> stars;
     public Player player;
     public DisguisePowerUps disguisePowerUps;
 
@@ -83,6 +91,7 @@ public class StealthNessieStage extends BaseStage {
     private int depthInitialIndex;
 
     public GenericActor moon;
+    public Parallax distantParallax;
     public Parallax farParallax;
     public Parallax nearParallax;
 
@@ -92,6 +101,7 @@ public class StealthNessieStage extends BaseStage {
         availableCover = new Array<Cover>();
         patrolers = new Array<Patroler>();
         disguises = new Array<Disguise>();
+        stars = new Array<AnimatedActor>();
 
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
@@ -105,9 +115,14 @@ public class StealthNessieStage extends BaseStage {
         clouds.setZIndex(depthInitialIndex++);
 
         TextureRegion moonTexture = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
-        moon = new GenericActor(initialMoonPos.x, initialMoonPos.y, 150f, 150f, moonTexture, Color.YELLOW);
+        moon = new GenericActor(initialMoonPos.x, initialMoonPos.y, 100f, 100f, moonTexture, Color.YELLOW);
         addActor(moon);
         moon.setZIndex(depthInitialIndex++);
+
+        TextureRegion distantParallaxRegion = new TextureRegion(am.get(AssetsUtil.MOUNTAINS, AssetsUtil.TEXTURE));
+        distantParallax = new Parallax(distantParalaxPos.x, distantParalaxPos.y, distantParallaxRegion);
+        addActor(distantParallax);
+        distantParallax.setZIndex(depthInitialIndex++);
 
         TextureRegion farParallaxRegion = new TextureRegion(am.get(AssetsUtil.FAR_TREES, AssetsUtil.TEXTURE));
         farParallax = new Parallax(farParallaxPos.x, farParallaxPos.y, farParallaxRegion);
@@ -148,6 +163,7 @@ public class StealthNessieStage extends BaseStage {
         initializeDisguies(am);
         initializePatrolers(am);
         initializeCover(am);
+        initializeStars(am);
 
         TextureRegion maskIcon = new TextureRegion(am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE));
         disguisePowerUps = new DisguisePowerUps(powerupsPos.x,
@@ -228,6 +244,21 @@ public class StealthNessieStage extends BaseStage {
 
     }
 
+    private void initializeStars(AssetManager am){
+        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Random rand = new Random(System.currentTimeMillis()*System.currentTimeMillis());
+        Animation ani = new Animation(STAR_TWINKLE_RATE, atlas.findRegions("star/Star"));
+        for(int i=0;i<MAX_STARS;i++){
+            float x = rand.nextInt((int)MAX_X);
+            float y = rand.nextInt((int)getHeight()- (int)initialMoonPos.y) + initialMoonPos.y;
+            float width = rand.nextInt((int)(STAR_SIZE*1.25f)) + STAR_SIZE/4;
+            float keyFrame = rand.nextInt((int)(1/STAR_TWINKLE_RATE))*STAR_TWINKLE_RATE;
+            AnimatedActor star = new AnimatedActor(x, y, width, width, ani, keyFrame);
+            stars.add(star);
+            clouds.addActor(star);
+            star.setZIndex(clouds.getChildren().size -1);
+        }
+    }
 
     private void initializeInputListeners(){
         this.addListener(new InputListener(){
@@ -295,11 +326,13 @@ public class StealthNessieStage extends BaseStage {
     public void act(float delta) {
 
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f){
+            distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
             moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
             farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
             nearParallax.velocity.x = NEAR_PARALLAX_RATIO * player.velocity.x;
         }else{
             moon.velocity.x = 0f;
+            distantParallax.velocity.x = 0f;
             farParallax.velocity.x = 0f;
             nearParallax.velocity.x = 0f;
         }
@@ -361,8 +394,6 @@ public class StealthNessieStage extends BaseStage {
                 resetLevel();
             }
         }
-
-        Gdx.app.log("Player Z:", "Player Z: " + player.getZIndex() + " Near Paralax Z: " + nearParallax.getZIndex());
     }
 
     private void reorderDepthActors(){
@@ -373,25 +404,27 @@ public class StealthNessieStage extends BaseStage {
              }
         }
 
+        //Order front to back, then apply Z Indexes highest to lowest
         depths.sort(new Comparator<DepthActor>() {
             @Override
             public int compare(DepthActor o1, DepthActor o2) {
-                return -1*Float.compare(o1.getY(), o2.getY());
+                return Float.compare(o1.getY(), o2.getY());
             }
         });
 
-        int size = depths.size;
-        int initialZ = depthInitialIndex;
+        int initialZ = getActors().size -1;
         for(DepthActor d:depths){
-            d.setZIndex(initialZ++);
+            d.setZIndex(initialZ--);
         }
 
-        clouds.setZIndex(0);
-        moon.setZIndex(1);
-        farParallax.setZIndex(2);
-        nearParallax.setZIndex(3);
-        background.setZIndex(4);
-        waves.setZIndex(5);
+        int index = 0;
+        clouds.setZIndex(index++);
+        moon.setZIndex(index++);
+        distantParallax.setZIndex(index++);
+        farParallax.setZIndex(index++);
+        nearParallax.setZIndex(index++);
+        background.setZIndex(index++);
+        waves.setZIndex(index);
     }
 
     private void adjustCamera() {

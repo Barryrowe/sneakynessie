@@ -73,6 +73,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.MOON, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.MOUNTAINS, AssetsUtil.TEXTURE);
 
 
         assetManager.load(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
