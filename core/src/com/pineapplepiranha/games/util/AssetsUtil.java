@@ -62,4 +62,5 @@ public class AssetsUtil {
     //SFX
     public static final String ALIEN_UP = "sfx/alien_up.mp3";
     public static final String WHISTLE = "sfx/whistle.mp3";
+    public static final String WALKING = "sfx/nessie_walk.mp3";
 }

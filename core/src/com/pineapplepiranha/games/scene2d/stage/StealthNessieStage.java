@@ -93,6 +93,8 @@ public class StealthNessieStage extends BaseStage {
     private int depthInitialIndex;
     private Sound alienUp;
     private Sound whistle;
+    private Sound walking;
+    private long walkId = -1L;
 
 
     public GenericActor moon;
@@ -113,6 +115,7 @@ public class StealthNessieStage extends BaseStage {
 
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         whistle = am.get(AssetsUtil.WHISTLE, AssetsUtil.SOUND);
+        walking = am.get(AssetsUtil.WALKING, AssetsUtil.SOUND);
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(0.5f);//gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
 
@@ -500,6 +503,17 @@ public class StealthNessieStage extends BaseStage {
                 //resetLevel();
             }
         }
+
+        if(player.velocity.x != 0f || player.velocity.y != 0f){
+            if(walkId < 0L){
+                walkId = walking.loop();
+            }else{
+                walking.resume(walkId);
+            }
+        }else{
+            walking.pause(walkId);
+        }
+
     }
 
     private void reorderDepthActors(){
