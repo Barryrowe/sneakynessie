@@ -282,52 +282,31 @@ public class StealthNessieStage extends BaseStage {
             addActor(c);
         }
 
-//        Random rand = new Random(System.currentTimeMillis());
-//        for(int i=0;i<MAX_COVER;i++){
-//            float x = rand.nextInt((int)MAX_X - (NO_TREES_ZONE)) + NO_TREES_ZONE;
-//            float y = rand.nextInt((int)MAX_Y);
-//
-//            Texture t = null;
-//            float width = 10f;
-//            float height = 10f;
-//            switch(i%3){
-//                case 0:
-//                    t = am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
-//                    width = 129f;
-//                    height = 121f;
-//                    break;
-//                case 1:
-//                    t = am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE);
-//                    width = 150f;
-//                    height = 254f;
-//                    break;
-//                case 2:
-//                    t = am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
-//                    width = 161f;
-//                    height = 279f;
-//                    break;
-//                default:
-//                    break;
-//            }
-//            TextureRegion tr = new TextureRegion(t);
-//            Cover c = new Cover(x, y, width, height, tr, (int)Math.floor(x/DEPTH_HEIGHT));
-//            availableCover.add(c);
-//            addActor(c);
-//        }
     }
 
     private void initializePatrolers(AssetManager am){
-        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
-        TextureRegion flashlightTexture = new TextureRegion(am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE));
-        Random rand = new Random(System.currentTimeMillis()*System.currentTimeMillis());
-        for(int i=0;i<MAX_PATROLS;i++){
-            float x = rand.nextInt((int)MAX_X - NO_TREES_ZONE) + NO_TREES_ZONE;
-            float y = rand.nextInt((int)MAX_Y);
 
+        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-            Patroler p = new Patroler(x, y, 50f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT), ViewportUtil.VP_WIDTH);
+        Array<Vector3> patrolVals = new Array<Vector3>();
+        patrolVals.add(new Vector3(1926, 720-504, 600));
+        patrolVals.add(new Vector3(2598, 720-596, 500));
+        patrolVals.add(new Vector3(4050, 720-562, 800));
+        patrolVals.add(new Vector3(5012, 720-500, 750));
+        patrolVals.add(new Vector3(5620, 720-660, 1500));
+        patrolVals.add(new Vector3(6482, 720-578, 500));
+        patrolVals.add(new Vector3(11000, 720-502, 500));
+        patrolVals.add(new Vector3(11000, 720-602, 500));
+        patrolVals.add(new Vector3(11000, 720-702, 500));
+        Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
+
+        float width = 50f;
+        float height = 100f;
+        for(Vector3 pv:patrolVals){
+            Animation animation = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
+            TextureRegion flashlightTexture = new TextureRegion(flTexture);
+            Patroler p = new Patroler(pv.x, pv.y, width, height, animation, 0, pv.z);
             p.setFlashlightTextureRegion(flashlightTexture);
-
             patrolers.add(p);
             addActor(p);
         }

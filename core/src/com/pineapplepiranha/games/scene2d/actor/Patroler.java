@@ -2,6 +2,7 @@ package com.pineapplepiranha.games.scene2d.actor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,7 +30,22 @@ public class Patroler extends DepthActor{
     private float minX, maxX;
 
     TextureRegion flashlight;
+    public Animation animation;
 
+    private float keyFrameTime = 0f;
+
+    public Patroler(float x, float y, float width, float height, Animation ani, int depthPos, float range){
+        super(x, y, width, height, depthPos);
+        setColor(Color.BLUE);
+        initialPos = new Vector2(x, y);
+        minX = x + (width/2) - range;
+        maxX = x + (width/2) + range;
+        velocity = new Vector2(speed, 0f);
+        this.depthPos = depthPos;
+        this.range = range;
+        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/2), getVisionBoxWidth(), height*2);
+        this.animation = ani;
+    }
     public Patroler(float x, float y, float width, float height, TextureRegion tr, int depthPos, float range){
         super(x, y, width, height, tr, depthPos);
         setColor(Color.BLUE);
@@ -51,6 +67,11 @@ public class Patroler extends DepthActor{
         super.act(delta);
         //Adjust visionBox
 
+        if(animation != null){
+            textureRegion = animation.getKeyFrame(keyFrameTime, true);
+            keyFrameTime += delta;
+        }
+
         if(getX() >= maxX || getX() <= minX){
             velocity.x *= -1;
         }
@@ -60,16 +81,20 @@ public class Patroler extends DepthActor{
             if(flashlight != null && !flashlight.isFlipX()){
                 flashlight.flip(true, false);
             }
+
+            if(textureRegion != null && !textureRegion.isFlipX()){
+                textureRegion.flip(true, false);
+            }
         }else{
             visionBox.setX(getX() - (getVisionBoxWidth()));
             if(flashlight != null && flashlight.isFlipX()){
                 flashlight.flip(true, false);
             }
-        }
 
-        //Force to the front. This is a super hack.
-        int numberActors = getStage().getActors().size;
-        setZIndex(numberActors-1);
+            if(textureRegion != null && textureRegion.isFlipX()){
+                textureRegion.flip(true, false);
+            }
+        }
     }
 
     @Override
@@ -80,22 +105,6 @@ public class Patroler extends DepthActor{
             batch.draw(flashlight, visionBox.x, visionBox.y, visionBox.width, visionBox.height);
         }
 
-//        batch.end();
-//        batch.begin();
-//        Gdx.gl20.glLineWidth(1f);
-//        //Set the projection matrix, and line shape
-//        debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
-//        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
-//
-//        Color c = getColor() != null ? getColor() : Color.WHITE;
-//        debugRenderer.setColor(c);
-//        debugRenderer.rect(visionBox.x, visionBox.y, visionBox.width, visionBox.height);
-//
-//        //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
-//        // coming in.
-//        debugRenderer.end();
-//        batch.end();
-//        batch.begin();
     }
 
     public void setFlashlightTextureRegion(TextureRegion tr){
