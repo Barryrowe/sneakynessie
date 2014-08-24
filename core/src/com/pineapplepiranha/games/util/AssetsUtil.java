@@ -33,7 +33,7 @@ public class AssetsUtil {
 
     //Images
     public static final String TITLE_SCREEN = "images/bg_city.png";
-    public static final String GAME_BG = "images/Background.jpg";
+    public static final String GAME_BG = "images/Background-D.png";
     public static final String TREE_1 = "images/Tree.png";
     public static final String TREE_2 = "images/Pine-Tree.png";
     public static final String BUSH = "images/Bush.png";
@@ -43,6 +43,9 @@ public class AssetsUtil {
     public static final String MASK_ICON = "images/Mask_Icon.png";
     public static final String GRASS = "images/Front-Grass.png";
     public static final String WAVES = "images/Waves.png";
+    public static final String FAR_TREES = "images/Background-Tree-Back.png";
+    public static final String NEAR_TREES = "images/Background-Tree-Front.png";
+    public static final String CLOUDS = "images/Clouds.jpg";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";

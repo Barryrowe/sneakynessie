@@ -42,18 +42,23 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_PATROLS = 5;
     private static float MAX_DISGUISE = 3;
     private static int NO_TREES_ZONE = 1400;
+    private static float FAR_PARALLAX_RATIO = 1f/5f;
+    private static float NEAR_PARALLAX_RATIO = 1f/10f;
 
     private static float ICON_SIZE = 50f;
 
     private static float DEPTH_HEIGHT = 20f;
 
-    private static Vector2 playerPos;
+    private static Vector2 playerPos, farParallaxPos, nearParallaxPos;
 
     static {
         playerPos = new Vector2(10f, 10f);
+        farParallaxPos = new Vector2(500f, 140f);
+        nearParallaxPos = new Vector2(600f, 140f);
     }
 
     //Actor Groups
+    public LevelBackground clouds;
     public LevelBackground background;
     public Waves waves;
     public Array<Cover> availableCover;
@@ -62,9 +67,13 @@ public class StealthNessieStage extends BaseStage {
     public Player player;
     public DisguisePowerUps disguisePowerUps;
 
+
+    public Parallax farParallax;
+    public Parallax nearParallax;
+
     //Ambiance
     private Music bgMusic;
-
+    private int depthInitialIndex;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -79,15 +88,31 @@ public class StealthNessieStage extends BaseStage {
         bgMusic.setLooping(true);
         bgMusic.play();
 
+        Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
+        clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
+        addActor(clouds);
+        clouds.setZIndex(3);
+
+        TextureRegion farParallaxRegion = new TextureRegion(am.get(AssetsUtil.FAR_TREES, AssetsUtil.TEXTURE));
+        farParallax = new Parallax(500f, 140f, farParallaxRegion);
+        addActor(farParallax);
+        farParallax.setZIndex(1);
+
+        TextureRegion nearParallaxRegion = new TextureRegion(am.get(AssetsUtil.NEAR_TREES, AssetsUtil.TEXTURE));
+        nearParallax = new Parallax(600f, 140f, nearParallaxRegion);
+        addActor(nearParallax);
+        nearParallax.setZIndex(2);
+
         Texture bgTexture = am.get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
         background = new LevelBackground(0f, 0f, bgTexture.getWidth(), bgTexture.getHeight(), bgTexture);
         addActor(background);
-        background.setZIndex(0);
+        background.setZIndex(3);
 
         TextureRegion wavesTexture = new TextureRegion(am.get(AssetsUtil.WAVES, AssetsUtil.TEXTURE));
         waves = new Waves(-80f, -80f, wavesTexture, 0f, 0f);
         addActor(waves);
-        waves.setZIndex(1);
+        waves.setZIndex(4);
+        depthInitialIndex = 5;
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
@@ -252,6 +277,15 @@ public class StealthNessieStage extends BaseStage {
 
     @Override
     public void act(float delta) {
+
+        if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f){
+            farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
+            nearParallax.velocity.x = NEAR_PARALLAX_RATIO * player.velocity.x;
+        }else{
+            farParallax.velocity.x = 0f;
+            nearParallax.velocity.x = 0f;
+        }
+
         super.act(delta);
         player.isHiding = false;
         for(Cover c:availableCover){
@@ -310,6 +344,7 @@ public class StealthNessieStage extends BaseStage {
             }
         }
 
+        Gdx.app.log("Player Z:", "Player Z: " + player.getZIndex() + " Near Paralax Z: " + nearParallax.getZIndex());
     }
 
     private void reorderDepthActors(){
@@ -328,10 +363,16 @@ public class StealthNessieStage extends BaseStage {
         });
 
         int size = depths.size;
-        int initialZ = waves.getZIndex()+1;
+        int initialZ = depthInitialIndex;
         for(DepthActor d:depths){
             d.setZIndex(initialZ++);
         }
+
+        clouds.setZIndex(0);
+        farParallax.setZIndex(1);
+        nearParallax.setZIndex(2);
+        background.setZIndex(3);
+        waves.setZIndex(4);
     }
 
     private void adjustCamera() {
