@@ -159,8 +159,8 @@ public class StealthNessieStage extends BaseStage {
         addActor(waves);
         waves.setZIndex(depthInitialIndex++);
 
-        TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
-        landingPad = new GenericActor(pickupPointPos.x, pickupPointPos.y, landingPadRegion.getRegionWidth(), landingPadRegion.getRegionHeight(), landingPadRegion, Color.GREEN);
+        //TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
+        landingPad = new GenericActor(pickupPointPos.x, pickupPointPos.y, 600f, 400f, null, Color.GREEN);
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
@@ -226,8 +226,6 @@ public class StealthNessieStage extends BaseStage {
 
         bushPositions.add(new Vector2(8575, 720-512));
         bushPositions.add(new Vector2(9356, 720-535));
-        bushPositions.add(new Vector2(11682, 720-541));
-        bushPositions.add(new Vector2(11816, 720-585));
         bushPositions.add(new Vector2(9378, 720-710));
         bushPositions.add(new Vector2(9570, 720-590));
 
@@ -319,10 +317,10 @@ public class StealthNessieStage extends BaseStage {
         patrolVals.add(new Vector3(7620, 720-660, 1500));
         patrolVals.add(new Vector3(8482, 720-578, 300));
         patrolVals.add(new Vector3(9500, 720-715, 800));
-        patrolVals.add(new Vector3(10000, 720-360, 200));
-        patrolVals.add(new Vector3(11000, 720-502, 500));
-        patrolVals.add(new Vector3(11000, 720-602, 500));
-        patrolVals.add(new Vector3(11000, 720-702, 500));
+        patrolVals.add(new Vector3(9000, 720-360, 200));
+        patrolVals.add(new Vector3(10500, 720-502, 500));
+        patrolVals.add(new Vector3(10500, 720-602, 500));
+        patrolVals.add(new Vector3(10500, 720-702, 500));
         Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
 
         float width = 50f;
