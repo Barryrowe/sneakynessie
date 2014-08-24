@@ -264,19 +264,19 @@ public class StealthNessieStage extends BaseStage {
         this.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.RIGHT == keycode){
+                if(Input.Keys.RIGHT == keycode || Input.Keys.D == keycode){
                     player.setXVelocity(player.speed);
-                }else if(Input.Keys.LEFT == keycode){
+                }else if(Input.Keys.LEFT == keycode || Input.Keys.A == keycode){
                     player.setXVelocity(-player.speed);
                 }
 
-                if(Input.Keys.UP == keycode){
+                if(Input.Keys.UP == keycode || Input.Keys.W == keycode){
                     player.setYVelocity(player.speed);
-                }else if(Input.Keys.DOWN == keycode){
+                }else if(Input.Keys.DOWN == keycode || Input.Keys.S == keycode){
                     player.setYVelocity(-player.speed);
                 }
 
-                if(Input.Keys.SHIFT_LEFT == keycode){
+                if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
                     player.speed = player.speed*2f;
                     player.setXVelocity(player.velocity.x*2f);
                     player.setYVelocity(player.velocity.y*2f);
@@ -298,19 +298,19 @@ public class StealthNessieStage extends BaseStage {
 
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if(Input.Keys.RIGHT == keycode && !Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+                if((Input.Keys.RIGHT == keycode || Input.Keys.D == keycode) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)){
                     player.setXVelocity(0);
-                }else if(Input.Keys.LEFT == keycode && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+                }else if((Input.Keys.LEFT == keycode || Input.Keys.A == keycode) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
                     player.setXVelocity(0);
                 }
 
-                if(Input.Keys.UP == keycode && !Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                if((Input.Keys.UP == keycode || Input.Keys.W == keycode) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)){
                     player.setYVelocity(0);
-                }else if(Input.Keys.DOWN == keycode && !Gdx.input.isKeyPressed(Input.Keys.UP)){
+                }else if((Input.Keys.DOWN == keycode || Input.Keys.S == keycode) && !Gdx.input.isKeyPressed(Input.Keys.UP)){
                     player.setYVelocity(0);
                 }
 
-                if(Input.Keys.SHIFT_LEFT == keycode){
+                if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
                     player.speed = player.speed/2f;
                     player.setXVelocity(player.velocity.x/2f);
                     player.setYVelocity(player.velocity.y/2f);
