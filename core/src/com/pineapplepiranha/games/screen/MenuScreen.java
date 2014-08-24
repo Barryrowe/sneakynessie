@@ -37,14 +37,10 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         private TextureRegion bgTextureRegion;
 
 
-        private Music bgMusic;
         public MenuScreen(IGameProcessor delegate){
             this.gameProcessor = delegate;
             stage = new BaseStage();
 
-            bgMusic = delegate.getAssetManager().get(AssetsUtil.BG_MUSIC, AssetsUtil.MUSIC);
-            bgMusic.setVolume(delegate.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
-            bgMusic.play();
 
 
             ClickListener listener = new ClickListener()
@@ -52,7 +48,6 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    bgMusic.stop();
                     Actor btn = event.getListenerActor();
 
                     if(btn == startGameButton){
