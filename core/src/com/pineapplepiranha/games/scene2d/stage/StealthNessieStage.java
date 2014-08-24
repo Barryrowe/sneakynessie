@@ -182,38 +182,121 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void initializeCover(AssetManager am){
-        Random rand = new Random(System.currentTimeMillis());
-        for(int i=0;i<MAX_COVER;i++){
-            float x = rand.nextInt((int)MAX_X - (NO_TREES_ZONE)) + NO_TREES_ZONE;
-            float y = rand.nextInt((int)MAX_Y);
 
-            Texture t = null;
-            float width = 10f;
-            float height = 10f;
-            switch(i%3){
-                case 0:
-                    t = am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
-                    width = 129f;
-                    height = 121f;
-                    break;
-                case 1:
-                    t = am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE);
-                    width = 150f;
-                    height = 254f;
-                    break;
-                case 2:
-                    t = am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
-                    width = 161f;
-                    height = 279f;
-                    break;
-                default:
-                    break;
-            }
-            TextureRegion tr = new TextureRegion(t);
-            Cover c = new Cover(x, y, width, height, tr, (int)Math.floor(x/DEPTH_HEIGHT));
+
+        Array<Vector2> bushPositions = new Array<Vector2>();
+        bushPositions.add(new Vector2(940, 720-540));
+        bushPositions.add(new Vector2(2040, 720-495));
+        bushPositions.add(new Vector2(2060, 720-700));
+        bushPositions.add(new Vector2(2575, 720-512));
+        bushPositions.add(new Vector2(3356, 720-638));
+        bushPositions.add(new Vector2(3682, 720-541));
+        bushPositions.add(new Vector2(3816, 720-585));
+        bushPositions.add(new Vector2(4378, 720-461));
+        bushPositions.add(new Vector2(4570, 720-471));
+
+        Array<Vector2> pineTreePositions = new Array<Vector2>();
+        pineTreePositions.add(new Vector2(1260, 720-504));
+        pineTreePositions.add(new Vector2(1530, 720-630));
+        pineTreePositions.add(new Vector2(1803, 720-591));
+        pineTreePositions.add(new Vector2(2289, 720-513));
+        pineTreePositions.add(new Vector2(2403, 720-660));
+
+        Array<Vector2> treePositions = new Array<Vector2>();
+        treePositions.add(new Vector2(2154, 720-594));
+        treePositions.add(new Vector2(2730, 720-666));
+        treePositions.add(new Vector2(2805, 720-552));
+        treePositions.add(new Vector2(2940, 720-651));
+        treePositions.add(new Vector2(3039, 720-516));
+        treePositions.add(new Vector2(3144, 720-717));
+        treePositions.add(new Vector2(3450, 720-540));
+        /*Bushes:
+            bushPositions.add(new Vector2(940, 720-540));
+            bushPositions.add(new Vector2(2040, 720-495));
+            bushPositions.add(new Vector2(2060, 720-700));
+            bushPositions.add(new Vector2(2575, 720-512));
+            bushPositions.add(new Vector2(3356, 720-638));
+            bushPositions.add(new Vector2(3682, 720-541));
+            bushPositions.add(new Vector2(3816, 720-585));
+            bushPositions.add(new Vector2(4378, 720-461));
+            bushPositions.add(new Vector2(4570, 720-471));
+
+        Pine Trees
+            pineTreePositions.add(new Vector2(1260, 720-504));
+            pineTreePositions.add(new Vector2(1530, 720-630));
+            pineTreePositions.add(new Vector2(1803, 720-591));
+            pineTreePositions.add(new Vector2(2289, 720-513));
+            pineTreePositions.add(new Vector2(2403, 720-660));
+
+        Trees
+            reePositions.add(new Vector2(2154, 720-594));
+            reePositions.add(new Vector2(2730, 720-666));
+            reePositions.add(new Vector2(2805, 720-552));
+            reePositions.add(new Vector2(2940, 720-651));
+            reePositions.add(new Vector2(3039, 720-516));
+            reePositions.add(new Vector2(3144, 720-717));
+            reePositions.add(new Vector2(3450, 720-540));
+         */
+
+        TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
+        float width = 129f;
+        float height = 121f;
+        for(Vector2 bv:bushPositions){
+            Cover c = new Cover(bv.x, bv.y, width, height, bushRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
             availableCover.add(c);
             addActor(c);
         }
+
+        TextureRegion ptRegion = new TextureRegion(am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
+        width = 161f;
+        height = 279f;
+        for(Vector2 ptv:pineTreePositions){
+            Cover c = new Cover(ptv.x, ptv.y, width, height, ptRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
+            availableCover.add(c);
+            addActor(c);
+        }
+
+        TextureRegion tRegion = new TextureRegion(am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
+        width = 150f;
+        height = 254f;
+        for(Vector2 tv:treePositions){
+            Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
+            availableCover.add(c);
+            addActor(c);
+        }
+
+//        Random rand = new Random(System.currentTimeMillis());
+//        for(int i=0;i<MAX_COVER;i++){
+//            float x = rand.nextInt((int)MAX_X - (NO_TREES_ZONE)) + NO_TREES_ZONE;
+//            float y = rand.nextInt((int)MAX_Y);
+//
+//            Texture t = null;
+//            float width = 10f;
+//            float height = 10f;
+//            switch(i%3){
+//                case 0:
+//                    t = am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
+//                    width = 129f;
+//                    height = 121f;
+//                    break;
+//                case 1:
+//                    t = am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE);
+//                    width = 150f;
+//                    height = 254f;
+//                    break;
+//                case 2:
+//                    t = am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
+//                    width = 161f;
+//                    height = 279f;
+//                    break;
+//                default:
+//                    break;
+//            }
+//            TextureRegion tr = new TextureRegion(t);
+//            Cover c = new Cover(x, y, width, height, tr, (int)Math.floor(x/DEPTH_HEIGHT));
+//            availableCover.add(c);
+//            addActor(c);
+//        }
     }
 
     private void initializePatrolers(AssetManager am){
