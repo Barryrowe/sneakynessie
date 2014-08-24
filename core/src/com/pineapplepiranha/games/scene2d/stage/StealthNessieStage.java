@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
-import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.actor.*;
@@ -93,10 +92,12 @@ public class StealthNessieStage extends BaseStage {
     private Music bgMusic;
     private int depthInitialIndex;
     private Sound alienUp;
+    private Sound whistle;
 
 
     public GenericActor moon;
     public GenericActor landingPad;
+    public GenericActor endScreen;
     public Parallax distantParallax;
     public Parallax farParallax;
     public Parallax nearParallax;
@@ -111,6 +112,7 @@ public class StealthNessieStage extends BaseStage {
         stars = new Array<AnimatedActor>();
 
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
+        whistle = am.get(AssetsUtil.WHISTLE, AssetsUtil.SOUND);
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(0.5f);//gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
 
@@ -410,6 +412,9 @@ public class StealthNessieStage extends BaseStage {
             alienUp.play();
             player.velocity.y = player.speed*3;
             isComplete = true;
+            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.END_SCREEN, AssetsUtil.TEXTURE));
+            endScreen = new GenericActor(getCamera().position.x - getCamera().viewportWidth/2, 0f, getWidth(), getHeight(), tr, Color.GREEN);
+            addActor(endScreen);
         }
 
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
@@ -480,6 +485,18 @@ public class StealthNessieStage extends BaseStage {
 
             if(reset){
                 player.setIsFound(true);
+                whistle.play();
+                for(Patroler p:patrolers){
+                    if(p.getX() > player.getOriginX() + player.getWidth()){
+                        p.goingToNessie = true;
+                        p.targetX = player.getOriginX() + player.getWidth();
+                        p.velocity.x = -500f;
+                    }else if(p.getX() < player.getOriginX()- player.getWidth()){
+                        p.goingToNessie = true;
+                        p.targetX = player.getOriginX() - player.getWidth();
+                        p.velocity.x = 500f;
+                    }
+                }
                 //resetLevel();
             }
         }

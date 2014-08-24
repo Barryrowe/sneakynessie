@@ -34,6 +34,9 @@ public class Patroler extends DepthActor{
 
     private float keyFrameTime = 0f;
 
+    public boolean goingToNessie = false;
+    public float targetX = 0f;
+
     public Patroler(float x, float y, float width, float height, Animation ani, int depthPos, float range){
         super(x, y, width, height, depthPos);
         setColor(Color.BLUE);
@@ -72,9 +75,19 @@ public class Patroler extends DepthActor{
             keyFrameTime += delta;
         }
 
-        if(getX() >= maxX || getX() <= minX){
+        if(goingToNessie){
+            if(velocity.x > 0f && getX() >= targetX){
+                velocity.x = 0f;
+            }else if(velocity.x > 0f && getX() <= targetX){
+                velocity.x = 0f;
+            }
+            return;
+        }else if(getX() >= maxX || getX() <= minX){
             velocity.x *= -1;
         }
+
+
+
         setPosition(getX() + (velocity.x * delta), getY());
         if(velocity.x >= 0){
             visionBox.setX(getX()+getWidth());

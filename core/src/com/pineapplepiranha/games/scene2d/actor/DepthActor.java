@@ -28,6 +28,6 @@ public class DepthActor extends GenericActor{
     @Override
     public void act(float delta) {
         super.act(delta);
-        setZIndex(depthPos);
+        //setZIndex(depthPos);
     }
 }
