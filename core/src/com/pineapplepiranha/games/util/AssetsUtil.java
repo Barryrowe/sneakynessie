@@ -58,4 +58,7 @@ public class AssetsUtil {
     //Music
     public static final String BG_MUSIC = "music/robowack.mp3";
     public static final String GAME_MUSIC = "music/cityofscrap.mp3";
+
+    //SFX
+    public static final String ALIEN_UP = "sfx/alien_up.mp3";
 }

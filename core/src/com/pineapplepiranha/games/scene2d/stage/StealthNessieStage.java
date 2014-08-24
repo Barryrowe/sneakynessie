@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -49,7 +49,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_PATROLS = 5;
     private static float MAX_DISGUISE = 3;
     private static int NO_TREES_ZONE = 1400;
-    private static float MOON_PARALLAX_RATIO = 1f/1.05f;
+    private static float MOON_PARALLAX_RATIO = 1f/1.02f;
     private static float DISTANT_PARALLAX_RATIO = 1f/2.5f;
     private static float FAR_PARALLAX_RATIO = 1f/5f;
     private static float NEAR_PARALLAX_RATIO = 1f/10f;
@@ -63,7 +63,7 @@ public class StealthNessieStage extends BaseStage {
 
     private static float DEPTH_HEIGHT = 20f;
 
-    private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos;
+    private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
 
     static {
         playerPos = new Vector2(10f, 10f);
@@ -72,6 +72,7 @@ public class StealthNessieStage extends BaseStage {
         nearParallaxPos = new Vector2(600f, 130f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
+        pickupPointPos = new Vector2(15500f, 0f);
     }
 
     //Actor Groups
@@ -86,12 +87,16 @@ public class StealthNessieStage extends BaseStage {
     public DisguisePowerUps disguisePowerUps;
 
 
+    private boolean isComplete = false;
 
     //Ambiance
     private Music bgMusic;
     private int depthInitialIndex;
+    private Sound alienUp;
+
 
     public GenericActor moon;
+    public GenericActor landingPad;
     public Parallax distantParallax;
     public Parallax farParallax;
     public Parallax nearParallax;
@@ -105,6 +110,7 @@ public class StealthNessieStage extends BaseStage {
         disguises = new Array<Disguise>();
         stars = new Array<AnimatedActor>();
 
+        alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
 
@@ -147,6 +153,12 @@ public class StealthNessieStage extends BaseStage {
         waves = new Waves(-80f, -80f, wavesTexture, 0f, 0f);
         addActor(waves);
         waves.setZIndex(depthInitialIndex++);
+
+        TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
+        landingPad = new GenericActor(pickupPointPos.x, pickupPointPos.y, landingPadRegion.getRegionWidth(), landingPadRegion.getRegionHeight(), landingPadRegion, Color.GREEN);
+        addActor(landingPad);
+        landingPad.setZIndex(depthInitialIndex++);
+
 
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Sad"));
@@ -415,6 +427,15 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
 
+        if(!isComplete && player.collider.overlaps(landingPad.collider) && !player.isFound() && !player.isDisguised){
+            alienUp.play();
+            isComplete = true;
+        }
+
+        if(isComplete){
+                   //HANDLE!!
+            return;
+        }
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
             distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
             moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
@@ -516,7 +537,8 @@ public class StealthNessieStage extends BaseStage {
         farParallax.setZIndex(index++);
         nearParallax.setZIndex(index++);
         background.setZIndex(index++);
-        waves.setZIndex(index);
+        waves.setZIndex(index++);
+        landingPad.setZIndex(index);
     }
 
     private void adjustCamera() {
