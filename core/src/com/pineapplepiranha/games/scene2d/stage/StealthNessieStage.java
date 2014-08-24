@@ -55,6 +55,7 @@ public class StealthNessieStage extends BaseStage {
 
     //Actor Groups
     public LevelBackground background;
+    public Waves waves;
     public Array<Cover> availableCover;
     public Array<Patroler> patrolers;
     public Array<Disguise> disguises;
@@ -82,6 +83,11 @@ public class StealthNessieStage extends BaseStage {
         background = new LevelBackground(0f, 0f, bgTexture.getWidth(), bgTexture.getHeight(), bgTexture);
         addActor(background);
         background.setZIndex(0);
+
+        TextureRegion wavesTexture = new TextureRegion(am.get(AssetsUtil.WAVES, AssetsUtil.TEXTURE));
+        waves = new Waves(-80f, -80f, wavesTexture, 0f, 0f);
+        addActor(waves);
+        waves.setZIndex(1);
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
@@ -322,7 +328,7 @@ public class StealthNessieStage extends BaseStage {
         });
 
         int size = depths.size;
-        int initialZ = background.getZIndex()+1;
+        int initialZ = waves.getZIndex()+1;
         for(DepthActor d:depths){
             d.setZIndex(initialZ++);
         }

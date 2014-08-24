@@ -42,6 +42,7 @@ public class AssetsUtil {
     public static final String FLASHLIGHT = "images/flashlight.png";
     public static final String MASK_ICON = "images/Mask_Icon.png";
     public static final String GRASS = "images/Front-Grass.png";
+    public static final String WAVES = "images/Waves.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
