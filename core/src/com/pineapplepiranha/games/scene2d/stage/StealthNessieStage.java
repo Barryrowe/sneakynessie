@@ -112,7 +112,7 @@ public class StealthNessieStage extends BaseStage {
 
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
-        bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
+        bgMusic.setVolume(0.5f);//gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
 
         bgMusic.setLooping(true);
         bgMusic.play();
