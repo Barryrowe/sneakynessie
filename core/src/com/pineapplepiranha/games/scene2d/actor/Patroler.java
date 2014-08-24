@@ -66,6 +66,10 @@ public class Patroler extends DepthActor{
                 flashlight.flip(true, false);
             }
         }
+
+        //Force to the front. This is a super hack.
+        int numberActors = getStage().getActors().size;
+        setZIndex(numberActors-1);
     }
 
     @Override

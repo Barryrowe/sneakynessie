@@ -85,9 +85,8 @@ public class Player extends DepthActor{
                 textureRegion = animation.getKeyFrame(keyFrameTotal, true);
                 if(velocity.x < 0f){
                     textureRegion.flip(true, false);
-                    Gdx.app.log("NESSIE", "ANIMATION FLIP!");
+
                 }
-                Gdx.app.log("NESSIE", "KeyFrame: " + keyFrameTotal);
                 keyFrameTotal += delta;
             }
 

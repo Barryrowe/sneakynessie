@@ -29,20 +29,13 @@ public class GameScreen extends ApplicationAdapter implements Screen, InputProce
 
     private Stage stage;
     private TextureRegion bgTextureRegion;
-    private Music bgMusic;
+
 
 
     public GameScreen(IGameProcessor delegate){
         gameProcessor = delegate;
 
         stage = new StealthNessieStage(gameProcessor);
-
-        bgMusic = gameProcessor.getAssetManager().get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
-        bgMusic.setVolume(gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
-
-
-        bgMusic.setLooping(true);
-        bgMusic.play();
     }
 
     @Override

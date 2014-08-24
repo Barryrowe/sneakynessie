@@ -18,4 +18,11 @@ public class Cover extends DepthActor {
         super(x, y, width, height, tr, depthPos);
         setColor(Color.GREEN);
     }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        setZIndex(3);
+    }
 }
