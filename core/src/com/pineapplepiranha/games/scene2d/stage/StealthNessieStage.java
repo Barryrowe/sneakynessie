@@ -5,11 +5,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -147,6 +153,7 @@ public class StealthNessieStage extends BaseStage {
         addActor(a);
 
         initializeInputListeners();
+        sharderStuff();
     }
 
     private void initializeCover(AssetManager am){
@@ -425,5 +432,131 @@ public class StealthNessieStage extends BaseStage {
 
         bgMusic.play();
 
+    }
+
+    /*SHADER MAGIC*/
+    private float lightSize = 1000f;
+    private FrameBuffer fbo;
+    private ShaderProgram finalShader;
+    private ShaderProgram defaultShader;
+    public float zAngle;
+    public static final float zSpeed = 15.0f;
+    public static final float PI2 = 3.1415926535897932384626433832795f * 2.0f;
+    private boolean	lightMove = false;
+    private boolean lightOscillate = false;
+    private Texture light;
+    private Texture bg;
+
+    public static final float ambientIntensity = .7f;
+    public static final Vector3 ambientColor = new Vector3(0.3f, 0.3f, 0.7f);
+    private static final String vertexShader = "attribute vec4 a_position;\n" +
+            "attribute vec4 a_color;\n" +
+            "attribute vec2 a_texCoord0;\n" +
+            "uniform mat4 u_projTrans;\n" +
+            "varying vec4 vColor;\n" +
+            "varying vec2 vTexCoord;\n" +
+            "\n" +
+            "void main() {\n" +
+            "\tvColor = a_color;\n" +
+            "\tvTexCoord = a_texCoord0;\n" +
+            "\tgl_Position = u_projTrans * a_position;\t\t\n" +
+            "}";
+
+    private static final String defaultPixelShader = "#ifdef GL_ES\n" +
+            "#define LOWP lowp\n" +
+            "precision mediump float;\n" +
+            "#else\n" +
+            "#define LOWP\n" +
+            "#endif\n" +
+            "\n" +
+            "varying LOWP vec4 vColor;\n" +
+            "varying vec2 vTexCoord;\n" +
+            "\n" +
+            "//our texture samplers\n" +
+            "uniform sampler2D u_texture; //diffuse map\n" +
+            "\n" +
+            "void main() {\n" +
+            "\tvec4 DiffuseColor = texture2D(u_texture, vTexCoord);\n" +
+            "\tgl_FragColor = vColor * DiffuseColor;\n" +
+            "}";
+
+    private static final String finalPixelShader = "#ifdef GL_ES\n" +
+            "#define LOWP lowp\n" +
+            "precision mediump float;\n" +
+            "#else\n" +
+            "#define LOWP\n" +
+            "#endif\n" +
+            "\n" +
+            "varying LOWP vec4 vColor;\n" +
+            "varying vec2 vTexCoord;\n" +
+            "\n" +
+            "//texture samplers\n" +
+            "uniform sampler2D u_texture; //diffuse map\n" +
+            "uniform sampler2D u_lightmap;   //light map\n" +
+            "\n" +
+            "//additional parameters for the shader\n" +
+            "uniform vec2 resolution; //resolution of screen\n" +
+            "uniform LOWP vec4 ambientColor; //ambient RGB, alpha channel is intensity \n" +
+            "\n" +
+            "void main() {\n" +
+            "\tvec4 diffuseColor = texture2D(u_texture, vTexCoord);\n" +
+            "\tvec2 lighCoord = (gl_FragCoord.xy / resolution.xy);\n" +
+            "\tvec4 light = texture2D(u_lightmap, lighCoord);\n" +
+            "\t\n" +
+            "\tvec3 ambient = ambientColor.rgb * ambientColor.a;\n" +
+            "\tvec3 intensity = ambient + light.rgb;\n" +
+            " \tvec3 finalColor = diffuseColor.rgb * intensity;\n" +
+            "\t\n" +
+            "\tgl_FragColor = vColor * vec4(finalColor, diffuseColor.a);\n" +
+            "}\n";
+    private void sharderStuff(){
+        ShaderProgram.pedantic = false;
+
+        defaultShader = new ShaderProgram(vertexShader, defaultPixelShader);
+
+        finalShader = new ShaderProgram(vertexShader, finalPixelShader);
+        finalShader.begin();
+        finalShader.setUniformi("u_lightmap", 1);
+        finalShader.setUniformf("ambientColor", ambientColor.x, ambientColor.y,
+                ambientColor.z, ambientIntensity);
+        finalShader.end();
+
+        light = gameProcessor.getAssetManager().get(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
+        bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
+    }
+
+    public void resize(int width, int height) {
+        fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
+
+        finalShader.begin();
+        finalShader.setUniformf("resolution", width, height);
+        finalShader.end();
+    }
+
+
+    @Override
+    public void draw() {
+        fbo.begin();
+        Batch batch = getBatch();
+        batch.setShader(defaultShader);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        batch.draw(light, player.getOriginX() - lightSize*0.5f + 0.5f,
+                player.getOriginY() + 0.5f - lightSize*0.5f,
+                lightSize, lightSize);
+        batch.end();
+        fbo.end();
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setShader(finalShader);
+        batch.begin();
+        fbo.getColorBufferTexture().bind(1); //this is important! bind the FBO to the 2nd texture unit
+        light.bind(0); //we force the binding of a texture on first texture unit to avoid artefacts
+        //this is because our default and ambiant shader dont use multi texturing...
+        //youc can basically bind anything, it doesnt matter
+        //tilemap.render(batch, dt);
+        //batch.draw(bg, 0f, 0f);
+        batch.end();
+        super.draw();
     }
 }

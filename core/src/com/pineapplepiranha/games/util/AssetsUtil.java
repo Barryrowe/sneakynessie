@@ -46,6 +46,7 @@ public class AssetsUtil {
     public static final String FAR_TREES = "images/Background-Tree-Back.png";
     public static final String NEAR_TREES = "images/Background-Tree-Front.png";
     public static final String CLOUDS = "images/Clouds.jpg";
+    public static final String LIGHT = "images/light.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
