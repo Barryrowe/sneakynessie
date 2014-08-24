@@ -48,6 +48,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_PATROLS = 5;
     private static float MAX_DISGUISE = 3;
     private static int NO_TREES_ZONE = 1400;
+    private static float MOON_PARALLAX_RATIO = 1f/1.05f;
     private static float FAR_PARALLAX_RATIO = 1f/5f;
     private static float NEAR_PARALLAX_RATIO = 1f/10f;
 
@@ -55,12 +56,14 @@ public class StealthNessieStage extends BaseStage {
 
     private static float DEPTH_HEIGHT = 20f;
 
-    private static Vector2 playerPos, farParallaxPos, nearParallaxPos;
+    private static Vector2 playerPos, farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos;
 
     static {
         playerPos = new Vector2(10f, 10f);
         farParallaxPos = new Vector2(500f, 140f);
         nearParallaxPos = new Vector2(600f, 140f);
+        initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/3)*2);
+        powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
     }
 
     //Actor Groups
@@ -74,12 +77,14 @@ public class StealthNessieStage extends BaseStage {
     public DisguisePowerUps disguisePowerUps;
 
 
-    public Parallax farParallax;
-    public Parallax nearParallax;
 
     //Ambiance
     private Music bgMusic;
     private int depthInitialIndex;
+
+    public GenericActor moon;
+    public Parallax farParallax;
+    public Parallax nearParallax;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -97,28 +102,32 @@ public class StealthNessieStage extends BaseStage {
         Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
         clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
         addActor(clouds);
-        clouds.setZIndex(3);
+        clouds.setZIndex(depthInitialIndex++);
+
+        TextureRegion moonTexture = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
+        moon = new GenericActor(initialMoonPos.x, initialMoonPos.y, 150f, 150f, moonTexture, Color.YELLOW);
+        addActor(moon);
+        moon.setZIndex(depthInitialIndex++);
 
         TextureRegion farParallaxRegion = new TextureRegion(am.get(AssetsUtil.FAR_TREES, AssetsUtil.TEXTURE));
-        farParallax = new Parallax(500f, 140f, farParallaxRegion);
+        farParallax = new Parallax(farParallaxPos.x, farParallaxPos.y, farParallaxRegion);
         addActor(farParallax);
-        farParallax.setZIndex(1);
+        farParallax.setZIndex(depthInitialIndex++);
 
         TextureRegion nearParallaxRegion = new TextureRegion(am.get(AssetsUtil.NEAR_TREES, AssetsUtil.TEXTURE));
-        nearParallax = new Parallax(600f, 140f, nearParallaxRegion);
+        nearParallax = new Parallax(nearParallaxPos.x, nearParallaxPos.y, nearParallaxRegion);
         addActor(nearParallax);
-        nearParallax.setZIndex(2);
+        nearParallax.setZIndex(depthInitialIndex++);
 
         Texture bgTexture = am.get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
         background = new LevelBackground(0f, 0f, bgTexture.getWidth(), bgTexture.getHeight(), bgTexture);
         addActor(background);
-        background.setZIndex(3);
+        background.setZIndex(depthInitialIndex++);
 
         TextureRegion wavesTexture = new TextureRegion(am.get(AssetsUtil.WAVES, AssetsUtil.TEXTURE));
         waves = new Waves(-80f, -80f, wavesTexture, 0f, 0f);
         addActor(waves);
-        waves.setZIndex(4);
-        depthInitialIndex = 5;
+        waves.setZIndex(depthInitialIndex++);
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
@@ -141,8 +150,8 @@ public class StealthNessieStage extends BaseStage {
         initializeCover(am);
 
         TextureRegion maskIcon = new TextureRegion(am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE));
-        disguisePowerUps = new DisguisePowerUps(ICON_SIZE,
-                                                 ViewportUtil.VP_HEIGHT - (ICON_SIZE*2),
+        disguisePowerUps = new DisguisePowerUps(powerupsPos.x,
+                                                 powerupsPos.y,
                                                  ICON_SIZE * 4,
                                                  ICON_SIZE, maskIcon);
         addActor(disguisePowerUps);
@@ -286,9 +295,11 @@ public class StealthNessieStage extends BaseStage {
     public void act(float delta) {
 
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f){
+            moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
             farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
             nearParallax.velocity.x = NEAR_PARALLAX_RATIO * player.velocity.x;
         }else{
+            moon.velocity.x = 0f;
             farParallax.velocity.x = 0f;
             nearParallax.velocity.x = 0f;
         }
@@ -376,10 +387,11 @@ public class StealthNessieStage extends BaseStage {
         }
 
         clouds.setZIndex(0);
-        farParallax.setZIndex(1);
-        nearParallax.setZIndex(2);
-        background.setZIndex(3);
-        waves.setZIndex(4);
+        moon.setZIndex(1);
+        farParallax.setZIndex(2);
+        nearParallax.setZIndex(3);
+        background.setZIndex(4);
+        waves.setZIndex(5);
     }
 
     private void adjustCamera() {
@@ -390,10 +402,10 @@ public class StealthNessieStage extends BaseStage {
         }
 
         float cameraLeft = getCamera().position.x - (getCamera().viewportWidth/2);
-        float cameraTop = getCamera().position.y + (getCamera().viewportHeight/2);
+        //float cameraTop = getCamera().position.y + (getCamera().viewportHeight/2);
 
-        float offset = ICON_SIZE*1.25f;
-        disguisePowerUps.setPosition(cameraLeft + offset, cameraTop - offset);
+        float offset = powerupsPos.x;
+        disguisePowerUps.setPosition(cameraLeft + offset, powerupsPos.y);
     }
 
     private void resetLevel(){
@@ -428,6 +440,7 @@ public class StealthNessieStage extends BaseStage {
         initializePatrolers(gameProcessor.getAssetManager());
         initializeDisguies(gameProcessor.getAssetManager());
 
+        moon.setPosition(initialMoonPos.x, initialMoonPos.y);
         adjustCamera();
 
         bgMusic.play();
@@ -435,7 +448,7 @@ public class StealthNessieStage extends BaseStage {
     }
 
     /*SHADER MAGIC*/
-    private float lightSize = 1000f;
+    private float lightSize = 1500f;
     private FrameBuffer fbo;
     private ShaderProgram finalShader;
     private ShaderProgram defaultShader;
@@ -541,8 +554,8 @@ public class StealthNessieStage extends BaseStage {
         batch.setShader(defaultShader);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(light, player.getOriginX() - lightSize*0.5f + 0.5f,
-                player.getOriginY() + 0.5f - lightSize*0.5f,
+        batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
+                moon.getOriginY() + 0.5f - lightSize*0.5f,
                 lightSize, lightSize);
         batch.end();
         fbo.end();
