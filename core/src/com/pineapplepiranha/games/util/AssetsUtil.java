@@ -49,6 +49,8 @@ public class AssetsUtil {
     public static final String MOON = "images/Moon.png";
     public static final String MOUNTAINS = "images/Mountains.png";
     public static final String END_SCREEN = "images/endscreen.png";
+    public static final String ALIEN_LIGHT = "images/alien-light.png";
+
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";

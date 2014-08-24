@@ -415,9 +415,12 @@ public class StealthNessieStage extends BaseStage {
             alienUp.play();
             player.velocity.y = player.speed*3;
             isComplete = true;
+        }else if(isComplete && endScreen == null && player.getY() > 720f){
+
             TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.END_SCREEN, AssetsUtil.TEXTURE));
             endScreen = new GenericActor(getCamera().position.x - getCamera().viewportWidth/2, 0f, getWidth(), getHeight(), tr, Color.GREEN);
             addActor(endScreen);
+
         }
 
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
@@ -507,6 +510,8 @@ public class StealthNessieStage extends BaseStage {
         if(player.velocity.x != 0f || player.velocity.y != 0f){
             if(walkId < 0L){
                 walkId = walking.loop();
+            }else if(isComplete){
+                walking.pause(walkId);
             }else{
                 walking.resume(walkId);
             }
@@ -607,6 +612,7 @@ public class StealthNessieStage extends BaseStage {
     private ShaderProgram finalShader;
     private ShaderProgram defaultShader;
     private Texture light;
+    private Texture alienLight;
     private Texture bg;
 
     public static final float ambientIntensity = .7f;
@@ -684,6 +690,7 @@ public class StealthNessieStage extends BaseStage {
         finalShader.end();
 
         light = gameProcessor.getAssetManager().get(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
+        alienLight = gameProcessor.getAssetManager().get(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
         bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
     }
 
@@ -708,6 +715,10 @@ public class StealthNessieStage extends BaseStage {
                 lightSize, lightSize);
         for(Patroler p:patrolers){
             batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
+        }
+
+        if(isComplete && player.getY() < 720f){
+            batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth()*1.25f, 720f);
         }
         batch.end();
         fbo.end();
