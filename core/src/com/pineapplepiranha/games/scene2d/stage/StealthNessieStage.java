@@ -39,7 +39,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_Y = ViewportUtil.VP_HEIGHT/3;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
     private static float MAX_COVER = 20;
-    private static float MAX_PATROLS = 15;
+    private static float MAX_PATROLS = 5;
     private static float MAX_DISGUISE = 3;
     private static int NO_TREES_ZONE = 1400;
 
@@ -213,10 +213,10 @@ public class StealthNessieStage extends BaseStage {
 
 
                 if(Input.Keys.SPACE == keycode){
-                    if(!player.isHiding && disguisePowerUps.hasDisguise()){
+                    if(!player.isHiding && !player.isDisguised && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
                         disguisePowerUps.popIndicator();
-                    }else if(!disguisePowerUps.hasDisguise() && player.isDisguised){
+                    }else if(player.isDisguised){
                         player.isDisguised = false;
                     }
                 }
