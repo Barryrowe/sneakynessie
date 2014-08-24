@@ -1,124 +1,166 @@
 
 animations.png
-size: 2034,1880
+size: 2034,2032
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 clouds/Clouds
   rotate: false
-  xy: 0, 1158
+  xy: 0, 1310
   size: 2000, 720
   orig: 2000, 720
   offset: 0, 0
   index: 1
 clouds/Clouds
   rotate: false
-  xy: 0, 436
+  xy: 0, 588
   size: 2000, 720
   orig: 2000, 720
   offset: 0, 0
   index: 2
 nessie/Disguised
   rotate: false
-  xy: 0, 234
+  xy: 0, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Sad
   rotate: false
-  xy: 0, 32
+  xy: 0, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Sad
   rotate: false
-  xy: 202, 234
+  xy: 202, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Sad
   rotate: false
-  xy: 202, 32
+  xy: 202, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Sad
   rotate: false
-  xy: 404, 234
+  xy: 404, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Sad
   rotate: false
-  xy: 404, 32
+  xy: 404, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 nessie/Sad
   rotate: false
-  xy: 606, 234
+  xy: 606, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 6
 nessie/Sad
   rotate: false
-  xy: 606, 32
+  xy: 606, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 7
 nessie/Still
   rotate: false
-  xy: 808, 234
+  xy: 808, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Walk
   rotate: false
-  xy: 808, 32
+  xy: 808, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Walk
   rotate: false
-  xy: 1010, 234
+  xy: 1010, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Walk
   rotate: false
-  xy: 1010, 32
+  xy: 1010, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Walk
   rotate: false
-  xy: 1212, 234
+  xy: 1212, 386
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Walk
   rotate: false
-  xy: 1212, 32
+  xy: 1212, 184
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
+patrol/Patrol
+  rotate: false
+  xy: 1414, 284
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 1
+patrol/Patrol
+  rotate: false
+  xy: 1522, 436
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 2
+patrol/Patrol
+  rotate: false
+  xy: 216, 32
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 3
+patrol/PatrolA
+  rotate: false
+  xy: 0, 32
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 1
+patrol/PatrolA
+  rotate: false
+  xy: 1414, 436
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 2
+patrol/PatrolA
+  rotate: false
+  xy: 108, 32
+  size: 106, 150
+  orig: 106, 150
+  offset: 0, 0
+  index: 3
 star/Star
   rotate: false
-  xy: 2002, 1848
+  xy: 2002, 2000
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
@@ -139,21 +181,21 @@ star/Star
   index: 6
 star/Star
   rotate: false
-  xy: 1414, 404
+  xy: 1414, 252
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 1414, 404
+  xy: 1414, 252
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 2002, 1816
+  xy: 1522, 404
   size: 30, 30
   orig: 30, 30
   offset: 0, 0

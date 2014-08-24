@@ -217,6 +217,21 @@ public class StealthNessieStage extends BaseStage {
         bushPositions.add(new Vector2(4378, 720-500));
         bushPositions.add(new Vector2(4570, 720-510));
 
+        bushPositions.add(new Vector2(4575, 720-512));
+        bushPositions.add(new Vector2(5356, 720-638));
+        bushPositions.add(new Vector2(7682, 720-541));
+        bushPositions.add(new Vector2(7816, 720-585));
+        bushPositions.add(new Vector2(6378, 720-500));
+        bushPositions.add(new Vector2(6570, 720-510));
+
+        bushPositions.add(new Vector2(8575, 720-512));
+        bushPositions.add(new Vector2(9356, 720-535));
+        bushPositions.add(new Vector2(11682, 720-541));
+        bushPositions.add(new Vector2(11816, 720-585));
+        bushPositions.add(new Vector2(9378, 720-710));
+        bushPositions.add(new Vector2(9570, 720-590));
+
+
         Array<Vector2> pineTreePositions = new Array<Vector2>();
         pineTreePositions.add(new Vector2(1260, 720-504));
         pineTreePositions.add(new Vector2(1530, 720-630));
@@ -264,7 +279,7 @@ public class StealthNessieStage extends BaseStage {
         float width = 129f;
         float height = 121f;
         for(Vector2 bv:bushPositions){
-            Cover c = new Cover(bv.x, bv.y, width, height, bushRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
+            Cover c = new Cover(bv.x, bv.y, width, height, bushRegion, 0);
             availableCover.add(c);
             addActor(c);
         }
@@ -273,7 +288,7 @@ public class StealthNessieStage extends BaseStage {
         width = 161f;
         height = 279f;
         for(Vector2 ptv:pineTreePositions){
-            Cover c = new Cover(ptv.x, ptv.y, width, height, ptRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
+            Cover c = new Cover(ptv.x, ptv.y, width, height, ptRegion, 0);
             availableCover.add(c);
             addActor(c);
         }
@@ -282,7 +297,7 @@ public class StealthNessieStage extends BaseStage {
         width = 150f;
         height = 254f;
         for(Vector2 tv:treePositions){
-            Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0);//(int)Math.floor(x/DEPTH_HEIGHT));
+            Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0);
             availableCover.add(c);
             addActor(c);
         }
@@ -300,6 +315,11 @@ public class StealthNessieStage extends BaseStage {
         patrolVals.add(new Vector3(5012, 720-500, 750));
         patrolVals.add(new Vector3(5620, 720-660, 1500));
         patrolVals.add(new Vector3(6482, 720-578, 500));
+        patrolVals.add(new Vector3(7012, 720-500, 750));
+        patrolVals.add(new Vector3(7620, 720-660, 1500));
+        patrolVals.add(new Vector3(8482, 720-578, 300));
+        patrolVals.add(new Vector3(9500, 720-715, 800));
+        patrolVals.add(new Vector3(10000, 720-360, 200));
         patrolVals.add(new Vector3(11000, 720-502, 500));
         patrolVals.add(new Vector3(11000, 720-602, 500));
         patrolVals.add(new Vector3(11000, 720-702, 500));
@@ -308,7 +328,8 @@ public class StealthNessieStage extends BaseStage {
         float width = 50f;
         float height = 100f;
         for(Vector3 pv:patrolVals){
-            Animation animation = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
+            String animationName = pv.z > 500 ? "patrol/Patrol" : "patrol/PatrolA";
+            Animation animation = new Animation(1f/3f, atlas.findRegions(animationName));
             TextureRegion flashlightTexture = new TextureRegion(flTexture);
             Patroler p = new Patroler(pv.x, pv.y, width, height, animation, 0, pv.z);
             p.setFlashlightTextureRegion(flashlightTexture);
