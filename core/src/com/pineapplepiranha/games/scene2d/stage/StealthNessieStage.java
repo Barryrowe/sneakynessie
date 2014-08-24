@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
@@ -21,6 +22,7 @@ import com.pineapplepiranha.games.scene2d.actor.*;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
+import java.util.Comparator;
 import java.util.Random;
 
 /**
@@ -40,6 +42,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MAX_COVER = 20;
     private static float MAX_PATROLS = 15;
     private static float MAX_DISGUISE = 3;
+    private static int NO_TREES_ZONE = 1400;
 
     private static float ICON_SIZE = 50f;
 
@@ -111,22 +114,44 @@ public class StealthNessieStage extends BaseStage {
     private void initializeCover(AssetManager am){
         Random rand = new Random(System.currentTimeMillis());
         for(int i=0;i<MAX_COVER;i++){
-            float x = rand.nextInt((int)MAX_X);
+            float x = rand.nextInt((int)MAX_X - (NO_TREES_ZONE)) + NO_TREES_ZONE;
             float y = rand.nextInt((int)MAX_Y);
 
-            TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
-            Cover c = new Cover(x, y, 90f, 100f, tr, (int)Math.floor(x/DEPTH_HEIGHT));
+            Texture t = null;
+            float width = 10f;
+            float height = 10f;
+            switch(i%3){
+                case 0:
+                    t = am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
+                    width = 129f;
+                    height = 121f;
+                    break;
+                case 1:
+                    t = am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE);
+                    width = 150f;
+                    height = 254f;
+                    break;
+                case 2:
+                    t = am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
+                    width = 161f;
+                    height = 279f;
+                    break;
+                default:
+                    break;
+            }
+            TextureRegion tr = new TextureRegion(t);
+            Cover c = new Cover(x, y, width, height, tr, (int)Math.floor(x/DEPTH_HEIGHT));
             availableCover.add(c);
             addActor(c);
         }
     }
 
     private void initializePatrolers(AssetManager am){
-        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_2, AssetsUtil.TEXTURE));
+        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.TREE_1, AssetsUtil.TEXTURE));
         TextureRegion flashlightTexture = new TextureRegion(am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE));
         Random rand = new Random(System.currentTimeMillis()*System.currentTimeMillis());
         for(int i=0;i<MAX_PATROLS;i++){
-            float x = rand.nextInt((int)MAX_X);
+            float x = rand.nextInt((int)MAX_X - NO_TREES_ZONE) + NO_TREES_ZONE;
             float y = rand.nextInt((int)MAX_Y);
 
 
@@ -220,10 +245,7 @@ public class StealthNessieStage extends BaseStage {
 
             if(player.collider.overlaps(c.collider)){
                 if(player.getY() > c.getY()){
-                    c.setZIndex(player.getZIndex()+1);
                     player.isHiding = true;
-                }else{
-                    player.setZIndex(c.getZIndex() + 1);
                 }
             }
         }
@@ -258,6 +280,7 @@ public class StealthNessieStage extends BaseStage {
             player.setY(MAX_Y);
         }
 
+        reorderDepthActors();
         adjustCamera();
 
         //Handle Patroler Collistions!
@@ -275,6 +298,28 @@ public class StealthNessieStage extends BaseStage {
             }
         }
 
+    }
+
+    private void reorderDepthActors(){
+        Array<DepthActor> depths = new Array<DepthActor>();
+        for(Actor a:getActors()){
+             if(a instanceof DepthActor){
+                 depths.add((DepthActor)a);
+             }
+        }
+
+        depths.sort(new Comparator<DepthActor>() {
+            @Override
+            public int compare(DepthActor o1, DepthActor o2) {
+                return -1*Float.compare(o1.getY(), o2.getY());
+            }
+        });
+
+        int size = depths.size;
+        int initialZ = background.getZIndex()+1;
+        for(DepthActor d:depths){
+            d.setZIndex(initialZ++);
+        }
     }
 
     private void adjustCamera() {

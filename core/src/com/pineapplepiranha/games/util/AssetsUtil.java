@@ -34,8 +34,9 @@ public class AssetsUtil {
     //Images
     public static final String TITLE_SCREEN = "images/bg_city.png";
     public static final String GAME_BG = "images/Background.jpg";
-    public static final String TREE_1 = "images/tree-1.png";
-    public static final String TREE_2 = "images/tree-2.png";
+    public static final String TREE_1 = "images/Tree.png";
+    public static final String TREE_2 = "images/Pine-Tree.png";
+    public static final String BUSH = "images/Bush.png";
     public static final String NESSIE_PTRN = "images/Nessi-Pattern.png";
     public static final String NESSIE = "images/Nessi-Teal.png";
     public static final String FLASHLIGHT = "images/flashlight.png";
