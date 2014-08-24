@@ -72,7 +72,7 @@ public class StealthNessieStage extends BaseStage {
         nearParallaxPos = new Vector2(600f, 130f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
-        pickupPointPos = new Vector2(15500f, 0f);
+        pickupPointPos = new Vector2(11600, 0f);
     }
 
     //Actor Groups
@@ -170,7 +170,7 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
 
-        player = new Player(0f, 5f, 150f, 150f, walking);
+        player = new Player(250f, 170f, 150f, 150f, walking);
         player.sadAnimation = sadNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
@@ -209,8 +209,8 @@ public class StealthNessieStage extends BaseStage {
         bushPositions.add(new Vector2(3356, 720-638));
         bushPositions.add(new Vector2(3682, 720-541));
         bushPositions.add(new Vector2(3816, 720-585));
-        bushPositions.add(new Vector2(4378, 720-461));
-        bushPositions.add(new Vector2(4570, 720-471));
+        bushPositions.add(new Vector2(4378, 720-500));
+        bushPositions.add(new Vector2(4570, 720-510));
 
         Array<Vector2> pineTreePositions = new Array<Vector2>();
         pineTreePositions.add(new Vector2(1260, 720-504));
@@ -429,13 +429,10 @@ public class StealthNessieStage extends BaseStage {
 
         if(!isComplete && player.collider.overlaps(landingPad.collider) && !player.isFound() && !player.isDisguised){
             alienUp.play();
+            player.velocity.y = player.speed*3;
             isComplete = true;
         }
 
-        if(isComplete){
-                   //HANDLE!!
-            return;
-        }
         if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
             distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
             moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
@@ -485,7 +482,7 @@ public class StealthNessieStage extends BaseStage {
 
         if(player.getY() < MIN_Y){
             player.setY(MIN_Y);
-        }else if(player.getY() > MAX_Y){
+        }else if(player.getY() > MAX_Y && !isComplete){
             player.setY(MAX_Y);
         }
 
@@ -699,6 +696,9 @@ public class StealthNessieStage extends BaseStage {
         batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
                 moon.getOriginY() + 0.5f - lightSize*0.5f,
                 lightSize, lightSize);
+        for(Patroler p:patrolers){
+            batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
+        }
         batch.end();
         fbo.end();
 
