@@ -17,8 +17,8 @@ public class AnimationTexturePacker {
         settings.edgePadding = false;
 
         // set the maximum dimension of each image atlas
-        settings.maxWidth = 4096;
-        settings.maxHeight = 4096;
+        settings.maxWidth = 2048;
+        settings.maxHeight = 2048;
         settings.combineSubdirectories = true;
 
         // pack the images

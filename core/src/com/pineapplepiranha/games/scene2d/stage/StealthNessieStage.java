@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -377,6 +378,8 @@ public class StealthNessieStage extends BaseStage {
                         disguisePowerUps.popIndicator();
                     }else if(player.isDisguised){
                         player.isDisguised = false;
+                    }else if(player.isFound()){
+                        resetLevel();
                     }
                 }
 
@@ -425,6 +428,7 @@ public class StealthNessieStage extends BaseStage {
         }
 
         super.act(delta);
+
         player.isHiding = false;
         for(Cover c:availableCover){
 
@@ -573,11 +577,6 @@ public class StealthNessieStage extends BaseStage {
     private FrameBuffer fbo;
     private ShaderProgram finalShader;
     private ShaderProgram defaultShader;
-    public float zAngle;
-    public static final float zSpeed = 15.0f;
-    public static final float PI2 = 3.1415926535897932384626433832795f * 2.0f;
-    private boolean	lightMove = false;
-    private boolean lightOscillate = false;
     private Texture light;
     private Texture bg;
 

@@ -1,188 +1,200 @@
 
 animations.png
-size: 4036,3526
+size: 2034,1880
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 clouds/Clouds
   rotate: false
-  xy: 0, 2804
+  xy: 0, 1158
   size: 2000, 720
   orig: 2000, 720
   offset: 0, 0
   index: 1
 clouds/Clouds
-  rotate: false
-  xy: 0, 2082
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 2
-clouds/Clouds
-  rotate: false
-  xy: 2002, 2804
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 3
-clouds/Clouds
-  rotate: false
-  xy: 0, 1360
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 4
-clouds/Clouds
-  rotate: false
-  xy: 2002, 2082
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 5
-clouds/Clouds
-  rotate: false
-  xy: 0, 638
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 6
-nessie/Disguised
-  rotate: false
-  xy: 2002, 1880
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: -1
-nessie/Sad
   rotate: false
   xy: 0, 436
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 1
-nessie/Sad
-  rotate: false
-  xy: 2002, 1678
-  size: 200, 200
-  orig: 200, 200
+  size: 2000, 720
+  orig: 2000, 720
   offset: 0, 0
   index: 2
-nessie/Sad
-  rotate: false
-  xy: 2204, 1880
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 3
-nessie/Sad
+nessie/Disguised
   rotate: false
   xy: 0, 234
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 4
-nessie/Sad
-  rotate: false
-  xy: 202, 436
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 5
-nessie/Sad
-  rotate: false
-  xy: 2002, 1476
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 6
-nessie/Sad
-  rotate: false
-  xy: 2204, 1678
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 7
-nessie/Still
-  rotate: false
-  xy: 2406, 1880
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
   index: -1
-nessie/Walk
+nessie/Sad
   rotate: false
   xy: 0, 32
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
-nessie/Walk
+nessie/Sad
   rotate: false
   xy: 202, 234
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
+nessie/Sad
+  rotate: false
+  xy: 202, 32
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 3
+nessie/Sad
+  rotate: false
+  xy: 404, 234
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 4
+nessie/Sad
+  rotate: false
+  xy: 404, 32
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 5
+nessie/Sad
+  rotate: false
+  xy: 606, 234
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 6
+nessie/Sad
+  rotate: false
+  xy: 606, 32
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 7
+nessie/Still
+  rotate: false
+  xy: 808, 234
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
 nessie/Walk
   rotate: false
-  xy: 404, 436
+  xy: 808, 32
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 1
+nessie/Walk
+  rotate: false
+  xy: 1010, 234
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 2
+nessie/Walk
+  rotate: false
+  xy: 1010, 32
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Walk
   rotate: false
-  xy: 2002, 1274
+  xy: 1212, 234
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Walk
   rotate: false
-  xy: 2204, 1476
+  xy: 1212, 32
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 4004, 3494
+  xy: 2002, 1848
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 1
 star/Star
   rotate: false
-  xy: 2406, 1848
+  xy: 0, 0
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 2
 star/Star
   rotate: false
-  xy: 2406, 1848
+  xy: 0, 0
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 6
 star/Star
   rotate: false
-  xy: 2608, 2050
+  xy: 1414, 404
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 2608, 2050
+  xy: 1414, 404
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 0, 0
+  xy: 2002, 1816
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 4
+
+animations2.png
+size: 2002,1444
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+clouds/Clouds
+  rotate: false
+  xy: 0, 722
+  size: 2000, 720
+  orig: 2000, 720
+  offset: 0, 0
+  index: 3
+clouds/Clouds
+  rotate: false
+  xy: 0, 0
+  size: 2000, 720
+  orig: 2000, 720
+  offset: 0, 0
+  index: 4
+
+animations3.png
+size: 2002,1444
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+clouds/Clouds
+  rotate: false
+  xy: 0, 722
+  size: 2000, 720
+  orig: 2000, 720
+  offset: 0, 0
+  index: 5
+clouds/Clouds
+  rotate: false
+  xy: 0, 0
+  size: 2000, 720
+  orig: 2000, 720
+  offset: 0, 0
+  index: 6
