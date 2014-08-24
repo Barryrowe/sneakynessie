@@ -1,9 +1,13 @@
 package com.pineapplepiranha.games.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
+import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.GenericGroup;
 
 /**
@@ -16,6 +20,17 @@ import com.pineapplepiranha.games.scene2d.GenericGroup;
 public class LevelBackground extends GenericGroup {
 
     Texture bgTexture;
+
+    public LevelBackground(float x, float y, float width, float height, Array<TextureAtlas.AtlasRegion> regions){
+        super(x, y, width, height, Color.BLACK);
+        float nextX = 0f;
+        Gdx.app.log("LVLBG", "Regions:" + regions.size);
+        for(TextureAtlas.AtlasRegion r:regions){
+            Gdx.app.log("LVLBG", "Region Name: " + r.name + " Nextx: " + nextX);
+            addActor(new GenericActor(nextX, 0f, r.getRegionWidth(), r.getRegionHeight(), r, Color.BLUE));
+            nextX += r.getRegionWidth();
+        }
+    }
 
     public LevelBackground(float x, float y, float width, float height, Texture bgTexture){
         super(x, y, width,height, Color.BLACK);

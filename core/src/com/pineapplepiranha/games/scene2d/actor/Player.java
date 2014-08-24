@@ -25,6 +25,7 @@ public class Player extends DepthActor{
 
     private float keyFrameTotal = 0f;
     public Animation animation = null;
+    public Animation sadAnimation = null;
 
     public TextureRegion hidingTexture;
     public TextureRegion normalTexture;
@@ -32,6 +33,7 @@ public class Player extends DepthActor{
 
     public boolean isHiding = false;
     public boolean isDisguised = false;
+    protected boolean isFound = false;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
         super(x+BUFFER, y+BUFFER, width-BUFFER*2, height-(BUFFER*2), tr, 0);
@@ -55,7 +57,7 @@ public class Player extends DepthActor{
 
     @Override
     public void adjustPosition(float delta) {
-        if(!isDisguised){
+        if(!isDisguised && !isFound){
             super.adjustPosition(delta);
         }
     }
@@ -64,8 +66,12 @@ public class Player extends DepthActor{
     public void act(float delta) {
         super.act(delta);
 
-
-        if(isDisguised){
+        if(isFound){
+            if(sadAnimation != null){
+              textureRegion = sadAnimation.getKeyFrame(keyFrameTotal, false);
+              keyFrameTotal += delta;
+            }
+        }else if(isDisguised){
             //Draw Disguised and return
 
             if(disguisedTexture != null){
@@ -132,6 +138,15 @@ public class Player extends DepthActor{
 
     public void setNormalTexture(TextureRegion tr){
         normalTexture = tr;
+    }
+
+    public void setIsFound(boolean found){
+        isFound = found;
+        keyFrameTotal = 0f;
+    }
+
+    public boolean isFound(){
+        return isFound;
     }
 
     @Override

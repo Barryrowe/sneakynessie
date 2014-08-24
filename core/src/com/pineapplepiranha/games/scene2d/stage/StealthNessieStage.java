@@ -69,7 +69,7 @@ public class StealthNessieStage extends BaseStage {
         distantParalaxPos = new Vector2(700f, -50f);
         farParallaxPos = new Vector2(500f, 130f);
         nearParallaxPos = new Vector2(600f, 130f);
-        initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/3)*2);
+        initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
     }
 
@@ -98,6 +98,7 @@ public class StealthNessieStage extends BaseStage {
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
         AssetManager am = gameProcessor.getAssetManager();
+        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         availableCover = new Array<Cover>();
         patrolers = new Array<Patroler>();
         disguises = new Array<Disguise>();
@@ -109,8 +110,10 @@ public class StealthNessieStage extends BaseStage {
         bgMusic.setLooping(true);
         bgMusic.play();
 
-        Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
-        clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
+        //Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
+        //clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
+
+        clouds = new LevelBackground(0f, 0f, 12000f, 720f, atlas.findRegions("clouds/Clouds"));
         addActor(clouds);
         clouds.setZIndex(depthInitialIndex++);
 
@@ -144,8 +147,8 @@ public class StealthNessieStage extends BaseStage {
         addActor(waves);
         waves.setZIndex(depthInitialIndex++);
 
-        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
+        Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Sad"));
         TextureRegion hidingTr = new TextureRegion(am.get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
         hidingTr.flip(true, false);
         TextureRegion normalTr = atlas.findRegion("nessie/Still");
@@ -155,6 +158,7 @@ public class StealthNessieStage extends BaseStage {
         disguisedTr.flip(true, false);
 
         player = new Player(0f, 5f, 150f, 150f, walking);
+        player.sadAnimation = sadNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
         player.disguisedTexture = disguisedTr;
@@ -368,7 +372,7 @@ public class StealthNessieStage extends BaseStage {
 
 
                 if(Input.Keys.SPACE == keycode){
-                    if(!player.isHiding && !player.isDisguised && disguisePowerUps.hasDisguise()){
+                    if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
                         disguisePowerUps.popIndicator();
                     }else if(player.isDisguised){
@@ -408,7 +412,7 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
 
-        if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f){
+        if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
             distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
             moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
             farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
@@ -464,7 +468,7 @@ public class StealthNessieStage extends BaseStage {
         adjustCamera();
 
         //Handle Patroler Collistions!
-        if(!player.isHiding && !player.isDisguised){
+        if(!player.isHiding && !player.isDisguised && !player.isFound()){
             boolean reset = false;
             for(Patroler p:patrolers){
                 if(p.visionBox.overlaps(player.collider)){
@@ -474,7 +478,8 @@ public class StealthNessieStage extends BaseStage {
             }
 
             if(reset){
-                resetLevel();
+                player.setIsFound(true);
+                //resetLevel();
             }
         }
     }
@@ -518,7 +523,6 @@ public class StealthNessieStage extends BaseStage {
         }
 
         float cameraLeft = getCamera().position.x - (getCamera().viewportWidth/2);
-        //float cameraTop = getCamera().position.y + (getCamera().viewportHeight/2);
 
         float offset = powerupsPos.x;
         disguisePowerUps.setPosition(cameraLeft + offset, powerupsPos.y);
@@ -543,6 +547,7 @@ public class StealthNessieStage extends BaseStage {
         }
         availableCover.clear();
 
+        player.setIsFound(false);
         player.setPosition(playerPos.x, playerPos.y);
         player.setXVelocity(0f);
         player.setYVelocity(0f);
