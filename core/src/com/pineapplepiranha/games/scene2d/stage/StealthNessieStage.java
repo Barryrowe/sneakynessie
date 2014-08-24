@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
-import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
@@ -60,7 +59,7 @@ public class StealthNessieStage extends BaseStage {
     public Array<Patroler> patrolers;
     public Array<Disguise> disguises;
     public Player player;
-    public DisguiseIndicator disguiseIndicator;
+    public DisguisePowerUps disguisePowerUps;
 
     //Ambiance
     private Music bgMusic;
@@ -105,8 +104,16 @@ public class StealthNessieStage extends BaseStage {
         initializeCover(am);
 
         TextureRegion maskIcon = new TextureRegion(am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE));
-        disguiseIndicator = new DisguiseIndicator(ViewportUtil.VP_WIDTH - (ICON_SIZE*2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*2), ICON_SIZE, ICON_SIZE, maskIcon);
-        addActor(disguiseIndicator);
+        disguisePowerUps = new DisguisePowerUps(ICON_SIZE,
+                                                 ViewportUtil.VP_HEIGHT - (ICON_SIZE*2),
+                                                 ICON_SIZE * 4,
+                                                 ICON_SIZE, maskIcon);
+        addActor(disguisePowerUps);
+        disguisePowerUps.addIndicator("NOSE", maskIcon);
+
+        TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GRASS, AssetsUtil.TEXTURE));
+        GenericActor a = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
+        addActor(a);
 
         initializeInputListeners();
     }
@@ -200,10 +207,10 @@ public class StealthNessieStage extends BaseStage {
 
 
                 if(Input.Keys.SPACE == keycode){
-                    if(!player.isHiding && disguiseIndicator.hasDisguise){
+                    if(!player.isHiding && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
-                        disguiseIndicator.hasDisguise = false;
-                    }else if(!disguiseIndicator.hasDisguise && player.isDisguised){
+                        disguisePowerUps.popIndicator();
+                    }else if(!disguisePowerUps.hasDisguise() && player.isDisguised){
                         player.isDisguised = false;
                     }
                 }
@@ -255,8 +262,7 @@ public class StealthNessieStage extends BaseStage {
         for(Disguise d:disguises){
             if(player.collider.overlaps(d.collider)){
                 toRemove = d;
-                disguiseIndicator.hasDisguise = true;
-                disguiseIndicator.disguiseType = d.disguiseType;
+                disguisePowerUps.addIndicator(d.disguiseType, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
             }
         }
 
@@ -329,11 +335,11 @@ public class StealthNessieStage extends BaseStage {
             getCamera().position.set(CAMERA_TRIGGER, getCamera().position.y, getCamera().position.z);
         }
 
-        float cameraRight = getCamera().position.x + (getCamera().viewportWidth/2);
+        float cameraLeft = getCamera().position.x - (getCamera().viewportWidth/2);
         float cameraTop = getCamera().position.y + (getCamera().viewportHeight/2);
 
         float offset = ICON_SIZE*1.25f;
-        disguiseIndicator.setPosition(cameraRight-offset, cameraTop-offset);
+        disguisePowerUps.setPosition(cameraLeft + offset, cameraTop - offset);
     }
 
     private void resetLevel(){
@@ -359,8 +365,10 @@ public class StealthNessieStage extends BaseStage {
         player.setXVelocity(0f);
         player.setYVelocity(0f);
 
-        disguiseIndicator.hasDisguise = true;
-        disguiseIndicator.disguiseType = "NOSE";
+        while(disguisePowerUps.hasDisguise()){
+            disguisePowerUps.popIndicator();
+        }
+        disguisePowerUps.addIndicator("NOSE", new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
 
         initializeCover(gameProcessor.getAssetManager());
         initializePatrolers(gameProcessor.getAssetManager());

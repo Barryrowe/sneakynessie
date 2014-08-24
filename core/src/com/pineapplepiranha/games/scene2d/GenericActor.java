@@ -72,6 +72,7 @@ public class GenericActor extends KasetagenActor {
     public void adjustOrigin(float delta){
         setOrigin(getX()+(getWidth()/2), getY()+(getHeight()/2));
     }
+
     @Override
     public void act(float delta) {
         super.act(delta);
