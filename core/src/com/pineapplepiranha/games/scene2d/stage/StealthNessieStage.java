@@ -39,6 +39,9 @@ import java.util.Random;
  */
 public class StealthNessieStage extends BaseStage {
 
+    private static float LEVEL_WIDTH = 12000f;
+    private static float LEVEL_HEIGHT = 720f;
+
     private static float MIN_X = 1f;
     private static float MAX_X = ViewportUtil.VP_WIDTH*5;
     private static float MIN_Y = 1f;
@@ -65,7 +68,7 @@ public class StealthNessieStage extends BaseStage {
     private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
 
     static {
-        playerPos = new Vector2(10f, 10f);
+        playerPos = new Vector2(250f, 170f);
         distantParalaxPos = new Vector2(700f, -50f);
         farParallaxPos = new Vector2(500f, 130f);
         nearParallaxPos = new Vector2(600f, 130f);
@@ -100,6 +103,7 @@ public class StealthNessieStage extends BaseStage {
     public GenericActor moon;
     public GenericActor landingPad;
     public GenericActor endScreen;
+    public GenericActor grass;
     public Parallax distantParallax;
     public Parallax farParallax;
     public Parallax nearParallax;
@@ -125,7 +129,7 @@ public class StealthNessieStage extends BaseStage {
         //Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
         //clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
 
-        clouds = new LevelBackground(0f, 0f, 12000f, 720f, atlas.findRegions("clouds/Clouds"));
+        clouds = new LevelBackground(0f, 0f, LEVEL_WIDTH, LEVEL_HEIGHT, atlas.findRegions("clouds/Clouds"));
         addActor(clouds);
         clouds.setZIndex(depthInitialIndex++);
 
@@ -149,8 +153,8 @@ public class StealthNessieStage extends BaseStage {
         addActor(nearParallax);
         nearParallax.setZIndex(depthInitialIndex++);
 
-        Texture bgTexture = am.get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
-        background = new LevelBackground(0f, 0f, bgTexture.getWidth(), bgTexture.getHeight(), bgTexture);
+
+        background = new LevelBackground(0f, 0f, LEVEL_WIDTH, LEVEL_HEIGHT, atlas.findRegions("bg/Background"));
         addActor(background);
         background.setZIndex(depthInitialIndex++);
 
@@ -175,7 +179,7 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
 
-        player = new Player(250f, 170f, 150f, 150f, walking);
+        player = new Player(playerPos.x, playerPos.y, 150f, 150f, walking);
         player.sadAnimation = sadNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
@@ -196,8 +200,8 @@ public class StealthNessieStage extends BaseStage {
         disguisePowerUps.addIndicator("NOSE", maskIcon);
 
         TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GRASS, AssetsUtil.TEXTURE));
-        GenericActor a = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
-        addActor(a);
+        grass = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
+        addActor(grass);
 
         initializeInputListeners();
         sharderStuff();
@@ -557,6 +561,7 @@ public class StealthNessieStage extends BaseStage {
         });
 
         int initialZ = getActors().size -1;
+        grass.setZIndex(initialZ--);
         for(DepthActor d:depths){
             d.setZIndex(initialZ--);
         }
@@ -710,7 +715,7 @@ public class StealthNessieStage extends BaseStage {
 
         light = gameProcessor.getAssetManager().get(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
         alienLight = gameProcessor.getAssetManager().get(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
-        bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
+        //bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
     }
 
     public void resize(int width, int height) {
