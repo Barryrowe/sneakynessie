@@ -47,10 +47,7 @@ public class StealthNessieStage extends BaseStage {
     private static float MIN_Y = 1f;
     private static float MAX_Y = ViewportUtil.VP_HEIGHT/3;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
-    private static float MAX_COVER = 20;
-    private static float MAX_PATROLS = 5;
     private static float MAX_DISGUISE = 3;
-    private static int NO_TREES_ZONE = 1400;
     private static float MOON_PARALLAX_RATIO = 1f/1.02f;
     private static float DISTANT_PARALLAX_RATIO = 1f/2.5f;
     private static float FAR_PARALLAX_RATIO = 1f/5f;
@@ -74,7 +71,7 @@ public class StealthNessieStage extends BaseStage {
         nearParallaxPos = new Vector2(600f, 130f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
-        pickupPointPos = new Vector2(11600, 0f);
+        pickupPointPos = new Vector2(11000  , 0f);
     }
 
     //Actor Groups
@@ -101,7 +98,7 @@ public class StealthNessieStage extends BaseStage {
 
 
     public GenericActor moon;
-    public GenericActor landingPad;
+    public AnimatedActor landingPad;
     public GenericActor endScreen;
     public GenericActor grass;
     public Parallax distantParallax;
@@ -164,7 +161,8 @@ public class StealthNessieStage extends BaseStage {
         waves.setZIndex(depthInitialIndex++);
 
         //TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
-        landingPad = new GenericActor(pickupPointPos.x, pickupPointPos.y, 600f, 400f, null, Color.GREEN);
+        Animation glowingAnimation = new Animation(STAR_TWINKLE_RATE, atlas.findRegions("bg/Glow"));
+        landingPad = new AnimatedActor(pickupPointPos.x, pickupPointPos.y, 800f, 167f, glowingAnimation, 0f);
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
@@ -371,23 +369,25 @@ public class StealthNessieStage extends BaseStage {
         this.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.RIGHT == keycode || Input.Keys.D == keycode){
-                    player.setXVelocity(player.speed);
-                }else if(Input.Keys.LEFT == keycode || Input.Keys.A == keycode){
-                    player.setXVelocity(-player.speed);
-                }
+                if(!isComplete){
+                    if(Input.Keys.RIGHT == keycode || Input.Keys.D == keycode){
+                        player.setXVelocity(player.speed);
+                    }else if(Input.Keys.LEFT == keycode || Input.Keys.A == keycode){
+                        player.setXVelocity(-player.speed);
+                    }
 
-                if(Input.Keys.UP == keycode || Input.Keys.W == keycode){
-                    player.setYVelocity(player.speed);
-                }else if(Input.Keys.DOWN == keycode || Input.Keys.S == keycode){
-                    player.setYVelocity(-player.speed);
-                }
+                    if(Input.Keys.UP == keycode || Input.Keys.W == keycode){
+                        player.setYVelocity(player.speed);
+                    }else if(Input.Keys.DOWN == keycode || Input.Keys.S == keycode){
+                        player.setYVelocity(-player.speed);
+                    }
 
-                if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
-                    player.speed = player.speed*2f;
-                    player.setXVelocity(player.velocity.x*2f);
-                    player.setYVelocity(player.velocity.y*2f);
-                    player.animation.setFrameDuration(player.animation.getFrameDuration()/2f);
+                    if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
+                        player.speed = player.speed*2f;
+                        player.setXVelocity(player.velocity.x*2f);
+                        player.setYVelocity(player.velocity.y*2f);
+                        player.animation.setFrameDuration(player.animation.getFrameDuration()/2f);
+                    }
                 }
 
 
@@ -407,18 +407,19 @@ public class StealthNessieStage extends BaseStage {
 
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if((Input.Keys.RIGHT == keycode || Input.Keys.D == keycode) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-                    player.setXVelocity(0);
-                }else if((Input.Keys.LEFT == keycode || Input.Keys.A == keycode) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-                    player.setXVelocity(0);
-                }
+                if(!isComplete){
+                    if((Input.Keys.RIGHT == keycode || Input.Keys.D == keycode) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+                        player.setXVelocity(0);
+                    }else if((Input.Keys.LEFT == keycode || Input.Keys.A == keycode) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+                        player.setXVelocity(0);
+                    }
 
-                if((Input.Keys.UP == keycode || Input.Keys.W == keycode) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-                    player.setYVelocity(0);
-                }else if((Input.Keys.DOWN == keycode || Input.Keys.S == keycode) && !Gdx.input.isKeyPressed(Input.Keys.UP)){
-                    player.setYVelocity(0);
+                    if((Input.Keys.UP == keycode || Input.Keys.W == keycode) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+                        player.setYVelocity(0);
+                    }else if((Input.Keys.DOWN == keycode || Input.Keys.S == keycode) && !Gdx.input.isKeyPressed(Input.Keys.UP)){
+                        player.setYVelocity(0);
+                    }
                 }
-
                 if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
                     player.speed = player.speed/2f;
                     player.setXVelocity(player.velocity.x/2f);
@@ -434,9 +435,10 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
 
-        if(!isComplete && player.collider.overlaps(landingPad.collider) && !player.isFound() && !player.isDisguised){
+        if(!isComplete && landingPad.collider.contains(player.collider) && !player.isFound() && !player.isDisguised){
             alienUp.play();
             player.velocity.y = player.speed*3;
+            player.velocity.x = 0f;
             isComplete = true;
         }else if(isComplete && endScreen == null && player.getY() > 720f){
 

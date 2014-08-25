@@ -1,12 +1,12 @@
 
 animations.png
-size: 4004,3782
+size: 4004,3798
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bg/Background
   rotate: false
-  xy: 0, 3060
+  xy: 0, 3076
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
@@ -18,6 +18,34 @@ bg/Background
   orig: 3000, 720
   offset: 0, 0
   index: 2
+bg/Glow
+  rotate: false
+  xy: 3002, 3285
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 1
+bg/Glow
+  rotate: false
+  xy: 3406, 3689
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 2
+bg/Glow
+  rotate: false
+  xy: 3406, 3689
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 4
+bg/Glow
+  rotate: false
+  xy: 3002, 3176
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 3
 clouds/Clouds
   rotate: false
   xy: 0, 1530
@@ -62,182 +90,182 @@ clouds/Clouds
   index: 6
 nessie/Disguised
   rotate: false
-  xy: 3002, 3580
+  xy: 3002, 3596
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Sad
   rotate: false
-  xy: 3002, 3378
+  xy: 3002, 3394
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Sad
   rotate: false
-  xy: 3002, 3176
+  xy: 3204, 3596
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
+nessie/Sad
+  rotate: false
+  xy: 3406, 3487
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 3
+nessie/Sad
+  rotate: false
+  xy: 3204, 3394
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 4
 nessie/Sad
   rotate: false
   xy: 3002, 2974
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 3
+  index: 5
 nessie/Sad
   rotate: false
   xy: 3002, 2772
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 4
+  index: 6
 nessie/Sad
   rotate: false
   xy: 3002, 2570
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 5
-nessie/Sad
-  rotate: false
-  xy: 3002, 2368
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 6
-nessie/Sad
-  rotate: false
-  xy: 3002, 2166
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
   index: 7
 nessie/Still
   rotate: false
-  xy: 3204, 3580
+  xy: 3002, 2368
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Walk
   rotate: false
-  xy: 3204, 3378
+  xy: 3002, 2166
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
-nessie/Walk
-  rotate: false
-  xy: 3204, 3176
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 2
 nessie/Walk
   rotate: false
   xy: 3204, 2974
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 3
+  index: 2
 nessie/Walk
   rotate: false
   xy: 3204, 2772
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
-  index: 4
+  index: 3
 nessie/Walk
   rotate: false
   xy: 3204, 2570
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
+  index: 4
+nessie/Walk
+  rotate: false
+  xy: 3204, 2368
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
   index: 5
 patrol/Patrol
   rotate: false
-  xy: 3312, 2266
+  xy: 3406, 2872
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/Patrol
   rotate: false
-  xy: 3406, 3630
+  xy: 3420, 2720
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/Patrol
   rotate: false
-  xy: 3406, 3478
+  xy: 3515, 3303
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 patrol/PatrolA
   rotate: false
-  xy: 3204, 2418
+  xy: 3204, 2216
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/PatrolA
   rotate: false
-  xy: 3312, 2418
+  xy: 3312, 2216
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/PatrolA
   rotate: false
-  xy: 3204, 2266
+  xy: 3406, 3024
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 0, 3028
+  xy: 3406, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 1
 star/Star
   rotate: false
-  xy: 32, 3028
+  xy: 3438, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 2
 star/Star
   rotate: false
-  xy: 32, 3028
+  xy: 3438, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 6
 star/Star
   rotate: false
-  xy: 64, 3028
+  xy: 3470, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 64, 3028
+  xy: 3470, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 96, 3028
+  xy: 3502, 3455
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
