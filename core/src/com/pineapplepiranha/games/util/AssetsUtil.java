@@ -42,9 +42,9 @@ public class AssetsUtil {
     public static final String MASK_ICON = "images/Mask_Icon.png";
     public static final String GRASS = "images/Front-Grass.png";
     public static final String WAVES = "images/Waves.png";
-    public static final String FAR_TREES = "images/Background-Tree-Back.png";
-    public static final String NEAR_TREES = "images/Background-Tree-Front.png";
-    public static final String CLOUDS = "images/Dark-Clouds.jpg";
+//    public static final String FAR_TREES = "images/Background-Tree-Back.png";
+//    public static final String NEAR_TREES = "images/Background-Tree-Front.png";
+//    public static final String CLOUDS = "images/Dark-Clouds.jpg";
     public static final String LIGHT = "images/light-2.png";
     public static final String MOON = "images/Moon.png";
     public static final String MOUNTAINS = "images/Mountains.png";

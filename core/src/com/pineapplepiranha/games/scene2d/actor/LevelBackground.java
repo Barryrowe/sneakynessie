@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.GenericGroup;
@@ -20,6 +21,8 @@ import com.pineapplepiranha.games.scene2d.GenericGroup;
 public class LevelBackground extends GenericGroup {
 
     Texture bgTexture;
+
+    public Vector2 velocity = new Vector2(0f, 0f);
 
     public LevelBackground(float x, float y, float width, float height, Array<TextureAtlas.AtlasRegion> regions){
         super(x, y, width, height, Color.BLACK);
@@ -38,6 +41,18 @@ public class LevelBackground extends GenericGroup {
         if(bgTexture != null){
             textureRegion = new TextureRegion(bgTexture);
         }
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        float curX = getX();
+        float curY = getY();
+        float newX = curX + (velocity.x * delta);
+        float newY = curY + (velocity.y * delta);
+        setPosition(newX, newY);
+
     }
 
     @Override

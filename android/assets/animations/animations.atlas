@@ -1,291 +1,325 @@
 
 animations.png
-size: 4004,3798
+size: 4047,4073
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+bg/BTree
+  rotate: false
+  xy: 0, 3351
+  size: 3500, 720
+  orig: 3500, 720
+  offset: 0, 0
+  index: 2
+bg/BTree
+  rotate: false
+  xy: 0, 2629
+  size: 3491, 720
+  orig: 3491, 720
+  offset: 0, 0
+  index: 3
 bg/Background
   rotate: false
-  xy: 0, 3076
+  xy: 0, 463
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 1
-bg/Background
+bg/FTree
   rotate: false
-  xy: 0, 2252
-  size: 3000, 720
-  orig: 3000, 720
+  xy: 0, 1907
+  size: 3122, 720
+  orig: 3122, 720
+  offset: 0, 0
+  index: 3
+bg/FTree
+  rotate: false
+  xy: 0, 1185
+  size: 3079, 720
+  orig: 3079, 720
   offset: 0, 0
   index: 2
 bg/Glow
   rotate: false
-  xy: 3002, 3285
+  xy: 3502, 3964
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 1
 bg/Glow
   rotate: false
-  xy: 3406, 3689
+  xy: 0, 354
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 2
 bg/Glow
   rotate: false
-  xy: 3406, 3689
+  xy: 0, 354
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 4
 bg/Glow
   rotate: false
-  xy: 3002, 3176
+  xy: 3502, 3855
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 3
-clouds/Clouds
-  rotate: false
-  xy: 0, 1530
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 1
-clouds/Clouds
-  rotate: false
-  xy: 2002, 1444
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 2
-clouds/Clouds
-  rotate: false
-  xy: 0, 808
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 3
-clouds/Clouds
-  rotate: false
-  xy: 2002, 722
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 4
-clouds/Clouds
-  rotate: false
-  xy: 0, 86
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 5
-clouds/Clouds
-  rotate: false
-  xy: 2002, 0
-  size: 2000, 720
-  orig: 2000, 720
-  offset: 0, 0
-  index: 6
 nessie/Disguised
   rotate: false
-  xy: 3002, 3596
+  xy: 3124, 2427
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Sad
   rotate: false
-  xy: 3002, 3394
+  xy: 0, 152
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Sad
   rotate: false
-  xy: 3204, 3596
+  xy: 3502, 3653
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Sad
   rotate: false
-  xy: 3406, 3487
+  xy: 3124, 2225
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Sad
   rotate: false
-  xy: 3204, 3394
+  xy: 202, 152
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Sad
   rotate: false
-  xy: 3002, 2974
+  xy: 3502, 3451
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 nessie/Sad
   rotate: false
-  xy: 3002, 2772
+  xy: 3704, 3653
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 6
 nessie/Sad
   rotate: false
-  xy: 3002, 2570
+  xy: 3124, 2023
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 7
 nessie/Still
   rotate: false
-  xy: 3002, 2368
+  xy: 3704, 3451
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Walk
   rotate: false
-  xy: 3002, 2166
+  xy: 3326, 2427
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Walk
   rotate: false
-  xy: 3204, 2974
+  xy: 3326, 2225
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Walk
   rotate: false
-  xy: 3204, 2772
+  xy: 3326, 2023
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Walk
   rotate: false
-  xy: 3204, 2570
+  xy: 3124, 1821
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Walk
   rotate: false
-  xy: 3204, 2368
+  xy: 3326, 1821
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 patrol/Patrol
   rotate: false
-  xy: 3406, 2872
+  xy: 108, 0
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/Patrol
   rotate: false
-  xy: 3420, 2720
+  xy: 3906, 3551
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/Patrol
   rotate: false
-  xy: 3515, 3303
+  xy: 216, 0
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 patrol/PatrolA
   rotate: false
-  xy: 3204, 2216
+  xy: 0, 0
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/PatrolA
   rotate: false
-  xy: 3312, 2216
+  xy: 404, 202
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/PatrolA
   rotate: false
-  xy: 3406, 3024
+  xy: 3906, 3703
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 3406, 3455
+  xy: 3002, 1153
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 1
 star/Star
   rotate: false
-  xy: 3438, 3455
+  xy: 4015, 4041
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 2
 star/Star
   rotate: false
-  xy: 3438, 3455
+  xy: 4015, 4041
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 6
 star/Star
   rotate: false
-  xy: 3470, 3455
+  xy: 513, 431
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 3470, 3455
+  xy: 513, 431
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 3502, 3455
+  xy: 3502, 3419
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 4
 
 animations2.png
-size: 3002,1444
+size: 3002,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bg/Background
   rotate: false
-  xy: 0, 722
+  xy: 0, 2888
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 2
+bg/Background
+  rotate: false
+  xy: 0, 2166
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 3
 bg/Background
   rotate: false
+  xy: 0, 1444
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 4
+clouds/Clouds
+  rotate: false
+  xy: 0, 722
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 1
+clouds/Clouds
+  rotate: false
   xy: 0, 0
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 2
+
+animations3.png
+size: 3002,2888
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bg/BTree
+  rotate: false
+  xy: 0, 0
+  size: 2900, 720
+  orig: 2900, 720
+  offset: 0, 0
+  index: 1
+bg/FTree
+  rotate: false
+  xy: 0, 722
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 1
+clouds/Clouds
+  rotate: false
+  xy: 0, 2166
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
+  index: 3
+clouds/Clouds
+  rotate: false
+  xy: 0, 1444
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0

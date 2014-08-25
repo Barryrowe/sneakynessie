@@ -67,11 +67,11 @@ public class StealthNessieStage extends BaseStage {
     static {
         playerPos = new Vector2(250f, 170f);
         distantParalaxPos = new Vector2(700f, -50f);
-        farParallaxPos = new Vector2(500f, 130f);
-        nearParallaxPos = new Vector2(600f, 130f);
+        farParallaxPos = new Vector2(600f, 0f);
+        nearParallaxPos = new Vector2(475f, 0f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
-        pickupPointPos = new Vector2(11000  , 0f);
+        pickupPointPos = new Vector2(10840  , 0f);
     }
 
     //Actor Groups
@@ -101,9 +101,9 @@ public class StealthNessieStage extends BaseStage {
     public AnimatedActor landingPad;
     public GenericActor endScreen;
     public GenericActor grass;
-    public Parallax distantParallax;
-    public Parallax farParallax;
-    public Parallax nearParallax;
+    public LevelBackground distantParallax;
+    public LevelBackground farParallax;
+    public LevelBackground nearParallax;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -123,9 +123,6 @@ public class StealthNessieStage extends BaseStage {
         bgMusic.setLooping(true);
         bgMusic.play();
 
-        //Texture cloudTexture = am.get(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
-        //clouds = new LevelBackground(0f, 0f, cloudTexture.getWidth(), cloudTexture.getHeight(), cloudTexture);
-
         clouds = new LevelBackground(0f, 0f, LEVEL_WIDTH, LEVEL_HEIGHT, atlas.findRegions("clouds/Clouds"));
         addActor(clouds);
         clouds.setZIndex(depthInitialIndex++);
@@ -135,18 +132,15 @@ public class StealthNessieStage extends BaseStage {
         addActor(moon);
         moon.setZIndex(depthInitialIndex++);
 
-        TextureRegion distantParallaxRegion = new TextureRegion(am.get(AssetsUtil.MOUNTAINS, AssetsUtil.TEXTURE));
-        distantParallax = new Parallax(distantParalaxPos.x, distantParalaxPos.y, distantParallaxRegion);
+        distantParallax = new LevelBackground(distantParalaxPos.x, distantParalaxPos.y, 9201f, 720f, atlas.findRegions("bg/B2Tree"));
         addActor(distantParallax);
         distantParallax.setZIndex(depthInitialIndex++);
 
-        TextureRegion farParallaxRegion = new TextureRegion(am.get(AssetsUtil.FAR_TREES, AssetsUtil.TEXTURE));
-        farParallax = new Parallax(farParallaxPos.x, farParallaxPos.y, farParallaxRegion);
+        farParallax = new LevelBackground(farParallaxPos.x, farParallaxPos.y, 9201f, 720f, atlas.findRegions("bg/BTree"));
         addActor(farParallax);
         farParallax.setZIndex(depthInitialIndex++);
 
-        TextureRegion nearParallaxRegion = new TextureRegion(am.get(AssetsUtil.NEAR_TREES, AssetsUtil.TEXTURE));
-        nearParallax = new Parallax(nearParallaxPos.x, nearParallaxPos.y, nearParallaxRegion);
+        nearParallax = new LevelBackground(nearParallaxPos.x, nearParallaxPos.y, 9891f, 720f, atlas.findRegions("bg/FTree"));
         addActor(nearParallax);
         nearParallax.setZIndex(depthInitialIndex++);
 
@@ -162,7 +156,7 @@ public class StealthNessieStage extends BaseStage {
 
         //TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
         Animation glowingAnimation = new Animation(STAR_TWINKLE_RATE, atlas.findRegions("bg/Glow"));
-        landingPad = new AnimatedActor(pickupPointPos.x, pickupPointPos.y, 800f, 167f, glowingAnimation, 0f);
+        landingPad = new AnimatedActor(pickupPointPos.x, pickupPointPos.y, 900f, 187f, glowingAnimation, 0f);
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
