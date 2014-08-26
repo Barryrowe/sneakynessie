@@ -161,7 +161,7 @@ public class StealthNessieStage extends BaseStage {
 
 
         Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walking"));
-        Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Sad"));
+        Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Cry"));
         Animation runNessie = new Animation(1f/6f, atlas.findRegions("nessie/Run"));
         TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
         hidingTr.flip(true, false);

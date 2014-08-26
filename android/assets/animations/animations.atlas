@@ -1,334 +1,376 @@
 
 animations.png
-size: 4047,4070
+size: 4047,4091
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bg/BTree
   rotate: false
-  xy: 0, 3348
+  xy: 0, 3369
   size: 3500, 720
   orig: 3500, 720
   offset: 0, 0
   index: 2
 bg/BTree
   rotate: false
-  xy: 0, 2626
+  xy: 0, 2647
   size: 3491, 720
   orig: 3491, 720
   offset: 0, 0
   index: 3
 bg/FTree
   rotate: false
-  xy: 0, 1329
+  xy: 0, 1350
   size: 3122, 720
   orig: 3122, 720
   offset: 0, 0
   index: 3
 bg/FTree
   rotate: false
-  xy: 0, 607
+  xy: 0, 628
   size: 3079, 720
   orig: 3079, 720
   offset: 0, 0
   index: 2
 bg/Glow
   rotate: false
-  xy: 3502, 3961
+  xy: 3502, 3982
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 1
 bg/Glow
   rotate: false
-  xy: 3502, 3852
+  xy: 3502, 3873
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 2
 bg/Glow
   rotate: false
-  xy: 3502, 3852
+  xy: 3502, 3873
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 4
 bg/Glow
   rotate: false
-  xy: 3502, 3743
+  xy: 3502, 3764
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 3
 bg/Mountains
   rotate: false
-  xy: 0, 2051
+  xy: 0, 2072
   size: 3318, 573
   orig: 3318, 573
   offset: 0, 0
   index: 1
 bg/Mountains
   rotate: false
-  xy: 0, 32
+  xy: 0, 53
   size: 3000, 573
   orig: 3000, 573
   offset: 0, 0
   index: 2
 nessie/Cammo
   rotate: false
-  xy: 3502, 3484
+  xy: 3502, 3505
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: -1
+nessie/Cry
+  rotate: false
+  xy: 3761, 3505
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 1
+nessie/Cry
+  rotate: false
+  xy: 3124, 1813
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 2
+nessie/Cry
+  rotate: false
+  xy: 3124, 1554
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 3
+nessie/Cry
+  rotate: false
+  xy: 3124, 1295
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 4
+nessie/Cry
+  rotate: false
+  xy: 3081, 1036
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 5
+nessie/Cry
+  rotate: false
+  xy: 3081, 777
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 6
 nessie/Disguised
   rotate: false
-  xy: 3383, 1906
+  xy: 3761, 3303
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Run
   rotate: false
-  xy: 3761, 3484
+  xy: 3320, 2388
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 1
 nessie/Run
   rotate: false
-  xy: 3761, 3484
+  xy: 3320, 2388
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 3
 nessie/Run
   rotate: false
-  xy: 3124, 1792
+  xy: 3320, 2129
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 2
 nessie/Run
   rotate: false
-  xy: 3124, 1533
+  xy: 3081, 518
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 4
 nessie/Sad
   rotate: false
-  xy: 3383, 1704
+  xy: 3493, 3044
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Sad
   rotate: false
-  xy: 3383, 1502
+  xy: 3493, 2842
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Sad
   rotate: false
-  xy: 3383, 1300
+  xy: 3261, 316
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Sad
   rotate: false
-  xy: 3502, 3282
+  xy: 3261, 114
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Sad
   rotate: false
-  xy: 3704, 3282
+  xy: 3695, 3044
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 nessie/Sad
   rotate: false
-  xy: 3493, 3080
+  xy: 3695, 2842
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 6
 nessie/Sad
   rotate: false
-  xy: 3493, 2878
+  xy: 3601, 2640
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 7
 nessie/Still
   rotate: false
-  xy: 3695, 3080
+  xy: 3579, 2438
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 nessie/Stills
   rotate: false
-  xy: 3124, 1274
+  xy: 3002, 259
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: -1
 nessie/Walk
   rotate: false
-  xy: 3493, 2676
+  xy: 3579, 2236
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 1
 nessie/Walk
   rotate: false
-  xy: 3695, 2878
+  xy: 3803, 2640
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 2
 nessie/Walk
   rotate: false
-  xy: 3695, 2676
+  xy: 3781, 2438
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 3
 nessie/Walk
   rotate: false
-  xy: 3579, 2474
+  xy: 3781, 2236
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 4
 nessie/Walk
   rotate: false
-  xy: 3579, 2272
+  xy: 3642, 2034
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: 5
 nessie/Walking
   rotate: false
-  xy: 3081, 1015
+  xy: 3002, 0
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 1
 nessie/Walking
   rotate: false
-  xy: 3081, 756
+  xy: 3383, 1870
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 2
 nessie/Walking
   rotate: false
-  xy: 3320, 2367
+  xy: 3383, 1611
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 3
 nessie/Walking
   rotate: false
-  xy: 3320, 2108
+  xy: 3383, 1352
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 4
 nessie/Walking
   rotate: false
-  xy: 3081, 497
+  xy: 3502, 3246
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 5
 patrol/Patrol
   rotate: false
-  xy: 3781, 2372
+  xy: 3642, 1730
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/Patrol
   rotate: false
-  xy: 3687, 2120
+  xy: 3642, 1578
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/Patrol
   rotate: false
-  xy: 3585, 1968
+  xy: 3642, 1426
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 patrol/PatrolA
   rotate: false
-  xy: 3906, 3332
+  xy: 3493, 2690
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 1
 patrol/PatrolA
   rotate: false
-  xy: 3781, 2524
+  xy: 3642, 1882
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 2
 patrol/PatrolA
   rotate: false
-  xy: 3579, 2120
+  xy: 3844, 2084
   size: 106, 150
   orig: 106, 150
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 0, 0
+  xy: 4015, 4059
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 1
 star/Star
   rotate: false
-  xy: 4015, 4038
+  xy: 3081, 1318
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 2
 star/Star
   rotate: false
-  xy: 4015, 4038
+  xy: 3081, 1318
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 6
 star/Star
   rotate: false
-  xy: 3340, 1242
+  xy: 3002, 596
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 3
 star/Star
   rotate: false
-  xy: 3340, 1242
+  xy: 3002, 596
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: 5
 star/Star
   rotate: false
-  xy: 3081, 1297
+  xy: 0, 21
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
