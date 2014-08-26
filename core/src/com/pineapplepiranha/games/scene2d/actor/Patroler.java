@@ -58,11 +58,11 @@ public class Patroler extends DepthActor{
         velocity = new Vector2(speed, 0f);
         this.depthPos = depthPos;
         this.range = range;
-        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/2), getVisionBoxWidth(), height*2);
+        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
     }
 
     private float getVisionBoxWidth(){
-        return getWidth()*3;
+        return getWidth()*2;
     }
 
     @Override

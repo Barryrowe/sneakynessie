@@ -22,18 +22,12 @@ public class AssetsUtil {
     public static Class<Sound> SOUND = Sound.class;
     public static Class<Music> MUSIC = Music.class;
     public static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
-    public static Class<ParticleEffect> PARTICLE = ParticleEffect.class;
-    public static Class<Skin> SKIN = Skin.class;
 
     //TextureAtlases
     public static final String ANIMATION_ATLAS = "animations/animations.atlas";
 
-    //Skin
-    public static final String DEFAULT_SKIN = "uiskin.json";
-
     //Images
-    public static final String TITLE_SCREEN = "images/bg_city.png";
-    //public static final String GAME_BG = "images/Background_E.png";
+    public static final String TITLE_SCREEN = "images/Title.jpg";
     public static final String TREE_1 = "images/Tree.png";
     public static final String TREE_2 = "images/Pine-Tree.png";
     public static final String BUSH = "images/Bush.png";
@@ -42,12 +36,8 @@ public class AssetsUtil {
     public static final String MASK_ICON = "images/Mask_Icon.png";
     public static final String GRASS = "images/Front-Grass.png";
     public static final String WAVES = "images/Waves.png";
-//    public static final String FAR_TREES = "images/Background-Tree-Back.png";
-//    public static final String NEAR_TREES = "images/Background-Tree-Front.png";
-//    public static final String CLOUDS = "images/Dark-Clouds.jpg";
     public static final String LIGHT = "images/light-2.png";
     public static final String MOON = "images/Moon.png";
-    public static final String MOUNTAINS = "images/Mountains.png";
     public static final String END_SCREEN = "images/endscreen.png";
     public static final String ALIEN_LIGHT = "images/alien-light.png";
 

@@ -57,7 +57,6 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
 
         assetManager.load(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
-        //assetManager.load(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.BUSH, AssetsUtil.TEXTURE);
@@ -66,12 +65,8 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.GRASS, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.WAVES, AssetsUtil.TEXTURE);
-        //assetManager.load(AssetsUtil.FAR_TREES, AssetsUtil.TEXTURE);
-        //assetManager.load(AssetsUtil.NEAR_TREES, AssetsUtil.TEXTURE);
-        //assetManager.load(AssetsUtil.CLOUDS, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.MOON, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.MOUNTAINS, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.END_SCREEN, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
 

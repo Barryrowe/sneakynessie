@@ -128,11 +128,11 @@ public class StealthNessieStage extends BaseStage {
         clouds.setZIndex(depthInitialIndex++);
 
         TextureRegion moonTexture = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
-        moon = new GenericActor(initialMoonPos.x, initialMoonPos.y, 100f, 100f, moonTexture, Color.YELLOW);
+        moon = new GenericActor(initialMoonPos.x, initialMoonPos.y, 150f, 150f, moonTexture, Color.YELLOW);
         addActor(moon);
         moon.setZIndex(depthInitialIndex++);
 
-        distantParallax = new LevelBackground(distantParalaxPos.x, distantParalaxPos.y, 9201f, 720f, atlas.findRegions("bg/B2Tree"));
+        distantParallax = new LevelBackground(distantParalaxPos.x, distantParalaxPos.y, 9201f, 720f, atlas.findRegions("bg/Mountains"));
         addActor(distantParallax);
         distantParallax.setZIndex(depthInitialIndex++);
 
@@ -154,7 +154,6 @@ public class StealthNessieStage extends BaseStage {
         addActor(waves);
         waves.setZIndex(depthInitialIndex++);
 
-        //TextureRegion landingPadRegion = new TextureRegion(am.get(AssetsUtil.MOON, AssetsUtil.TEXTURE));
         Animation glowingAnimation = new Animation(STAR_TWINKLE_RATE, atlas.findRegions("bg/Glow"));
         landingPad = new AnimatedActor(pickupPointPos.x, pickupPointPos.y, 900f, 187f, glowingAnimation, 0f);
         addActor(landingPad);
@@ -313,13 +312,13 @@ public class StealthNessieStage extends BaseStage {
         patrolVals.add(new Vector3(7620, 720-660, 1500));
         patrolVals.add(new Vector3(8482, 720-578, 300));
         patrolVals.add(new Vector3(9500, 720-715, 800));
-        patrolVals.add(new Vector3(9000, 720-360, 200));
+        patrolVals.add(new Vector3(9000, 720-560, 200));
         patrolVals.add(new Vector3(10500, 720-502, 500));
         patrolVals.add(new Vector3(10500, 720-602, 500));
         patrolVals.add(new Vector3(10500, 720-702, 500));
         Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
 
-        float width = 50f;
+        float width = 75f;
         float height = 100f;
         for(Vector3 pv:patrolVals){
             String animationName = pv.z > 500 ? "patrol/Patrol" : "patrol/PatrolA";

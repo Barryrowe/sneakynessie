@@ -27,9 +27,9 @@ public class LevelBackground extends GenericGroup {
     public LevelBackground(float x, float y, float width, float height, Array<TextureAtlas.AtlasRegion> regions){
         super(x, y, width, height, Color.BLACK);
         float nextX = 0f;
-        Gdx.app.log("LVLBG", "Regions:" + regions.size);
+
         for(TextureAtlas.AtlasRegion r:regions){
-            Gdx.app.log("LVLBG", "Region Name: " + r.name + " Nextx: " + nextX);
+
             addActor(new GenericActor(nextX, 0f, r.getRegionWidth(), r.getRegionHeight(), r, Color.BLUE));
             nextX += r.getRegionWidth();
         }

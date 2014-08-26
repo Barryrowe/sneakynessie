@@ -57,8 +57,6 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
                     else if (btn == optionsButton){
                         gameProcessor.changeToScreen(SneakyNessieGame.OPTIONS);
                     }
-
-                    Gdx.app.log("Menu Item Clicked", "Clicked");
                 }
             };
 
@@ -67,23 +65,23 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
 
             TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
             style.font = gameProcessor.getAssetManager().get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-            style.fontColor =  Color.CYAN;
-            style.overFontColor = Color.RED;
-            style.downFontColor = Color.GRAY;
+            style.fontColor =  Color.WHITE;
+            style.overFontColor = Color.TEAL;
+            style.downFontColor = Color.WHITE;
             float fontScale = 2f;
             style.font.setScale(fontScale);
 
-            startGameButton = new TextButton("Play Game", style);
+            startGameButton = new TextButton("Start Sneakin'", style);
             startGameButton.addListener(listener);
-            startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
+            startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, -5f);
 
             stage.addActor(startGameButton);
 
-            optionsButton = new TextButton("Options", style);
-            optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
-            optionsButton.addListener(listener);
-
-            stage.addActor(optionsButton);
+//            optionsButton = new TextButton("Options", style);
+//            optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
+//            optionsButton.addListener(listener);
+//
+//            stage.addActor(optionsButton);
 
         }
 
