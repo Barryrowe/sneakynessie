@@ -26,6 +26,7 @@ public class Player extends DepthActor{
     private float keyFrameTotal = 0f;
     public Animation animation = null;
     public Animation sadAnimation = null;
+    public Animation runningAnimation = null;
 
     public TextureRegion hidingTexture;
     public TextureRegion normalTexture;
@@ -79,6 +80,10 @@ public class Player extends DepthActor{
             }
             return;
         }else{
+
+            if(runningAnimation != null && isRunning()){
+               textureRegion = runningAnimation.getKeyFrame(keyFrameTotal);
+            }
             if(velocity.x == 0.0f && velocity.y == 0.0f){
                 //
                 if(isHiding){
@@ -149,10 +154,15 @@ public class Player extends DepthActor{
         return isFound;
     }
 
+    public boolean isRunning(){
+        return Math.abs(velocity.x) > speed || Math.abs(velocity.y) > speed;
+    }
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
         //super.drawFull(batch, parentAlpha);
-        batch.draw(textureRegion, getX()-BUFFER, getY()-BUFFER, getWidth()+(BUFFER*2), getHeight()+(BUFFER*2));
+        if(isRunning()){
+            batch.draw(textureRegion, getX()-BUFFER, getY()-BUFFER, getWidth()+(BUFFER*2), getHeight()+(BUFFER*2));
+        }
         if(KasetagenStateUtil.isDebugMode()){
             batch.end();
             batch.begin();
