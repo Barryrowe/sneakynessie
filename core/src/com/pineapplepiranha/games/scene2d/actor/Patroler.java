@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 
 /**
@@ -46,20 +47,20 @@ public class Patroler extends DepthActor{
         velocity = new Vector2(speed, 0f);
         this.depthPos = depthPos;
         this.range = range;
-        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/2), getVisionBoxWidth(), height*2);
+        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
         this.animation = ani;
     }
-    public Patroler(float x, float y, float width, float height, TextureRegion tr, int depthPos, float range){
-        super(x, y, width, height, tr, depthPos);
-        setColor(Color.BLUE);
-        initialPos = new Vector2(x, y);
-        minX = x + (width/2) - range;
-        maxX = x + (width/2) + range;
-        velocity = new Vector2(speed, 0f);
-        this.depthPos = depthPos;
-        this.range = range;
-        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
-    }
+    //    public Patroler(float x, float y, float width, float height, TextureRegion tr, int depthPos, float range){
+    //        super(x, y, width, height, tr, depthPos);
+    //        setColor(Color.BLUE);
+    //        initialPos = new Vector2(x, y);
+    //        minX = x + (width/2) - range;
+    //        maxX = x + (width/2) + range;
+    //        velocity = new Vector2(speed, 0f);
+    //        this.depthPos = depthPos;
+    //        this.range = range;
+    //        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
+    //    }
 
     private float getVisionBoxWidth(){
         return getWidth()*2;
@@ -116,6 +117,26 @@ public class Patroler extends DepthActor{
 
         if(flashlight != null){
             batch.draw(flashlight, visionBox.x, visionBox.y, visionBox.width, visionBox.height);
+        }
+
+        if(KasetagenStateUtil.isDebugMode()){
+            batch.end();
+            batch.begin();
+            Gdx.gl20.glLineWidth(1f);
+            //Set the projection matrix, and line shape
+            debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
+            debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+            //Draw the bounds of the actor as a box
+            Color c = getColor() != null ? getColor() : Color.WHITE;
+            debugRenderer.setColor(c);
+            debugRenderer.rect(visionBox.x, visionBox.y, visionBox.width, visionBox.height);
+
+            //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
+            // coming in.
+            debugRenderer.end();
+            batch.end();
+            batch.begin();
         }
 
     }

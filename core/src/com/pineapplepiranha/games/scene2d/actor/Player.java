@@ -35,13 +35,15 @@ public class Player extends DepthActor{
     public boolean isHiding = false;
     public boolean isDisguised = false;
     protected boolean isFound = false;
+    public boolean isRunning = false;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
         super(x+BUFFER, y+BUFFER, width-BUFFER*2, height-(BUFFER*2), tr, 0);
         setColor(Color.YELLOW);
         normalTexture = tr;
         animation = null;
-        collider.set(x+(width/4), y+(height/4), width/2, height/2);
+        //collider.set(x+(width/4), y+(height/4), width/2, height/2);
+        collider.set(x+(width/4), y, width/2, height/2);
     }
 
     public Player(float x, float y, float width, float height, Animation anim){
@@ -53,7 +55,14 @@ public class Player extends DepthActor{
 
     @Override
     protected void adjustCollidingBox(float delta) {
-        collider.set(getX()+(getWidth()/4), getY()+(getHeight()/4), getWidth()/2, getHeight()/2);
+        if(isRunning){
+            Gdx.app.log("PLAYER", "IS RUNNING");
+            //collider.set(getX()+(getWidth()/8), getY()+(getHeight()/8), (getWidth()/1.5f), (getHeight()/1.5f));
+            collider.set(getX()+(getWidth()/8), getY(), (getWidth()/1.5f), (getHeight()/1.5f));
+        }   else{
+            //collider.set(getX()+(getWidth()/4), getY()+(getHeight()/4), getWidth()/2, getHeight()/2);
+            collider.set(getX()+(getWidth()/4), getY(), getWidth()/2, getHeight()/2);
+        }
     }
 
     @Override
@@ -80,10 +89,6 @@ public class Player extends DepthActor{
             }
             return;
         }else{
-
-            if(runningAnimation != null && isRunning()){
-               textureRegion = runningAnimation.getKeyFrame(keyFrameTotal);
-            }
             if(velocity.x == 0.0f && velocity.y == 0.0f){
                 //
                 if(isHiding){
@@ -93,7 +98,7 @@ public class Player extends DepthActor{
                 }
                 keyFrameTotal = 0f;
             }else if(animation != null){
-                textureRegion = animation.getKeyFrame(keyFrameTotal, true);
+                textureRegion = isRunning ? runningAnimation.getKeyFrame(keyFrameTotal, true) : animation.getKeyFrame(keyFrameTotal, true);
                 if(velocity.x < 0f){
                     textureRegion.flip(true, false);
 
@@ -154,13 +159,12 @@ public class Player extends DepthActor{
         return isFound;
     }
 
-    public boolean isRunning(){
-        return Math.abs(velocity.x) > speed || Math.abs(velocity.y) > speed;
-    }
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
         //super.drawFull(batch, parentAlpha);
-        if(isRunning()){
+        if(isRunning && velocity.x != 0f && velocity.y != 0f){
+            batch.draw(textureRegion, getX()-(BUFFER/2), getY()-(BUFFER/2), getWidth()+(BUFFER), getHeight()+(BUFFER));
+        }else{
             batch.draw(textureRegion, getX()-BUFFER, getY()-BUFFER, getWidth()+(BUFFER*2), getHeight()+(BUFFER*2));
         }
         if(KasetagenStateUtil.isDebugMode()){

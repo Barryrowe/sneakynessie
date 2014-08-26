@@ -160,18 +160,20 @@ public class StealthNessieStage extends BaseStage {
         landingPad.setZIndex(depthInitialIndex++);
 
 
-        Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walk"));
+        Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walking"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Sad"));
-        TextureRegion hidingTr = new TextureRegion(am.get(AssetsUtil.NESSIE_PTRN, AssetsUtil.TEXTURE));
+        Animation runNessie = new Animation(1f/6f, atlas.findRegions("nessie/Run"));
+        TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
         hidingTr.flip(true, false);
-        TextureRegion normalTr = atlas.findRegion("nessie/Still");
+        TextureRegion normalTr = atlas.findRegion("nessie/Stills");
         normalTr.flip(true, false);
 
         TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
 
-        player = new Player(playerPos.x, playerPos.y, 150f, 150f, walking);
+        player = new Player(playerPos.x, playerPos.y, 200f, 200f, walking);
         player.sadAnimation = sadNessie;
+        player.runningAnimation = runNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
         player.disguisedTexture = disguisedTr;
@@ -376,6 +378,7 @@ public class StealthNessieStage extends BaseStage {
                     }
 
                     if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
+                        player.isRunning = true;
                         player.speed = player.speed*2f;
                         player.setXVelocity(player.velocity.x*2f);
                         player.setYVelocity(player.velocity.y*2f);
@@ -414,6 +417,7 @@ public class StealthNessieStage extends BaseStage {
                     }
                 }
                 if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
+                    player.isRunning = false;
                     player.speed = player.speed/2f;
                     player.setXVelocity(player.velocity.x/2f);
                     player.setYVelocity(player.velocity.y/2f);
