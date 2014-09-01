@@ -453,7 +453,10 @@ public class StealthNessieStage extends BaseStage {
     public void act(float delta) {
 
         //Initialize Ending Interactions.
-        if(!isComplete && landingPad.collider.contains(player.collider) && !player.isFound() && !player.isDisguised){
+        boolean isOnLandingPad = landingPad.collider.overlaps(player.collider) &&
+                                 player.collider.x >= landingPad.collider.x &&
+                                 (player.collider.x + player.collider.width) <= (landingPad.collider.x + landingPad.collider.width);
+        if(!isComplete && isOnLandingPad && !player.isFound() && !player.isDisguised){
             alienUp.play();
             player.velocity.y = player.speed*3;
             player.velocity.x = 0f;
