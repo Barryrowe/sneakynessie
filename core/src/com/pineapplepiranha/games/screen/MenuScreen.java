@@ -36,11 +36,13 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         private TextButton optionsButton;
         private TextureRegion bgTextureRegion;
 
+        private Music menuMusic;
+
 
         public MenuScreen(IGameProcessor delegate){
             this.gameProcessor = delegate;
             stage = new BaseStage();
-
+            menuMusic = delegate.getAssetManager().get(AssetsUtil.MENU_MUSIC, AssetsUtil.MUSIC);
 
 
             ClickListener listener = new ClickListener()
@@ -98,12 +100,14 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
 
         @Override
         public void show() {
-            //To change body of implemented methods use File | Settings | File Templates.
+            menuMusic.play();
+            menuMusic.setLooping(true);
+            menuMusic.setVolume(0.5f);
         }
 
         @Override
         public void hide() {
-            //To change body of implemented methods use File | Settings | File Templates.
+            menuMusic.stop();
         }
 
         @Override

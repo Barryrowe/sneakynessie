@@ -48,7 +48,8 @@ public class AssetsUtil {
     public static final String COURIER_FONT_IMG = "fonts/courier-new-bold.png";
 
     //Music
-    public static final String GAME_MUSIC = "music/crystal_caves_1_2.mp3";//"music/cityofscrap.mp3";
+    public static final String GAME_MUSIC = "music/crystal_caves_1_2.mp3";
+    public static final String MENU_MUSIC = "music/lazy_day_v0.9.mp3";
 
     //SFX
     public static final String ALIEN_UP = "sfx/alien_up.mp3";

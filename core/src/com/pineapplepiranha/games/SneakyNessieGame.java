@@ -56,6 +56,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
 
+        assetManager.load(AssetsUtil.MENU_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.TREE_1, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.TREE_2, AssetsUtil.TEXTURE);
