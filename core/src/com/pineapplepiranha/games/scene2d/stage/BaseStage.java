@@ -31,9 +31,9 @@ public class BaseStage extends Stage {
     public boolean keyDown(int keyCode) {
         boolean result = super.keyDown(keyCode);
 
-//        if(Input.Keys.TAB == keyCode){
-//            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-//        }
+        if(Input.Keys.TAB == keyCode){
+            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
+        }
 
         return result;
     }

@@ -43,7 +43,7 @@ public class StealthNessieStage extends BaseStage {
     private static float LEVEL_HEIGHT = 720f;
 
     private static float MIN_X = 1f;
-    private static float MAX_X = ViewportUtil.VP_WIDTH*5;
+    private static float MAX_X = 12000f;
     private static float MIN_Y = 1f;
     private static float MAX_Y = ViewportUtil.VP_HEIGHT/3;
     private static float CAMERA_TRIGGER = ViewportUtil.VP_WIDTH/2;
@@ -84,7 +84,7 @@ public class StealthNessieStage extends BaseStage {
     public Array<AnimatedActor> stars;
     public Player player;
     public DisguisePowerUps disguisePowerUps;
-
+    public Array<BlockingActor> blockingActors;
 
     private boolean isComplete = false;
 
@@ -113,6 +113,7 @@ public class StealthNessieStage extends BaseStage {
         patrolers = new Array<Patroler>();
         disguises = new Array<Disguise>();
         stars = new Array<AnimatedActor>();
+        blockingActors = new Array<BlockingActor>();
 
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         whistle = am.get(AssetsUtil.WHISTLE, AssetsUtil.SOUND);
@@ -180,9 +181,10 @@ public class StealthNessieStage extends BaseStage {
         addActor(player);
 
         initializeDisguies(am);
-        initializePatrolers(am);
+        //initializePatrolers(am);
         initializeCover(am);
         initializeStars(am);
+        initializeBlockingComponents();
 
         TextureRegion maskIcon = new TextureRegion(am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE));
         disguisePowerUps = new DisguisePowerUps(powerupsPos.x,
@@ -360,6 +362,23 @@ public class StealthNessieStage extends BaseStage {
         }
     }
 
+    private void initializeBlockingComponents(){
+
+//        BlockingActor verticalBlock = new BlockingActor(0f, MAX_Y, 12000f, 300f);
+//        blockingActors.add(verticalBlock);
+//        addActor(verticalBlock);
+//
+//
+//        BlockingActor startingBlock = new BlockingActor(500f, 0f, 20f, 720f);
+//        blockingActors.add(startingBlock);
+//        addActor(startingBlock);
+//
+//        //End Wall
+//        BlockingActor ba = new BlockingActor(12000f, 0f, 10f, 720f);
+//        blockingActors.add(ba);
+//        addActor(ba);
+    }
+
     private void initializeInputListeners(){
         this.addListener(new InputListener(){
             @Override
@@ -432,6 +451,7 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
 
+        //Initialize Ending Interactions.
         if(!isComplete && landingPad.collider.contains(player.collider) && !player.isFound() && !player.isDisguised){
             alienUp.play();
             player.velocity.y = player.speed*3;
@@ -445,7 +465,8 @@ public class StealthNessieStage extends BaseStage {
 
         }
 
-        if(player.getX() > CAMERA_TRIGGER && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
+        //Adjust parallax velocities.
+        if(player.getX() > CAMERA_TRIGGER && (player.getX()+player.getWidth()) < getMaximumXPosition() && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
             distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
             moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
             farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
@@ -459,37 +480,18 @@ public class StealthNessieStage extends BaseStage {
 
         super.act(delta);
 
-        player.isHiding = false;
-        for(Cover c:availableCover){
-
-            if(player.collider.overlaps(c.collider)){
-                if(player.getY() > c.getY()){
-                    player.isHiding = true;
-                }
-            }
-        }
+        processHidingStatus();
 
         //Pickup Disguise!
-        Disguise toRemove = null;
-        for(Disguise d:disguises){
-            if(player.collider.overlaps(d.collider)){
-                toRemove = d;
-                disguisePowerUps.addIndicator(d.disguiseType, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
-            }
-        }
-
-        if(toRemove != null){
-            disguises.removeValue(toRemove, true);
-            toRemove.remove();
-        }
+        pickupDisguises();
 
         float y = player.getY();
         player.depthPos = (int)Math.floor(MAX_Y-y/DEPTH_HEIGHT);
 
         if(player.getX() < MIN_X){
             player.setX(MIN_X);
-        }else if(player.getY() > MAX_X){
-            player.setY(MAX_X);
+        }else if(player.getX()+player.getWidth() >= MAX_X){
+            player.setX(MAX_X-player.getWidth());
         }
 
         if(player.getY() < MIN_Y){
@@ -543,6 +545,33 @@ public class StealthNessieStage extends BaseStage {
 
     }
 
+    private void pickupDisguises() {
+        Disguise toRemove = null;
+        for(Disguise d:disguises){
+            if(player.collider.overlaps(d.collider)){
+                toRemove = d;
+                disguisePowerUps.addIndicator(d.disguiseType, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
+            }
+        }
+
+        if(toRemove != null){
+            disguises.removeValue(toRemove, true);
+            toRemove.remove();
+        }
+    }
+
+    private void processHidingStatus() {
+        player.isHiding = false;
+        for(Cover c:availableCover){
+
+            if(player.collider.overlaps(c.collider)){
+                if(player.getY() > c.getY()){
+                    player.isHiding = true;
+                }
+            }
+        }
+    }
+
     private void reorderDepthActors(){
         Array<DepthActor> depths = new Array<DepthActor>();
         for(Actor a:getActors()){
@@ -577,7 +606,10 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void adjustCamera() {
-        if(player.getX() > CAMERA_TRIGGER){
+
+        if(player.getX() > getMaximumXPosition()){
+            getCamera().position.set(getMaximumXPosition(), getCamera().position.y, getCamera().position.z);
+        }else if(player.getX() > CAMERA_TRIGGER){
             getCamera().position.set(player.getX(), getCamera().position.y, getCamera().position.z);
         }else{
             getCamera().position.set(CAMERA_TRIGGER, getCamera().position.y, getCamera().position.z);
@@ -587,6 +619,10 @@ public class StealthNessieStage extends BaseStage {
 
         float offset = powerupsPos.x;
         disguisePowerUps.setPosition(cameraLeft + offset, powerupsPos.y);
+    }
+
+    private float getMaximumXPosition(){
+        return MAX_X - CAMERA_TRIGGER;
     }
 
     private void resetLevel(){

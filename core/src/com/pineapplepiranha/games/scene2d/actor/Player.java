@@ -42,7 +42,6 @@ public class Player extends DepthActor{
         setColor(Color.YELLOW);
         normalTexture = tr;
         animation = null;
-        //collider.set(x+(width/4), y+(height/4), width/2, height/2);
         collider.set(x+(width/4), y, width/2, height/2);
     }
 
@@ -56,11 +55,8 @@ public class Player extends DepthActor{
     @Override
     protected void adjustCollidingBox(float delta) {
         if(isRunning){
-            Gdx.app.log("PLAYER", "IS RUNNING");
-            //collider.set(getX()+(getWidth()/8), getY()+(getHeight()/8), (getWidth()/1.5f), (getHeight()/1.5f));
             collider.set(getX()+(getWidth()/8), getY(), (getWidth()/1.5f), (getHeight()/1.5f));
         }   else{
-            //collider.set(getX()+(getWidth()/4), getY()+(getHeight()/4), getWidth()/2, getHeight()/2);
             collider.set(getX()+(getWidth()/4), getY(), getWidth()/2, getHeight()/2);
         }
     }
