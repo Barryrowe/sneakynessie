@@ -50,17 +50,6 @@ public class Patroler extends DepthActor{
         this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
         this.animation = ani;
     }
-    //    public Patroler(float x, float y, float width, float height, TextureRegion tr, int depthPos, float range){
-    //        super(x, y, width, height, tr, depthPos);
-    //        setColor(Color.BLUE);
-    //        initialPos = new Vector2(x, y);
-    //        minX = x + (width/2) - range;
-    //        maxX = x + (width/2) + range;
-    //        velocity = new Vector2(speed, 0f);
-    //        this.depthPos = depthPos;
-    //        this.range = range;
-    //        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
-    //    }
 
     private float getVisionBoxWidth(){
         return getWidth()*2;
@@ -79,10 +68,9 @@ public class Patroler extends DepthActor{
         if(goingToNessie){
             if(velocity.x > 0f && getX() >= targetX){
                 velocity.x = 0f;
-            }else if(velocity.x > 0f && getX() <= targetX){
+            }else if(velocity.x < 0f && getX() <= targetX){
                 velocity.x = 0f;
             }
-            return;
         }else if(getX() >= maxX || getX() <= minX){
             velocity.x *= -1;
         }
@@ -90,7 +78,7 @@ public class Patroler extends DepthActor{
 
 
         setPosition(getX() + (velocity.x * delta), getY());
-        if(velocity.x >= 0){
+        if(velocity.x > 0f){
             visionBox.setX(getX()+getWidth());
             if(flashlight != null && !flashlight.isFlipX()){
                 flashlight.flip(true, false);
@@ -99,7 +87,7 @@ public class Patroler extends DepthActor{
             if(textureRegion != null && !textureRegion.isFlipX()){
                 textureRegion.flip(true, false);
             }
-        }else{
+        }else if(velocity.x < 0f){
             visionBox.setX(getX() - (getVisionBoxWidth()));
             if(flashlight != null && flashlight.isFlipX()){
                 flashlight.flip(true, false);

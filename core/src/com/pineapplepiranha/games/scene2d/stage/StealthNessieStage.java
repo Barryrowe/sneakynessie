@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
@@ -181,7 +182,7 @@ public class StealthNessieStage extends BaseStage {
         addActor(player);
 
         initializeDisguies(am);
-        //initializePatrolers(am);
+        initializePatrolers(am);
         initializeCover(am);
         initializeStars(am);
         initializeBlockingComponents();
@@ -516,15 +517,15 @@ public class StealthNessieStage extends BaseStage {
             if(reset){
                 player.setIsFound(true);
                 whistle.play();
+                Random rand = new Random();
                 for(Patroler p:patrolers){
-                    if(p.getX() > player.getOriginX() + player.getWidth()){
-                        p.goingToNessie = true;
-                        p.targetX = player.getOriginX() + player.getWidth();
-                        p.velocity.x = -500f;
+                    p.goingToNessie = true;
+                    p.velocity.x = 1000f;
+                    if(p.getX() >= player.getOriginX() + player.getWidth()){
+                        p.targetX = player.getOriginX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
+                        p.velocity.x *= -1f;
                     }else if(p.getX() < player.getOriginX()- player.getWidth()){
-                        p.goingToNessie = true;
-                        p.targetX = player.getOriginX() - player.getWidth();
-                        p.velocity.x = 500f;
+                        p.targetX = player.getOriginX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
                     }
                 }
                 //resetLevel();
