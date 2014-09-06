@@ -16,8 +16,8 @@ import com.pineapplepiranha.games.scene2d.GenericGroup;
  */
 public class DisguisePowerUps extends GenericGroup{
 
-    private float INDICATOR_WIDTH = 100f;
-    private float BUFFER = 10f;
+    private float INDICATOR_WIDTH = 75f;
+    private float BUFFER = 0f;
     private TextureRegion indicatorRegion;
 
     private Array<DisguiseIndicator> indicators;

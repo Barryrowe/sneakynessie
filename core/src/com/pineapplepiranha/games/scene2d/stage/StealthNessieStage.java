@@ -69,7 +69,7 @@ public class StealthNessieStage extends BaseStage {
     public static final float SPACESHIP_HEIGHT = 371f;
     public static final float ABDUCTION_SPEED = 100f;
 
-    private static float ICON_SIZE = 100f;
+    private static float ICON_SIZE = 75f;
 
     private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
 
