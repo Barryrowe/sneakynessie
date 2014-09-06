@@ -18,7 +18,7 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  * Time: 10:56 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Patroler extends DepthActor{
+public class Patrol extends DepthActor{
 
     public float range;
     public Vector2 velocity;
@@ -38,7 +38,7 @@ public class Patroler extends DepthActor{
     public boolean goingToNessie = false;
     public float targetX = 0f;
 
-    public Patroler(float x, float y, float width, float height, Animation ani, int depthPos, float range){
+    public Patrol(float x, float y, float width, float height, Animation ani, int depthPos, float range){
         super(x, y, width, height, depthPos);
         setColor(Color.BLUE);
         initialPos = new Vector2(x, y);
@@ -57,19 +57,23 @@ public class Patroler extends DepthActor{
 
     @Override
     public void act(float delta) {
+
         super.act(delta);
         //Adjust visionBox
-
         if(animation != null){
             textureRegion = animation.getKeyFrame(keyFrameTime, true);
             keyFrameTime += delta;
         }
 
+
+
         if(goingToNessie){
             if(velocity.x > 0f && getX() >= targetX){
                 velocity.x = 0f;
+                textureRegion = animation.getKeyFrame(0f);
             }else if(velocity.x < 0f && getX() <= targetX){
                 velocity.x = 0f;
+                textureRegion = animation.getKeyFrame(0f);
             }
         }else if(getX() >= maxX || getX() <= minX){
             velocity.x *= -1;

@@ -40,8 +40,12 @@ import java.util.Random;
  */
 public class StealthNessieStage extends BaseStage {
 
+    /**
+     * Top of Screen
+     */
+    public static final float TOS = 720f;
     private static float LEVEL_WIDTH = 12000f;
-    private static float LEVEL_HEIGHT = 720f;
+    private static float LEVEL_HEIGHT = TOS;
 
     private static float MIN_X = 1f;
     private static float MAX_X = 12000f;
@@ -59,9 +63,13 @@ public class StealthNessieStage extends BaseStage {
     private static int MAX_STARS = 20;
     private static float STAR_SIZE = 30f;
 
-    private static float ICON_SIZE = 50f;
+    //Spaceship
+    private static final float SPACESHIP_CYCLE_RATE = 1f/9f;
+    public static final float SPACESHIP_WIDTH = 356f;
+    public static final float SPACESHIP_HEIGHT = 371f;
+    public static final float ABDUCTION_SPEED = 100f;
 
-    private static float DEPTH_HEIGHT = 20f;
+    private static float ICON_SIZE = 100f;
 
     private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
 
@@ -71,7 +79,7 @@ public class StealthNessieStage extends BaseStage {
         farParallaxPos = new Vector2(600f, 0f);
         nearParallaxPos = new Vector2(475f, 0f);
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
-        powerupsPos = new Vector2((ViewportUtil.VP_WIDTH/2) - (ICON_SIZE*3/2), ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.5f));
+        powerupsPos = new Vector2(ICON_SIZE/2f, ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.25f));
         pickupPointPos = new Vector2(10840  , 0f);
     }
 
@@ -80,12 +88,14 @@ public class StealthNessieStage extends BaseStage {
     public LevelBackground background;
     public Waves waves;
     public Array<Cover> availableCover;
-    public Array<Patroler> patrolers;
+    public Array<Patrol> patrols;
     public Array<Disguise> disguises;
     public Array<AnimatedActor> stars;
     public Player player;
     public DisguisePowerUps disguisePowerUps;
     public Array<BlockingActor> blockingActors;
+
+    private Spaceship spaceship;
 
     private boolean isComplete = false;
 
@@ -99,7 +109,7 @@ public class StealthNessieStage extends BaseStage {
 
 
     public GenericActor moon;
-    public AnimatedActor landingPad;
+    public LandingPad landingPad;
     public GenericActor endScreen;
     public GenericActor grass;
     public LevelBackground distantParallax;
@@ -111,7 +121,7 @@ public class StealthNessieStage extends BaseStage {
         AssetManager am = gameProcessor.getAssetManager();
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         availableCover = new Array<Cover>();
-        patrolers = new Array<Patroler>();
+        patrols = new Array<Patrol>();
         disguises = new Array<Disguise>();
         stars = new Array<AnimatedActor>();
         blockingActors = new Array<BlockingActor>();
@@ -134,15 +144,15 @@ public class StealthNessieStage extends BaseStage {
         addActor(moon);
         moon.setZIndex(depthInitialIndex++);
 
-        distantParallax = new LevelBackground(distantParalaxPos.x, distantParalaxPos.y, 9201f, 720f, atlas.findRegions("bg/Mountains"));
+        distantParallax = new LevelBackground(distantParalaxPos.x, distantParalaxPos.y, 9201f, TOS, atlas.findRegions("bg/Mountains"));
         addActor(distantParallax);
         distantParallax.setZIndex(depthInitialIndex++);
 
-        farParallax = new LevelBackground(farParallaxPos.x, farParallaxPos.y, 9201f, 720f, atlas.findRegions("bg/BTree"));
+        farParallax = new LevelBackground(farParallaxPos.x, farParallaxPos.y, 9201f, TOS, atlas.findRegions("bg/BTree"));
         addActor(farParallax);
         farParallax.setZIndex(depthInitialIndex++);
 
-        nearParallax = new LevelBackground(nearParallaxPos.x, nearParallaxPos.y, 9891f, 720f, atlas.findRegions("bg/FTree"));
+        nearParallax = new LevelBackground(nearParallaxPos.x, nearParallaxPos.y, 9891f, TOS, atlas.findRegions("bg/FTree"));
         addActor(nearParallax);
         nearParallax.setZIndex(depthInitialIndex++);
 
@@ -157,7 +167,7 @@ public class StealthNessieStage extends BaseStage {
         waves.setZIndex(depthInitialIndex++);
 
         Animation glowingAnimation = new Animation(STAR_TWINKLE_RATE, atlas.findRegions("bg/Glow"));
-        landingPad = new AnimatedActor(pickupPointPos.x, pickupPointPos.y, 900f, 187f, glowingAnimation, 0f);
+        landingPad = new LandingPad(pickupPointPos.x, pickupPointPos.y, 900f, 187f, glowingAnimation, 0f);
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
@@ -182,7 +192,7 @@ public class StealthNessieStage extends BaseStage {
         addActor(player);
 
         initializeDisguies(am);
-        initializePatrolers(am);
+        //initializePatrols(am);
         initializeCover(am);
         initializeStars(am);
         initializeBlockingComponents();
@@ -193,7 +203,7 @@ public class StealthNessieStage extends BaseStage {
                                                  ICON_SIZE * 4,
                                                  ICON_SIZE, maskIcon);
         addActor(disguisePowerUps);
-        disguisePowerUps.addIndicator("NOSE", maskIcon);
+        disguisePowerUps.addIndicator("NOSE");
 
         TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GRASS, AssetsUtil.TEXTURE));
         grass = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
@@ -302,7 +312,7 @@ public class StealthNessieStage extends BaseStage {
 
     }
 
-    private void initializePatrolers(AssetManager am){
+    private void initializePatrols(AssetManager am){
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
@@ -329,9 +339,9 @@ public class StealthNessieStage extends BaseStage {
             String animationName = pv.z > 500 ? "patrol/Patrol" : "patrol/PatrolA";
             Animation animation = new Animation(1f/3f, atlas.findRegions(animationName));
             TextureRegion flashlightTexture = new TextureRegion(flTexture);
-            Patroler p = new Patroler(pv.x, pv.y, width, height, animation, 0, pv.z);
+            Patrol p = new Patrol(pv.x, pv.y, width, height, animation, 0, pv.z);
             p.setFlashlightTextureRegion(flashlightTexture);
-            patrolers.add(p);
+            patrols.add(p);
             addActor(p);
         }
     }
@@ -452,35 +462,9 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void act(float delta) {
 
-        //Initialize Ending Interactions.
-        boolean isOnLandingPad = landingPad.collider.overlaps(player.collider) &&
-                                 player.collider.x >= landingPad.collider.x &&
-                                 (player.collider.x + player.collider.width) <= (landingPad.collider.x + landingPad.collider.width);
-        if(!isComplete && isOnLandingPad && !player.isFound() && !player.isDisguised){
-            alienUp.play();
-            player.velocity.y = player.speed*3;
-            player.velocity.x = 0f;
-            isComplete = true;
-        }else if(isComplete && endScreen == null && player.getY() > 720f){
+        resolveEndingInteractions();
+        adjustParallaxVelocities();
 
-            TextureRegion tr = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.END_SCREEN, AssetsUtil.TEXTURE));
-            endScreen = new GenericActor(getCamera().position.x - getCamera().viewportWidth/2, 0f, getWidth(), getHeight(), tr, Color.GREEN);
-            addActor(endScreen);
-
-        }
-
-        //Adjust parallax velocities.
-        if(player.getX() > CAMERA_TRIGGER && (player.getX()+player.getWidth()) < getMaximumXPosition() && player.velocity.x != 0f && !player.isFound() && !player.isDisguised){
-            distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
-            moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
-            farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
-            nearParallax.velocity.x = NEAR_PARALLAX_RATIO * player.velocity.x;
-        }else{
-            moon.velocity.x = 0f;
-            distantParallax.velocity.x = 0f;
-            farParallax.velocity.x = 0f;
-            nearParallax.velocity.x = 0f;
-        }
 
         super.act(delta);
 
@@ -489,8 +473,8 @@ public class StealthNessieStage extends BaseStage {
         //Pickup Disguise!
         pickupDisguises();
 
-        float y = player.getY();
-        player.depthPos = (int)Math.floor(MAX_Y-y/DEPTH_HEIGHT);
+
+        //player.depthPos = (int)Math.floor(MAX_Y-player.getY()/DEPTH_HEIGHT);
 
         if(player.getX() < MIN_X){
             player.setX(MIN_X);
@@ -507,10 +491,10 @@ public class StealthNessieStage extends BaseStage {
         reorderDepthActors();
         adjustCamera();
 
-        //Handle Patroler Collistions!
+        //Handle Patrol Collisions!
         if(!player.isHiding && !player.isDisguised && !player.isFound()){
             boolean reset = false;
-            for(Patroler p:patrolers){
+            for(Patrol p: patrols){
                 if(p.visionBox.overlaps(player.collider)){
                     reset = true;
                     break;
@@ -521,7 +505,7 @@ public class StealthNessieStage extends BaseStage {
                 player.setIsFound(true);
                 whistle.play();
                 Random rand = new Random();
-                for(Patroler p:patrolers){
+                for(Patrol p: patrols){
                     p.goingToNessie = true;
                     p.velocity.x = 1000f;
                     if(p.getX() >= player.getOriginX() + player.getWidth()){
@@ -531,7 +515,6 @@ public class StealthNessieStage extends BaseStage {
                         p.targetX = player.getOriginX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
                     }
                 }
-                //resetLevel();
             }
         }
 
@@ -549,12 +532,63 @@ public class StealthNessieStage extends BaseStage {
 
     }
 
+    private void resolveEndingInteractions() {
+        //Initialize Ending Interactions.
+        boolean isOnLandingPad = landingPad.collider.overlaps(player.collider) &&
+                                 player.collider.x >= landingPad.collider.x &&
+                                 (player.collider.x + player.collider.width) <= (landingPad.collider.x + landingPad.collider.width);
+        if(!isComplete && isOnLandingPad && !player.isFound() && !player.isDisguised){
+            alienUp.play();
+            player.velocity.y = ABDUCTION_SPEED;
+            player.velocity.x = 0f;
+            isComplete = true;
+            TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+            Animation spaceshipAni = new Animation(SPACESHIP_CYCLE_RATE, atlas.findRegions("spaceship/SpaceShip"));
+            spaceship = new Spaceship(player.getX() - ((SPACESHIP_WIDTH - player.getWidth())/2), TOS, SPACESHIP_WIDTH, SPACESHIP_HEIGHT, spaceshipAni);
+            addActor(spaceship);
+            MoveToAction moveSpaceshipAction = new MoveToAction();
+            moveSpaceshipAction.setPosition(spaceship.getX(), TOS-SPACESHIP_HEIGHT);
+            moveSpaceshipAction.setDuration(0.75f);
+            spaceship.addAction(moveSpaceshipAction);
+
+        }else if(isComplete && endScreen == null && player.getY() > spaceship.getY()){
+
+            player.setVisible(false);
+            MoveToAction moveSpaceshipAction = new MoveToAction();
+            moveSpaceshipAction.setPosition(spaceship.getX()-1000f, TOS + spaceship.getHeight());
+            moveSpaceshipAction.setDuration(2f);
+            spaceship.addAction(moveSpaceshipAction);
+
+            spaceship.setSpeechBubble(gameProcessor.getAssetManager().get(AssetsUtil.SPEECH_BUBBLE, AssetsUtil.TEXTURE), SPACESHIP_WIDTH/2, -(SPACESHIP_HEIGHT/2));
+        }
+    }
+
+    private void adjustParallaxVelocities() {
+        //Adjust parallax velocities.
+        boolean needsParallaxMovement = player.getX() > CAMERA_TRIGGER &&
+                                        (player.getX()+player.getWidth()) < getMaximumXPosition() &&
+                                        player.velocity.x != 0f &&
+                                        !player.isFound() &&
+                                        !player.isDisguised;
+        if(needsParallaxMovement){
+            distantParallax.velocity.x = DISTANT_PARALLAX_RATIO * player.velocity.x;
+            moon.velocity.x = MOON_PARALLAX_RATIO * player.velocity.x;
+            farParallax.velocity.x = FAR_PARALLAX_RATIO * player.velocity.x;
+            nearParallax.velocity.x = NEAR_PARALLAX_RATIO * player.velocity.x;
+        }else{
+            moon.velocity.x = 0f;
+            distantParallax.velocity.x = 0f;
+            farParallax.velocity.x = 0f;
+            nearParallax.velocity.x = 0f;
+        }
+    }
+
     private void pickupDisguises() {
         Disguise toRemove = null;
         for(Disguise d:disguises){
             if(player.collider.overlaps(d.collider)){
                 toRemove = d;
-                disguisePowerUps.addIndicator(d.disguiseType, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
+                disguisePowerUps.addIndicator(d.disguiseType);//, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
             }
         }
 
@@ -593,6 +627,9 @@ public class StealthNessieStage extends BaseStage {
         });
 
         int initialZ = getActors().size -1;
+        if(spaceship != null){
+            spaceship.setZIndex(initialZ--);
+        }
         grass.setZIndex(initialZ--);
         for(DepthActor d:depths){
             d.setZIndex(initialZ--);
@@ -633,10 +670,10 @@ public class StealthNessieStage extends BaseStage {
 
         bgMusic.stop();
 
-        for(Patroler p:patrolers){
+        for(Patrol p: patrols){
             p.remove();
         }
-        patrolers.clear();
+        patrols.clear();
 
         for(Disguise d:disguises){
             d.remove();
@@ -656,10 +693,10 @@ public class StealthNessieStage extends BaseStage {
         while(disguisePowerUps.hasDisguise()){
             disguisePowerUps.popIndicator();
         }
-        disguisePowerUps.addIndicator("NOSE", new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
+        disguisePowerUps.addIndicator("NOSE");//, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
 
         initializeCover(gameProcessor.getAssetManager());
-        initializePatrolers(gameProcessor.getAssetManager());
+        initializePatrols(gameProcessor.getAssetManager());
         initializeDisguies(gameProcessor.getAssetManager());
 
         moon.setPosition(initialMoonPos.x, initialMoonPos.y);
@@ -776,12 +813,12 @@ public class StealthNessieStage extends BaseStage {
         batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
                 moon.getOriginY() + 0.5f - lightSize*0.5f,
                 lightSize, lightSize);
-        for(Patroler p:patrolers){
+        for(Patrol p: patrols){
             batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
         }
 
-        if(isComplete && player.getY() < 720f){
-            batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth()*1.25f, 720f);
+        if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){
+            batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth() + 20f, spaceship.getY() + 30f);
         }
         batch.end();
         fbo.end();

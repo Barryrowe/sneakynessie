@@ -32,13 +32,14 @@ public class AssetsUtil {
     public static final String TREE_2 = "images/Pine-Tree.png";
     public static final String BUSH = "images/Bush.png";
     public static final String FLASHLIGHT = "images/flashlight.png";
-    public static final String MASK_ICON = "images/Mask_Icon.png";
+    public static final String MASK_ICON = "images/Mask_Icon_Circle.png";
     public static final String GRASS = "images/Front-Grass.png";
     public static final String WAVES = "images/Waves.png";
     public static final String LIGHT = "images/light-2.png";
     public static final String MOON = "images/Moon.png";
     public static final String END_SCREEN = "images/endscreen.png";
     public static final String ALIEN_LIGHT = "images/alien-light.png";
+    public static final String SPEECH_BUBBLE = "images/WHN_Speech.png";
 
 
     //Font Paths

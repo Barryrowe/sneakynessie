@@ -16,7 +16,7 @@ import com.pineapplepiranha.games.scene2d.GenericGroup;
  */
 public class DisguisePowerUps extends GenericGroup{
 
-    private float INDICATOR_WIDTH = 50f;
+    private float INDICATOR_WIDTH = 100f;
     private float BUFFER = 10f;
     private TextureRegion indicatorRegion;
 
@@ -29,12 +29,12 @@ public class DisguisePowerUps extends GenericGroup{
         indicators = new Array<DisguiseIndicator>();
     }
 
-    public void addIndicator(String type, TextureRegion tr){
+    public void addIndicator(String type){
         float x = indicators.size * (INDICATOR_WIDTH + BUFFER);
         float y = 0f;
         float width = INDICATOR_WIDTH;
         float height = INDICATOR_WIDTH;
-        DisguiseIndicator indicator = new DisguiseIndicator(x, y, width, height, tr);
+        DisguiseIndicator indicator = new DisguiseIndicator(x, y, width, height, indicatorRegion);
         indicator.disguiseType = type;
         this.addActor(indicator);
         indicators.add(indicator);
