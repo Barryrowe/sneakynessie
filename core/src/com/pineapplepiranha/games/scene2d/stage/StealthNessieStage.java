@@ -45,6 +45,8 @@ public class StealthNessieStage extends BaseStage {
      * Top of Screen
      */
     public static final float TOS = 720f;
+    public static final float WALKING_CYCLE_RATE = 1f / 5f;
+    public static final float RUNNING_CYCLE_RATE = 1f / 6f;
     private static float LEVEL_WIDTH = 12000f;
     private static float LEVEL_HEIGHT = TOS;
 
@@ -131,9 +133,7 @@ public class StealthNessieStage extends BaseStage {
         stars = new Array<AnimatedActor>();
         blockingActors = new Array<BlockingActor>();
 
-        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
-        instructions = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, LEVEL_HEIGHT, instructionRegion, Color.BLUE);
-        addActor(instructions);
+        initializeInstructions(am, atlas);
 
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         whistle = am.get(AssetsUtil.WHISTLE, AssetsUtil.SOUND);
@@ -181,9 +181,9 @@ public class StealthNessieStage extends BaseStage {
         landingPad.setZIndex(depthInitialIndex++);
 
 
-        Animation walking = new Animation(1f/5f, atlas.findRegions("nessie/Walking"));
+        Animation walking = new Animation(WALKING_CYCLE_RATE, atlas.findRegions("nessie/Walking"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Cry"));
-        Animation runNessie = new Animation(1f/6f, atlas.findRegions("nessie/Run"));
+        Animation runNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Run"));
         TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
         hidingTr.flip(true, false);
         TextureRegion normalTr = atlas.findRegion("nessie/Stills");
@@ -200,8 +200,8 @@ public class StealthNessieStage extends BaseStage {
         player.disguisedTexture = disguisedTr;
         addActor(player);
 
-        initializeDisguies(am);
-        //initializePatrols(am);
+        initializeDisguises(am);
+        initializePatrols(am);
         initializeCover(am);
         initializeStars(am);
         initializeBlockingComponents();
@@ -220,6 +220,21 @@ public class StealthNessieStage extends BaseStage {
 
         initializeInputListeners();
         sharderStuff();
+    }
+
+    private void initializeInstructions(AssetManager am, TextureAtlas atlas) {
+        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
+        instructions = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, LEVEL_HEIGHT, instructionRegion, Color.BLUE);
+        addActor(instructions);
+
+        Animation walkingAni = new Animation(WALKING_CYCLE_RATE, atlas.findRegions("nessie/Walking"));
+        AnimatedActor walkingAnimation = new AnimatedActor(20f, 720f-263f, 257f, 257f, walkingAni, 0f);
+        instructions.addActor(walkingAnimation);
+        Animation runningAni = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Run"));
+        AnimatedActor runningAnimation = new AnimatedActor(680f, 720f-263f, 257f, 257f, runningAni, 0f);
+        instructions.addActor(runningAnimation);
+
+
     }
 
     private void initializeCover(AssetManager am){
@@ -328,7 +343,7 @@ public class StealthNessieStage extends BaseStage {
         }
     }
 
-    private void initializeDisguies(AssetManager am){
+    private void initializeDisguises(AssetManager am){
         Texture disguiseTexture = am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE);
         for(int i=0;i<MAX_DISGUISE;i++){
             float adjust = (background.getWidth()/2)/3;
@@ -684,7 +699,7 @@ public class StealthNessieStage extends BaseStage {
 
         initializeCover(gameProcessor.getAssetManager());
         initializePatrols(gameProcessor.getAssetManager());
-        initializeDisguies(gameProcessor.getAssetManager());
+        initializeDisguises(gameProcessor.getAssetManager());
 
         moon.setPosition(initialMoonPos.x, initialMoonPos.y);
         adjustCamera();

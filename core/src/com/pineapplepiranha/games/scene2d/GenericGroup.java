@@ -53,10 +53,15 @@ public class GenericGroup extends KasetagenGroup {
     }
 
     @Override
-    protected void drawFull(Batch batch, float parentAlpha) {
+    protected void drawBefore(Batch batch, float parentAlpha) {
         if(textureRegion != null){
             batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
+    }
+
+    @Override
+    protected void drawFull(Batch batch, float v) {
+
     }
 }
