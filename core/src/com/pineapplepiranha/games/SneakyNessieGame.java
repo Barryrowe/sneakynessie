@@ -67,7 +67,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.WAVES, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.MOON, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.END_SCREEN, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.SPEECH_BUBBLE, AssetsUtil.TEXTURE);
 
@@ -95,7 +95,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu.getStage());
+            Gdx.input.setInputProcessor(menu);
 
         }else if(GAME.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!

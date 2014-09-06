@@ -1,9 +1,6 @@
 package com.pineapplepiranha.games.screen;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -84,7 +81,6 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
 //            optionsButton.addListener(listener);
 //
 //            stage.addActor(optionsButton);
-
         }
 
         @Override
@@ -131,7 +127,12 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
 //
         @Override
         public boolean keyDown(int keycode) {
-            return false;  //To change body of implemented methods use File | Settings | File Templates.
+
+            if(keycode == Input.Keys.SPACE){
+                gameProcessor.changeToScreen(SneakyNessieGame.GAME);
+            }
+
+            return false;
         }
 
         @Override

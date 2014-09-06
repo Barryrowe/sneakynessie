@@ -24,9 +24,9 @@ public class LandingPad extends AnimatedActor {
 
     @Override
     protected void adjustCollidingBox(float delta) {
-        collider.setPosition(getX() + (getWidth()/8f), getY() + (getHeight()/8f));
-        collider.setWidth(getWidth()*(3f/4f));
-        collider.setHeight(getHeight()*(3f/4f));
+        collider.setPosition(getX() + (getWidth()/4f), getY() + (getHeight()/4f));
+        collider.setWidth(getWidth()*(1f/2f));
+        collider.setHeight(getHeight()*(1f/2f));
     }
 
     @Override

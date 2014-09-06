@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
+import com.pineapplepiranha.games.scene2d.GenericGroup;
 import com.pineapplepiranha.games.scene2d.actor.*;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
@@ -67,11 +68,14 @@ public class StealthNessieStage extends BaseStage {
     private static final float SPACESHIP_CYCLE_RATE = 1f/9f;
     public static final float SPACESHIP_WIDTH = 356f;
     public static final float SPACESHIP_HEIGHT = 371f;
-    public static final float ABDUCTION_SPEED = 100f;
+    public static final float SPACESHIP_GETAWAY_DURATION = 4f;
+    public static final float ABDUCTION_SPEED = 200f;
 
     private static float ICON_SIZE = 75f;
 
     private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
+
+    private boolean isShowingInstructions = true;
 
     static {
         playerPos = new Vector2(250f, 170f);
@@ -115,6 +119,7 @@ public class StealthNessieStage extends BaseStage {
     public LevelBackground distantParallax;
     public LevelBackground farParallax;
     public LevelBackground nearParallax;
+    public GenericGroup instructions;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -126,11 +131,15 @@ public class StealthNessieStage extends BaseStage {
         stars = new Array<AnimatedActor>();
         blockingActors = new Array<BlockingActor>();
 
+        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
+        instructions = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, LEVEL_HEIGHT, instructionRegion, Color.BLUE);
+        addActor(instructions);
+
         alienUp = am.get(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
         whistle = am.get(AssetsUtil.WHISTLE, AssetsUtil.SOUND);
         walking = am.get(AssetsUtil.WALKING, AssetsUtil.SOUND);
         bgMusic = am.get(AssetsUtil.GAME_MUSIC, AssetsUtil.MUSIC);
-        bgMusic.setVolume(0.5f);//gameProcessor.getStoredFloat(IDataSaver.BG_MUSIC_VOLUME_PREF_KEY));
+        bgMusic.setVolume(0.5f);
 
         bgMusic.setLooping(true);
         bgMusic.play();
@@ -255,33 +264,6 @@ public class StealthNessieStage extends BaseStage {
         treePositions.add(new Vector2(3039, 720-516));
         treePositions.add(new Vector2(3144, 720-717));
         treePositions.add(new Vector2(3450, 720-540));
-        /*Bushes:
-            bushPositions.add(new Vector2(940, 720-540));
-            bushPositions.add(new Vector2(2040, 720-495));
-            bushPositions.add(new Vector2(2060, 720-700));
-            bushPositions.add(new Vector2(2575, 720-512));
-            bushPositions.add(new Vector2(3356, 720-638));
-            bushPositions.add(new Vector2(3682, 720-541));
-            bushPositions.add(new Vector2(3816, 720-585));
-            bushPositions.add(new Vector2(4378, 720-461));
-            bushPositions.add(new Vector2(4570, 720-471));
-
-        Pine Trees
-            pineTreePositions.add(new Vector2(1260, 720-504));
-            pineTreePositions.add(new Vector2(1530, 720-630));
-            pineTreePositions.add(new Vector2(1803, 720-591));
-            pineTreePositions.add(new Vector2(2289, 720-513));
-            pineTreePositions.add(new Vector2(2403, 720-660));
-
-        Trees
-            reePositions.add(new Vector2(2154, 720-594));
-            reePositions.add(new Vector2(2730, 720-666));
-            reePositions.add(new Vector2(2805, 720-552));
-            reePositions.add(new Vector2(2940, 720-651));
-            reePositions.add(new Vector2(3039, 720-516));
-            reePositions.add(new Vector2(3144, 720-717));
-            reePositions.add(new Vector2(3450, 720-540));
-         */
 
         TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
         float width = 129f;
@@ -394,7 +376,7 @@ public class StealthNessieStage extends BaseStage {
         this.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(!isComplete){
+                if(!isComplete && !isShowingInstructions){
                     if(Input.Keys.RIGHT == keycode || Input.Keys.D == keycode){
                         player.setXVelocity(player.speed);
                     }else if(Input.Keys.LEFT == keycode || Input.Keys.A == keycode){
@@ -418,7 +400,10 @@ public class StealthNessieStage extends BaseStage {
 
 
                 if(Input.Keys.SPACE == keycode){
-                    if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
+                    if(instructions.isVisible()){
+                        instructions.setVisible(false);
+                        isShowingInstructions = false;
+                    }else if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
                         disguisePowerUps.popIndicator();
                     }else if(player.isDisguised){
@@ -433,7 +418,7 @@ public class StealthNessieStage extends BaseStage {
 
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if(!isComplete){
+                if(!isComplete && !isShowingInstructions){
                     if((Input.Keys.RIGHT == keycode || Input.Keys.D == keycode) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)){
                         player.setXVelocity(0);
                     }else if((Input.Keys.LEFT == keycode || Input.Keys.A == keycode) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
@@ -445,14 +430,15 @@ public class StealthNessieStage extends BaseStage {
                     }else if((Input.Keys.DOWN == keycode || Input.Keys.S == keycode) && !Gdx.input.isKeyPressed(Input.Keys.UP)){
                         player.setYVelocity(0);
                     }
+                    if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
+                        player.isRunning = false;
+                        player.speed = player.speed/2f;
+                        player.setXVelocity(player.velocity.x/2f);
+                        player.setYVelocity(player.velocity.y/2f);
+                        player.animation.setFrameDuration(player.animation.getFrameDuration()*2f);
+                    }
                 }
-                if(Input.Keys.SHIFT_LEFT == keycode || Input.Keys.SHIFT_RIGHT == keycode){
-                    player.isRunning = false;
-                    player.speed = player.speed/2f;
-                    player.setXVelocity(player.velocity.x/2f);
-                    player.setYVelocity(player.velocity.y/2f);
-                    player.animation.setFrameDuration(player.animation.getFrameDuration()*2f);
-                }
+
 
                 return true;
             }
@@ -556,7 +542,7 @@ public class StealthNessieStage extends BaseStage {
             player.setVisible(false);
             MoveToAction moveSpaceshipAction = new MoveToAction();
             moveSpaceshipAction.setPosition(spaceship.getX()-1000f, TOS + spaceship.getHeight());
-            moveSpaceshipAction.setDuration(2f);
+            moveSpaceshipAction.setDuration(SPACESHIP_GETAWAY_DURATION);
             spaceship.addAction(moveSpaceshipAction);
 
             spaceship.setSpeechBubble(gameProcessor.getAssetManager().get(AssetsUtil.SPEECH_BUBBLE, AssetsUtil.TEXTURE), SPACESHIP_WIDTH/2, -(SPACESHIP_HEIGHT/2));
@@ -627,6 +613,7 @@ public class StealthNessieStage extends BaseStage {
         });
 
         int initialZ = getActors().size -1;
+        instructions.setZIndex(initialZ--);
         if(spaceship != null){
             spaceship.setZIndex(initialZ--);
         }
@@ -805,34 +792,36 @@ public class StealthNessieStage extends BaseStage {
 
     @Override
     public void draw() {
-        fbo.begin();
-        Batch batch = getBatch();
-        batch.setShader(defaultShader);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
-                moon.getOriginY() + 0.5f - lightSize*0.5f,
-                lightSize, lightSize);
-        for(Patrol p: patrols){
-            batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
-        }
+        if(!isShowingInstructions){
+            fbo.begin();
+            Batch batch = getBatch();
+            batch.setShader(defaultShader);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            batch.begin();
+            batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
+                    moon.getOriginY() + 0.5f - lightSize*0.5f,
+                    lightSize, lightSize);
+            for(Patrol p: patrols){
+                batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
+            }
 
-        if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){
-            batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth() + 20f, spaceship.getY() + 30f);
-        }
-        batch.end();
-        fbo.end();
+            if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){
+                batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth() + 20f, spaceship.getY() + 30f);
+            }
+            batch.end();
+            fbo.end();
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setShader(finalShader);
-        batch.begin();
-        fbo.getColorBufferTexture().bind(1); //this is important! bind the FBO to the 2nd texture unit
-        light.bind(0); //we force the binding of a texture on first texture unit to avoid artefacts
-        //this is because our default and ambiant shader dont use multi texturing...
-        //youc can basically bind anything, it doesnt matter
-        //tilemap.render(batch, dt);
-        //batch.draw(bg, 0f, 0f);
-        batch.end();
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            batch.setShader(finalShader);
+            batch.begin();
+            fbo.getColorBufferTexture().bind(1); //this is important! bind the FBO to the 2nd texture unit
+            light.bind(0); //we force the binding of a texture on first texture unit to avoid artefacts
+            //this is because our default and ambiant shader dont use multi texturing...
+            //youc can basically bind anything, it doesnt matter
+            //tilemap.render(batch, dt);
+            //batch.draw(bg, 0f, 0f);
+            batch.end();
+        }
         super.draw();
     }
 }
