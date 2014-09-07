@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
-import com.pineapplepiranha.games.scene2d.GenericActor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,34 +19,30 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
 public class Patrol extends DepthActor{
 
     public float range;
-    public Vector2 velocity;
     public float speed = 100f;
-
     public Rectangle visionBox;
-
-
-    private Vector2 initialPos;
-    private float minX, maxX;
-
     TextureRegion flashlight;
     public Animation animation;
 
+    private float minX, maxX;
     private float keyFrameTime = 0f;
-
-    public boolean goingToNessie = false;
-    public float targetX = 0f;
+    private boolean goingToNessie = false;
+    private float targetX = 0f;
+    private boolean isGoingLeft = false;
 
     public Patrol(float x, float y, float width, float height, Animation ani, int depthPos, float range){
         super(x, y, width, height, depthPos);
         setColor(Color.BLUE);
-        initialPos = new Vector2(x, y);
+
         minX = x + (width/2) - range;
         maxX = x + (width/2) + range;
-        velocity = new Vector2(speed, 0f);
+        velocity.set(speed, 0f);
+        isGoingLeft = speed < 0f;
         this.depthPos = depthPos;
         this.range = range;
         this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
         this.animation = ani;
+        updateDirections(isGoingLeft);
     }
 
     private float getVisionBoxWidth(){
@@ -59,47 +53,69 @@ public class Patrol extends DepthActor{
     public void act(float delta) {
 
         super.act(delta);
-        //Adjust visionBox
-        if(animation != null){
-            textureRegion = animation.getKeyFrame(keyFrameTime, true);
-            keyFrameTime += delta;
-        }
-
-
 
         if(goingToNessie){
-            if(velocity.x > 0f && getX() >= targetX){
-                velocity.x = 0f;
-                textureRegion = animation.getKeyFrame(0f);
-            }else if(velocity.x < 0f && getX() <= targetX){
+            if((velocity.x > 0f && getX() >= targetX) || (velocity.x < 0f && getX() <= targetX)){
+                setX(targetX);
                 velocity.x = 0f;
                 textureRegion = animation.getKeyFrame(0f);
             }
-        }else if(getX() >= maxX || getX() <= minX){
-            velocity.x *= -1;
+        }else if(getX() >= maxX){
+            setX(maxX - 1);
+
+            //Switch to Going Left
+            updateDirections(true);
+        }else if(getX() <= minX){
+            setX(minX + 1);
+            //Switch to going right
+            updateDirections(false);
         }
 
 
 
-        setPosition(getX() + (velocity.x * delta), getY());
-        if(velocity.x > 0f){
-            visionBox.setX(getX()+getWidth());
-            if(flashlight != null && !flashlight.isFlipX()){
-                flashlight.flip(true, false);
-            }
 
-            if(textureRegion != null && !textureRegion.isFlipX()){
-                textureRegion.flip(true, false);
+        if(animation != null){
+            if(!goingToNessie && getX() != targetX){
+                textureRegion = animation.getKeyFrame(keyFrameTime, true);
+                keyFrameTime += delta;
             }
-        }else if(velocity.x < 0f){
+        }
+
+        if(isGoingLeft){
             visionBox.setX(getX() - (getVisionBoxWidth()));
-            if(flashlight != null && flashlight.isFlipX()){
+        }else{
+            visionBox.setX(getX() + getWidth());
+        }
+    }
+
+
+    private void updateDirections(boolean goingLeft){
+        //Switch to Going Left
+        isGoingLeft = goingLeft;
+        if(flashlight != null){
+            if((isGoingLeft && flashlight.isFlipX()) || (!isGoingLeft && !flashlight.isFlipX())){
                 flashlight.flip(true, false);
             }
+        }
 
-            if(textureRegion != null && textureRegion.isFlipX()){
-                textureRegion.flip(true, false);
+        if(animation != null){
+            for(TextureRegion tr:animation.getKeyFrames()){
+                if((isGoingLeft && tr.isFlipX()) || (!isGoingLeft && !tr.isFlipX())){
+                    tr.flip(true, false);
+                }
             }
+        }
+
+        if(velocity.x > 0f && isGoingLeft || velocity.x < 0f && !isGoingLeft){
+            velocity.x *= -1;
+        }
+    }
+
+    public void sendToNessie(float targetX){
+        goingToNessie = true;
+        this.targetX = targetX;
+        if(targetX < getX() || targetX > getX()){
+            updateDirections(targetX < getX());
         }
     }
 
@@ -135,5 +151,6 @@ public class Patrol extends DepthActor{
 
     public void setFlashlightTextureRegion(TextureRegion tr){
         flashlight = tr;
+        updateDirections(isGoingLeft);
     }
 }

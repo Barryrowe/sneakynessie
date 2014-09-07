@@ -418,6 +418,8 @@ public class StealthNessieStage extends BaseStage {
                     if(instructions.isVisible()){
                         instructions.setVisible(false);
                         isShowingInstructions = false;
+                    }else if(isComplete && !player.isVisible()){
+                        resetLevel();
                     }else if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
                         disguisePowerUps.popIndicator();
@@ -494,38 +496,41 @@ public class StealthNessieStage extends BaseStage {
 
         //Handle Patrol Collisions!
         if(!player.isHiding && !player.isDisguised && !player.isFound()){
-            boolean reset = false;
+            boolean playerIsCaught = false;
             for(Patrol p: patrols){
                 if(p.visionBox.overlaps(player.collider)){
-                    reset = true;
+                    playerIsCaught = true;
                     break;
                 }
             }
 
-            if(reset){
+            if(playerIsCaught){
                 player.setIsFound(true);
                 whistle.play();
                 Random rand = new Random();
                 for(Patrol p: patrols){
-                    p.goingToNessie = true;
                     p.velocity.x = 1000f;
+                    float targetX = p.getX();
                     if(p.getX() >= player.getOriginX() + player.getWidth()){
-                        p.targetX = player.getOriginX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
-                        p.velocity.x *= -1f;
+                        targetX = player.getOriginX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
                     }else if(p.getX() < player.getOriginX()- player.getWidth()){
-                        p.targetX = player.getOriginX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
+                        targetX = player.getOriginX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
                     }
+
+                    p.sendToNessie(targetX);
                 }
             }
         }
 
         if(player.velocity.x != 0f || player.velocity.y != 0f){
+            float volume = player.isRunning ? 1f : 0.2f;
             if(walkId < 0L){
-                walkId = walking.loop();
+                walkId = walking.loop(volume);
             }else if(isComplete){
                 walking.pause(walkId);
             }else{
                 walking.resume(walkId);
+                walking.setVolume(walkId, volume);
             }
         }else{
             walking.pause(walkId);
@@ -671,6 +676,9 @@ public class StealthNessieStage extends BaseStage {
     private void resetLevel(){
 
         bgMusic.stop();
+        if(spaceship != null){
+            spaceship.remove();
+        }
 
         for(Patrol p: patrols){
             p.remove();
@@ -687,6 +695,7 @@ public class StealthNessieStage extends BaseStage {
         }
         availableCover.clear();
 
+        player.setVisible(true);
         player.setIsFound(false);
         player.setPosition(playerPos.x, playerPos.y);
         player.setXVelocity(0f);
