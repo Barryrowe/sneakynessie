@@ -723,6 +723,7 @@ public class StealthNessieStage extends BaseStage {
     private ShaderProgram finalShader;
     private ShaderProgram defaultShader;
     private Texture light;
+    private TextureRegion lightRegion;
     private Texture alienLight;
     private Texture bg;
 
@@ -801,6 +802,7 @@ public class StealthNessieStage extends BaseStage {
         finalShader.end();
 
         light = gameProcessor.getAssetManager().get(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
+        lightRegion = new TextureRegion(light);
         alienLight = gameProcessor.getAssetManager().get(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
         //bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
     }
@@ -826,7 +828,11 @@ public class StealthNessieStage extends BaseStage {
                     moon.getOriginY() + 0.5f - lightSize*0.5f,
                     lightSize, lightSize);
             for(Patrol p: patrols){
-                batch.draw(light, p.visionBox.x, p.visionBox.y, p.visionBox.width, p.visionBox.height);
+                float originX = p.visionBox.width/2;
+                float originY = p.visionBox.height/2;
+                batch.draw(lightRegion, p.visionBox.x, p.visionBox.y,
+                           originX, originY, p.visionBox.width, p.visionBox.height,
+                           1f+p.getCurrentAdjustment(), 1f+p.getCurrentAdjustment(), 0f);
             }
 
             if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){

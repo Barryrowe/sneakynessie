@@ -30,6 +30,11 @@ public class Patrol extends DepthActor{
     private float targetX = 0f;
     private boolean isGoingLeft = false;
 
+    private float minAdjustment = -0.15f;
+    private float maxAdjustment = 0.15f;
+    private float adjustmentRate = 0.25f;
+    private float currentAdjustment = 0f;
+
     public Patrol(float x, float y, float width, float height, Animation ani, int depthPos, float range){
         super(x, y, width, height, depthPos);
         setColor(Color.BLUE);
@@ -81,6 +86,13 @@ public class Patrol extends DepthActor{
             }
         }
 
+        if(flashlight != null){
+            if(currentAdjustment <= minAdjustment || currentAdjustment >= maxAdjustment){
+                adjustmentRate *= -1f;
+            }
+            currentAdjustment = currentAdjustment + (adjustmentRate *delta);
+        }
+
         if(isGoingLeft){
             visionBox.setX(getX() - (getVisionBoxWidth()));
         }else{
@@ -119,12 +131,17 @@ public class Patrol extends DepthActor{
         }
     }
 
+    public float getCurrentAdjustment(){
+        return currentAdjustment;
+    }
+
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
         super.drawFull(batch, parentAlpha);
 
         if(flashlight != null){
             batch.draw(flashlight, visionBox.x, visionBox.y, visionBox.width, visionBox.height);
+
         }
 
         if(KasetagenStateUtil.isDebugMode()){
