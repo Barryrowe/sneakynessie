@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -124,6 +125,7 @@ public class StealthNessieStage extends BaseStage {
     public LevelBackground nearParallax;
     public GenericGroup instructions;
     public GenericGroup lampPost;
+    public AnimatedActor raincoat;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -182,18 +184,7 @@ public class StealthNessieStage extends BaseStage {
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
-        TextureRegion lampPostRegion = new TextureRegion(am.get(AssetsUtil.LAMP_POST, AssetsUtil.TEXTURE));
-        lampPost = new GenericGroup(448f, 72f, lampPostRegion.getRegionWidth(), lampPostRegion.getRegionHeight(), lampPostRegion, Color.GREEN);
-        TextureRegion lanternRegion = new TextureRegion(am.get(AssetsUtil.LANTERN, AssetsUtil.TEXTURE));
-        GenericActor lantern = new GenericActor(356f, 210f, lanternRegion.getRegionWidth(), lanternRegion.getRegionHeight(), lanternRegion, Color.CYAN);
-        lantern.addDecorator(new OscillatingDectorator(-5f, 5f, 5f));
-        lantern.setOrigin(lantern.getWidth()/2, lantern.getHeight());
-        lampPost.addActor(lantern);
-
-        Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
-        AnimatedActor raincoat = new AnimatedActor(200f, 190f, 111f, 138f, coat, 0f);
-        //raincoat.addDecorator(new OscillatingDectorator(-10f, 10f, 2f));
-        lampPost.addActor(raincoat);
+        initializeShoreline(am, atlas);
 
 
         addActor(lampPost);
@@ -206,15 +197,19 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion normalTr = atlas.findRegion("nessie/Stills");
         normalTr.flip(true, false);
 
-        TextureRegion disguisedTr = atlas.findRegion("nessie/Fisherman_Disguise");//Disguised");
+        TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
+        TextureRegion fishermanTr = atlas.findRegion("nessie/Fisherman_Disguise");
+        fishermanTr.flip(true, false);
 
         player = new Player(playerPos.x, playerPos.y, 200f, 200f, walking);
         player.sadAnimation = sadNessie;
         player.runningAnimation = runNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
-        player.disguisedTexture = disguisedTr;
+        //player.disguisedTexture = disguisedTr;
+        player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
+        player.addDisguiseTexture(DisguiseType.FISHERMAN, fishermanTr);
         addActor(player);
 
         initializeDisguises(am);
@@ -229,7 +224,7 @@ public class StealthNessieStage extends BaseStage {
                                                  ICON_SIZE * 4,
                                                  ICON_SIZE, maskIcon);
         addActor(disguisePowerUps);
-        disguisePowerUps.addIndicator("NOSE");
+        disguisePowerUps.addIndicator(DisguiseType.NOSE);
 
         TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GRASS, AssetsUtil.TEXTURE));
         grass = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
@@ -237,6 +232,22 @@ public class StealthNessieStage extends BaseStage {
 
         initializeInputListeners();
         sharderStuff();
+    }
+
+    private void initializeShoreline(AssetManager am, TextureAtlas atlas) {
+        TextureRegion lampPostRegion = new TextureRegion(am.get(AssetsUtil.LAMP_POST, AssetsUtil.TEXTURE));
+        lampPost = new GenericGroup(448f, 72f, lampPostRegion.getRegionWidth(), lampPostRegion.getRegionHeight(), lampPostRegion, Color.GREEN);
+        TextureRegion lanternRegion = new TextureRegion(am.get(AssetsUtil.LANTERN, AssetsUtil.TEXTURE));
+        GenericActor lantern = new GenericActor(356f, 210f, lanternRegion.getRegionWidth(), lanternRegion.getRegionHeight(), lanternRegion, Color.CYAN);
+        lantern.addDecorator(new OscillatingDectorator(-5f, 5f, 5f));
+        lantern.setOrigin(lantern.getWidth()/2, lantern.getHeight());
+        lampPost.addActor(lantern);
+
+        Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
+        raincoat = new AnimatedActor(648f, 262f, 111f, 138f, coat, 0f);
+        addActor(raincoat);
+
+        //lampPost.addActor(raincoat);
     }
 
     private void initializeInstructions(AssetManager am, TextureAtlas atlas) {
@@ -268,17 +279,17 @@ public class StealthNessieStage extends BaseStage {
         bushPositions.add(new Vector2(4378, 720-500));
         bushPositions.add(new Vector2(4570, 720-510));
 
-        bushPositions.add(new Vector2(4575, 720-512));
-        bushPositions.add(new Vector2(5356, 720-638));
-        bushPositions.add(new Vector2(7682, 720-541));
-        bushPositions.add(new Vector2(7816, 720-585));
-        bushPositions.add(new Vector2(6378, 720-500));
-        bushPositions.add(new Vector2(6570, 720-510));
+//        bushPositions.add(new Vector2(4575, 720-512));
+//        bushPositions.add(new Vector2(5356, 720-638));
+//        bushPositions.add(new Vector2(7682, 720-541));
+//        bushPositions.add(new Vector2(7816, 720-585));
+//        bushPositions.add(new Vector2(6378, 720-500));
+//        bushPositions.add(new Vector2(6570, 720-510));
 
-        bushPositions.add(new Vector2(8575, 720-512));
-        bushPositions.add(new Vector2(9356, 720-535));
-        bushPositions.add(new Vector2(9378, 720-710));
-        bushPositions.add(new Vector2(9570, 720-590));
+//        bushPositions.add(new Vector2(8575, 720-512));
+//        bushPositions.add(new Vector2(9356, 720-535));
+//        bushPositions.add(new Vector2(9378, 720-710));
+//        bushPositions.add(new Vector2(9570, 720-590));
 
 
         Array<Vector2> pineTreePositions = new Array<Vector2>();
@@ -293,18 +304,26 @@ public class StealthNessieStage extends BaseStage {
         treePositions.add(new Vector2(2730, 720-666));
         treePositions.add(new Vector2(2805, 720-552));
         treePositions.add(new Vector2(2940, 720-651));
-        treePositions.add(new Vector2(3039, 720-516));
-        treePositions.add(new Vector2(3144, 720-717));
-        treePositions.add(new Vector2(3450, 720-540));
+//        treePositions.add(new Vector2(3039, 720-516));
+//        treePositions.add(new Vector2(3144, 720-717));
+//        treePositions.add(new Vector2(3450, 720-540));
 
         Array<Vector2> barrellPositions = new Array<Vector2>();
-        barrellPositions.add(new Vector2(2154, 720-594));
-        barrellPositions.add(new Vector2(2730, 720-666));
-        barrellPositions.add(new Vector2(2805, 720-552));
-        barrellPositions.add(new Vector2(2940, 720-651));
         barrellPositions.add(new Vector2(3039, 720-516));
         barrellPositions.add(new Vector2(3144, 720-717));
         barrellPositions.add(new Vector2(3450, 720-540));
+
+        barrellPositions.add(new Vector2(4575, 720-512));
+        barrellPositions.add(new Vector2(5356, 720-638));
+        barrellPositions.add(new Vector2(7682, 720-541));
+        barrellPositions.add(new Vector2(7816, 720-585));
+        barrellPositions.add(new Vector2(6378, 720-500));
+        barrellPositions.add(new Vector2(6570, 720-510));
+
+        barrellPositions.add(new Vector2(8575, 720-512));
+        barrellPositions.add(new Vector2(9356, 720-535));
+        barrellPositions.add(new Vector2(9378, 720-710));
+        barrellPositions.add(new Vector2(9570, 720-590));
 
 
         TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
@@ -383,7 +402,7 @@ public class StealthNessieStage extends BaseStage {
         Texture disguiseTexture = am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE);
         for(int i=0;i<MAX_DISGUISE;i++){
             float adjust = (background.getWidth()/2)/3;
-            Disguise d = new Disguise(background.getWidth()/2 +(i*adjust), MAX_Y-ICON_SIZE, ICON_SIZE, ICON_SIZE/2, disguiseTexture, "NOSE");
+            Disguise d = new Disguise(background.getWidth()/2 +(i*adjust), MAX_Y-ICON_SIZE, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.NOSE);
             disguises.add(d);
             addActor(d);
         }
@@ -460,7 +479,9 @@ public class StealthNessieStage extends BaseStage {
                         resetLevel();
                     }else if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
                         player.isDisguised = true;
-                        disguisePowerUps.popIndicator();
+                        DisguiseIndicator d = disguisePowerUps.popIndicator();
+                        player.setDisguiseType(d.disguiseType);
+
                     }else if(player.isDisguised){
                         player.isDisguised = false;
                     }else if(player.isFound()){
@@ -628,6 +649,13 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void pickupDisguises() {
+        if(raincoat.getStage() != null && player.collider.overlaps(raincoat.collider)){
+            lampPost.removeActor(raincoat);
+            raincoat.remove();
+            disguisePowerUps.addIndicator(DisguiseType.FISHERMAN);
+        }
+
+
         Disguise toRemove = null;
         for(Disguise d:disguises){
             if(player.collider.overlaps(d.collider)){
@@ -743,7 +771,7 @@ public class StealthNessieStage extends BaseStage {
         while(disguisePowerUps.hasDisguise()){
             disguisePowerUps.popIndicator();
         }
-        disguisePowerUps.addIndicator("NOSE");//, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
+        disguisePowerUps.addIndicator(DisguiseType.NOSE);//, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
 
         initializeCover(gameProcessor.getAssetManager());
         initializePatrols(gameProcessor.getAssetManager());

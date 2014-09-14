@@ -14,8 +14,8 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  */
 public class Disguise extends GenericActor {
 
-    public String disguiseType;
-    public Disguise(float x, float y, float width, float height, Texture texture, String disguiseType){
+    public DisguiseType disguiseType;
+    public Disguise(float x, float y, float width, float height, Texture texture, DisguiseType disguiseType){
         super(x, y, width, height, new TextureRegion(texture), Color.ORANGE);
         this.disguiseType = disguiseType;
     }

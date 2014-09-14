@@ -29,7 +29,7 @@ public class DisguisePowerUps extends GenericGroup{
         indicators = new Array<DisguiseIndicator>();
     }
 
-    public void addIndicator(String type){
+    public void addIndicator(DisguiseType type){
         float x = indicators.size * (INDICATOR_WIDTH + BUFFER);
         float y = 0f;
         float width = INDICATOR_WIDTH;
@@ -38,7 +38,6 @@ public class DisguisePowerUps extends GenericGroup{
         indicator.disguiseType = type;
         this.addActor(indicator);
         indicators.add(indicator);
-
     }
 
     public DisguiseIndicator popIndicator(){

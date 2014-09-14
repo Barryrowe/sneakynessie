@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 
@@ -31,11 +33,14 @@ public class Player extends DepthActor{
     public TextureRegion hidingTexture;
     public TextureRegion normalTexture;
     public TextureRegion disguisedTexture;
+    private ObjectMap<DisguiseType, TextureRegion> disguises;
 
     public boolean isHiding = false;
     public boolean isDisguised = false;
     protected boolean isFound = false;
     public boolean isRunning = false;
+
+    private DisguiseType disguiseType;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
         super(x+BUFFER, y+BUFFER, width-BUFFER*2, height-(BUFFER*2), tr, 0);
@@ -43,6 +48,9 @@ public class Player extends DepthActor{
         normalTexture = tr;
         animation = null;
         collider.set(x+(width/4), y, width/2, height/2);
+        disguiseType = DisguiseType.NOSE;
+        disguises = new ObjectMap<DisguiseType, TextureRegion>();
+
     }
 
     public Player(float x, float y, float width, float height, Animation anim){
@@ -50,6 +58,8 @@ public class Player extends DepthActor{
         setColor(Color.YELLOW);
         animation = anim;
         normalTexture = animation.getKeyFrame(0f);
+        disguiseType = DisguiseType.NOSE;
+        disguises = new ObjectMap<DisguiseType, TextureRegion>();
     }
 
     @Override
@@ -80,9 +90,13 @@ public class Player extends DepthActor{
         }else if(isDisguised){
             //Draw Disguised and return
 
-            if(disguisedTexture != null){
-                textureRegion = disguisedTexture;
+            if(disguises.containsKey(disguiseType)){
+                textureRegion = disguises.get(disguiseType);
             }
+
+//            if(disguisedTexture != null){
+//                textureRegion = disguisedTexture;
+//            }
             return;
         }else{
             if(velocity.x == 0.0f && velocity.y == 0.0f){
@@ -153,6 +167,14 @@ public class Player extends DepthActor{
 
     public boolean isFound(){
         return isFound;
+    }
+
+    public void setDisguiseType(DisguiseType dType){
+        disguiseType = dType;
+    }
+
+    public void addDisguiseTexture(DisguiseType dType, TextureRegion tr){
+        disguises.put(dType, tr);
     }
 
     @Override

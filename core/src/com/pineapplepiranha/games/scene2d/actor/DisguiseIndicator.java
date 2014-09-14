@@ -13,15 +13,11 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  */
 public class DisguiseIndicator extends GenericActor {
 
-    public String disguiseType;
+    //public String disguiseType;
+    public DisguiseType disguiseType;
 
     public DisguiseIndicator(float x, float y, float width, float height, TextureRegion tr){
         super(x, y, width, height, tr, Color.ORANGE);
-        disguiseType = "NOSE";
-    }
-
-    @Override
-    public void adjustOrigin(float delta) {
-        //do nothing
+        disguiseType = DisguiseType.NOSE; //"NOSE";
     }
 }
