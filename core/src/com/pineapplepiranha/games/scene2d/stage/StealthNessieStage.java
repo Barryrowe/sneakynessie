@@ -18,15 +18,18 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.utils.Array;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.GenericGroup;
 import com.pineapplepiranha.games.scene2d.actor.*;
+import com.pineapplepiranha.games.scene2d.decorator.ActorDecorator;
 import com.pineapplepiranha.games.scene2d.decorator.OscillatingDectorator;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
@@ -126,6 +129,7 @@ public class StealthNessieStage extends BaseStage {
     public GenericGroup instructions;
     public GenericGroup lampPost;
     public AnimatedActor raincoat;
+    public GenericActor hanger;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -648,10 +652,33 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void pickupDisguises() {
-        if(raincoat.getStage() != null && player.collider.overlaps(raincoat.collider)){
+        if(hanger == null && player.collider.overlaps(raincoat.collider)){
             lampPost.removeActor(raincoat);
             raincoat.remove();
             disguisePowerUps.addIndicator(DisguiseType.FISHERMAN);
+            TextureRegion region = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.HANGER, AssetsUtil.TEXTURE));
+            hanger = new GenericActor(raincoat.getX()+10f, raincoat.getY()+(138f-47f), 74f, 47f, region, Color.BLACK);
+            hanger.setOrigin(hanger.getWidth()/2, hanger.getHeight());
+
+            hanger.addDecorator(new ActorDecorator() {
+                float totalDuration = 1f;
+                float elapsedTime = 0f;
+                RotateByAction rotateBackToZero;
+                @Override
+                public void applyAdjustment(Actor a, float delta) {
+                    if(elapsedTime < totalDuration){
+                        a.rotateBy(-720f*delta);
+                        elapsedTime += delta;
+                    }else if(a.getRotation() != 0f && rotateBackToZero == null){
+                        rotateBackToZero = new RotateByAction();
+                        rotateBackToZero.setDuration(500f);
+                        rotateBackToZero.setAmount(a.getRotation() * -1f);
+                        a.addAction(rotateBackToZero);
+                    }
+                }
+            });
+
+            addActor(hanger);
         }
 
 
@@ -756,8 +783,14 @@ public class StealthNessieStage extends BaseStage {
         }
         disguises.clear();
 
+        //Clean up shoreline
+        if(hanger != null){
+            hanger.remove();
+        }
+        hanger = null;
         raincoat.remove();
         raincoat = null;
+
 
         for(Cover c:availableCover){
             c.remove();
