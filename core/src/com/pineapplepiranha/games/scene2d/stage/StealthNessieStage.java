@@ -26,6 +26,7 @@ import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.GenericGroup;
 import com.pineapplepiranha.games.scene2d.actor.*;
+import com.pineapplepiranha.games.scene2d.decorator.OscillatingDectorator;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
@@ -80,7 +81,7 @@ public class StealthNessieStage extends BaseStage {
     private boolean isShowingInstructions = true;
 
     static {
-        playerPos = new Vector2(250f, 170f);
+        playerPos = new Vector2(800f, 120f);//playerPos = new Vector2(250f, 170f);
         distantParalaxPos = new Vector2(700f, -50f);
         farParallaxPos = new Vector2(600f, 0f);
         nearParallaxPos = new Vector2(475f, 0f);
@@ -122,6 +123,7 @@ public class StealthNessieStage extends BaseStage {
     public LevelBackground farParallax;
     public LevelBackground nearParallax;
     public GenericGroup instructions;
+    public GenericGroup lampPost;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -142,7 +144,7 @@ public class StealthNessieStage extends BaseStage {
         bgMusic.setVolume(0.5f);
 
         bgMusic.setLooping(true);
-        bgMusic.play();
+        //bgMusic.play();
 
         clouds = new LevelBackground(0f, 0f, LEVEL_WIDTH, LEVEL_HEIGHT, atlas.findRegions("clouds/Clouds"));
         addActor(clouds);
@@ -180,6 +182,21 @@ public class StealthNessieStage extends BaseStage {
         addActor(landingPad);
         landingPad.setZIndex(depthInitialIndex++);
 
+        TextureRegion lampPostRegion = new TextureRegion(am.get(AssetsUtil.LAMP_POST, AssetsUtil.TEXTURE));
+        lampPost = new GenericGroup(448f, 72f, lampPostRegion.getRegionWidth(), lampPostRegion.getRegionHeight(), lampPostRegion, Color.GREEN);
+        TextureRegion lanternRegion = new TextureRegion(am.get(AssetsUtil.LANTERN, AssetsUtil.TEXTURE));
+        GenericActor lantern = new GenericActor(356f, 210f, lanternRegion.getRegionWidth(), lanternRegion.getRegionHeight(), lanternRegion, Color.CYAN);
+        lantern.addDecorator(new OscillatingDectorator(-5f, 5f, 5f));
+        lantern.setOrigin(lantern.getWidth()/2, lantern.getHeight());
+        lampPost.addActor(lantern);
+
+        Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
+        AnimatedActor raincoat = new AnimatedActor(200f, 190f, 111f, 138f, coat, 0f);
+        //raincoat.addDecorator(new OscillatingDectorator(-10f, 10f, 2f));
+        lampPost.addActor(raincoat);
+
+
+        addActor(lampPost);
 
         Animation walking = new Animation(WALKING_CYCLE_RATE, atlas.findRegions("nessie/Walking"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Cry"));
@@ -189,7 +206,7 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion normalTr = atlas.findRegion("nessie/Stills");
         normalTr.flip(true, false);
 
-        TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
+        TextureRegion disguisedTr = atlas.findRegion("nessie/Fisherman_Disguise");//Disguised");
         disguisedTr.flip(true, false);
 
         player = new Player(playerPos.x, playerPos.y, 200f, 200f, walking);
@@ -280,6 +297,16 @@ public class StealthNessieStage extends BaseStage {
         treePositions.add(new Vector2(3144, 720-717));
         treePositions.add(new Vector2(3450, 720-540));
 
+        Array<Vector2> barrellPositions = new Array<Vector2>();
+        barrellPositions.add(new Vector2(2154, 720-594));
+        barrellPositions.add(new Vector2(2730, 720-666));
+        barrellPositions.add(new Vector2(2805, 720-552));
+        barrellPositions.add(new Vector2(2940, 720-651));
+        barrellPositions.add(new Vector2(3039, 720-516));
+        barrellPositions.add(new Vector2(3144, 720-717));
+        barrellPositions.add(new Vector2(3450, 720-540));
+
+
         TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
         float width = 129f;
         float height = 121f;
@@ -303,6 +330,15 @@ public class StealthNessieStage extends BaseStage {
         height = 254f;
         for(Vector2 tv:treePositions){
             Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0);
+            availableCover.add(c);
+            addActor(c);
+        }
+
+        TextureRegion bRegion = new TextureRegion(am.get(AssetsUtil.BARREL, AssetsUtil.TEXTURE));
+        width = 85f;
+        height = 110f;
+        for(Vector2 bv:barrellPositions){
+            Cover c = new Cover(bv.x, bv.y, width, height, bRegion, 0);
             availableCover.add(c);
             addActor(c);
         }
@@ -418,6 +454,8 @@ public class StealthNessieStage extends BaseStage {
                     if(instructions.isVisible()){
                         instructions.setVisible(false);
                         isShowingInstructions = false;
+                        bgMusic.play();
+
                     }else if(isComplete && !player.isVisible()){
                         resetLevel();
                     }else if(!player.isHiding && !player.isDisguised && !player.isFound() && disguisePowerUps.hasDisguise()){
@@ -470,7 +508,7 @@ public class StealthNessieStage extends BaseStage {
 
 
         super.act(delta);
-
+        instructions.setX(getCamera().position.x - (getCamera().viewportWidth/2));
         processHidingStatus();
 
         //Pickup Disguise!
@@ -511,10 +549,10 @@ public class StealthNessieStage extends BaseStage {
                 for(Patrol p: patrols){
                     p.velocity.x = 1000f;
                     float targetX = p.getX();
-                    if(p.getX() >= player.getOriginX() + player.getWidth()){
-                        targetX = player.getOriginX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
-                    }else if(p.getX() < player.getOriginX()- player.getWidth()){
-                        targetX = player.getOriginX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
+                    if(p.getX() >= player.getCenterX() + player.getWidth()){
+                        targetX = player.getCenterX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
+                    }else if(p.getX() < player.getCenterX()- player.getWidth()){
+                        targetX = player.getCenterX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
                     }
 
                     p.sendToNessie(targetX);
@@ -638,6 +676,8 @@ public class StealthNessieStage extends BaseStage {
             spaceship.setZIndex(initialZ--);
         }
         grass.setZIndex(initialZ--);
+        waves.setZIndex(initialZ--);
+        lampPost.setZIndex(initialZ--);
         for(DepthActor d:depths){
             d.setZIndex(initialZ--);
         }
@@ -649,7 +689,6 @@ public class StealthNessieStage extends BaseStage {
         farParallax.setZIndex(index++);
         nearParallax.setZIndex(index++);
         background.setZIndex(index++);
-        waves.setZIndex(index++);
         landingPad.setZIndex(index);
     }
 
@@ -712,8 +751,10 @@ public class StealthNessieStage extends BaseStage {
 
         moon.setPosition(initialMoonPos.x, initialMoonPos.y);
         adjustCamera();
+        instructions.setVisible(true);
+        isShowingInstructions = true;
 
-        bgMusic.play();
+//        bgMusic.play();
 
     }
 
@@ -804,7 +845,6 @@ public class StealthNessieStage extends BaseStage {
         light = gameProcessor.getAssetManager().get(AssetsUtil.LIGHT, AssetsUtil.TEXTURE);
         lightRegion = new TextureRegion(light);
         alienLight = gameProcessor.getAssetManager().get(AssetsUtil.ALIEN_LIGHT, AssetsUtil.TEXTURE);
-        //bg = gameProcessor.getAssetManager().get(AssetsUtil.GAME_BG, AssetsUtil.TEXTURE);
     }
 
     public void resize(int width, int height) {
@@ -824,8 +864,9 @@ public class StealthNessieStage extends BaseStage {
             batch.setShader(defaultShader);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.begin();
-            batch.draw(light, moon.getOriginX() - lightSize*0.5f + 0.5f,
-                    moon.getOriginY() + 0.5f - lightSize*0.5f,
+
+            batch.draw(light, moon.getCenterX() - lightSize*0.5f + 0.5f,
+                    moon.getCenterY() + 0.5f - lightSize*0.5f,
                     lightSize, lightSize);
             for(Patrol p: patrols){
                 float originX = p.visionBox.width/2;

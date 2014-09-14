@@ -40,6 +40,9 @@ public class AssetsUtil {
     public static final String INSTRUCTIONS = "images/Instruction_Screen.jpg";
     public static final String ALIEN_LIGHT = "images/alien-light.png";
     public static final String SPEECH_BUBBLE = "images/WHN_Speech.png";
+    public static final String BARREL = "images/Barrel.png";
+    public static final String LAMP_POST = "images/Lamp_Post.png";
+    public static final String LANTERN = "images/Lantern.png";
 
 
     //Font Paths

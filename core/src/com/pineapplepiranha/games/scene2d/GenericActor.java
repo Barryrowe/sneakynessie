@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenActor;
+import com.pineapplepiranha.games.scene2d.decorator.ActorDecorator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +25,8 @@ public class GenericActor extends KasetagenActor {
 
     protected float rotationSpeed = 0f;
 
+    private Array<ActorDecorator> decorations;
+
     public GenericActor(float x, float y, float width, float height, TextureRegion textureRegion, Color color){
         super();
         setPosition(x, y);
@@ -33,6 +37,7 @@ public class GenericActor extends KasetagenActor {
         setColor(color);
         this.textureRegion = textureRegion;
         collider = new Rectangle(x, y, width, height);
+        decorations = new Array<ActorDecorator>();
     }
 
     public GenericActor(float x, float y, float width, float height, Color color){
@@ -44,6 +49,7 @@ public class GenericActor extends KasetagenActor {
         setOrigin(x + width/2, y + height/2);
         setColor(color);
         collider = new Rectangle(x, y, width, height);
+        decorations = new Array<ActorDecorator>();
     }
 
     protected void adjustCollidingBox(float delta){
@@ -70,7 +76,12 @@ public class GenericActor extends KasetagenActor {
 
 
     public void adjustOrigin(float delta){
-        setOrigin(getX()+(getWidth()/2), getY()+(getHeight()/2));
+        Vector2 parentAdjustment = new Vector2(0f, 0f);
+        if(getParent() != null){
+            parentAdjustment.set(getParent().getX(), getParent().getY());
+        }
+        setOrigin(parentAdjustment.x + getX()+(getWidth()/2),
+                  parentAdjustment.y + getY()+(getHeight()/2));
     }
 
     @Override
@@ -79,7 +90,12 @@ public class GenericActor extends KasetagenActor {
         adjustCollidingBox(delta);
         adjustRotation(delta);
         adjustPosition(delta);
-        adjustOrigin(delta);
+        //TODO: Find out why we were doing this in the first place
+        //adjustOrigin(delta);
+
+        for(ActorDecorator d:decorations){
+            d.applyAdjustment(this, delta);
+        }
     }
 
     @Override
@@ -88,5 +104,13 @@ public class GenericActor extends KasetagenActor {
             batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
+    }
+
+    public void addDecorator(ActorDecorator d){
+        this.decorations.add(d);
+    }
+
+    public void removeDecorator(ActorDecorator d){
+        this.decorations.removeValue(d, true);
     }
 }
