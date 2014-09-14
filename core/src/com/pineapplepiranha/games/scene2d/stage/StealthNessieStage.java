@@ -242,11 +242,6 @@ public class StealthNessieStage extends BaseStage {
         lantern.addDecorator(new OscillatingDectorator(-5f, 5f, 5f));
         lantern.setOrigin(lantern.getWidth()/2, lantern.getHeight());
         lampPost.addActor(lantern);
-
-        Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
-        raincoat = new AnimatedActor(648f, 262f, 111f, 138f, coat, 0f);
-        addActor(raincoat);
-
         //lampPost.addActor(raincoat);
     }
 
@@ -407,6 +402,10 @@ public class StealthNessieStage extends BaseStage {
             addActor(d);
         }
 
+        TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
+        raincoat = new AnimatedActor(648f, 262f, 111f, 138f, coat, 0f);
+        addActor(raincoat);
     }
 
     private void initializeStars(AssetManager am){
@@ -756,6 +755,9 @@ public class StealthNessieStage extends BaseStage {
             d.remove();
         }
         disguises.clear();
+
+        raincoat.remove();
+        raincoat = null;
 
         for(Cover c:availableCover){
             c.remove();
