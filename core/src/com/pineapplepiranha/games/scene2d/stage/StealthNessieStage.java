@@ -80,12 +80,13 @@ public class StealthNessieStage extends BaseStage {
 
     private static float ICON_SIZE = 75f;
 
-    private static Vector2 playerPos, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
+    private static Vector2 playerPos, playerSize, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
 
     private boolean isShowingInstructions = true;
 
     static {
-        playerPos = new Vector2(800f, 120f);//playerPos = new Vector2(250f, 170f);
+        playerPos = new Vector2(800f, 120f);
+        playerSize = new Vector2(257f, 257f);
         distantParalaxPos = new Vector2(700f, -50f);
         farParallaxPos = new Vector2(600f, 0f);
         nearParallaxPos = new Vector2(475f, 0f);
@@ -196,6 +197,9 @@ public class StealthNessieStage extends BaseStage {
         Animation walking = new Animation(WALKING_CYCLE_RATE, atlas.findRegions("nessie/Walking"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Cry"));
         Animation runNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Run"));
+        Animation fisherNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Fisherman"));
+        Animation superNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Superman"));
+
         TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
         hidingTr.flip(true, false);
         TextureRegion normalTr = atlas.findRegion("nessie/Stills");
@@ -203,17 +207,20 @@ public class StealthNessieStage extends BaseStage {
 
         TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
-        TextureRegion fishermanTr = atlas.findRegion("nessie/Fisherman_Disguise");
-        fishermanTr.flip(true, false);
+//        TextureRegion fishermanTr = atlas.findRegion("nessie/Fisherman_Disguise");
+//        fishermanTr.flip(true, false);
 
-        player = new Player(playerPos.x, playerPos.y, 200f, 200f, walking);
+        player = new Player(playerPos.x, playerPos.y, playerSize.x, playerSize.y, walking);
         player.sadAnimation = sadNessie;
         player.runningAnimation = runNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
         //player.disguisedTexture = disguisedTr;
-        player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
-        player.addDisguiseTexture(DisguiseType.FISHERMAN, fishermanTr);
+        //player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
+        //player.addDisguiseTexture(DisguiseType.FISHERMAN, fishermanTr);
+        player.addDisguiseAnimation(DisguiseType.NOSE, superNessie);
+        player.addDisguiseAnimation(DisguiseType.FISHERMAN, fisherNessie);
+        player.addDisguiseAnimation(DisguiseType.SUPERMAN, superNessie);
         addActor(player);
 
         initializeDisguises(am);
@@ -701,7 +708,7 @@ public class StealthNessieStage extends BaseStage {
         for(Cover c:availableCover){
 
             if(player.collider.overlaps(c.collider)){
-                if(player.getY() > c.getY()){
+                if(player.collider.y > c.getY()){
                     player.isHiding = true;
                 }
             }
@@ -921,13 +928,14 @@ public class StealthNessieStage extends BaseStage {
 
     @Override
     public void draw() {
-        if(!isShowingInstructions){
-            fbo.begin();
-            Batch batch = getBatch();
-            batch.setShader(defaultShader);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            batch.begin();
 
+        fbo.begin();
+        Batch batch = getBatch();
+        batch.setShader(defaultShader);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+
+        if(!isShowingInstructions){
             batch.draw(light, moon.getCenterX() - lightSize*0.5f + 0.5f,
                     moon.getCenterY() + 0.5f - lightSize*0.5f,
                     lightSize, lightSize);
@@ -942,9 +950,12 @@ public class StealthNessieStage extends BaseStage {
             if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){
                 batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth() + 20f, spaceship.getY() + 30f);
             }
-            batch.end();
-            fbo.end();
+        }
 
+        batch.end();
+        fbo.end();
+
+        if(!isShowingInstructions){
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.setShader(finalShader);
             batch.begin();
@@ -952,7 +963,6 @@ public class StealthNessieStage extends BaseStage {
             light.bind(0); //we force the binding of a texture on first texture unit to avoid artefacts
             //this is because our default and ambiant shader dont use multi texturing...
             //youc can basically bind anything, it doesnt matter
-            //tilemap.render(batch, dt);
             //batch.draw(bg, 0f, 0f);
             batch.end();
         }

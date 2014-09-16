@@ -20,9 +20,6 @@ import com.pineapplepiranha.games.scene2d.GenericActor;
  */
 public class Player extends DepthActor{
 
-    //THIS IS GROSS!!!
-    private static float BUFFER = 20f;
-
     public float speed = 180f;
 
     private float keyFrameTotal = 0f;
@@ -32,8 +29,8 @@ public class Player extends DepthActor{
 
     public TextureRegion hidingTexture;
     public TextureRegion normalTexture;
-    public TextureRegion disguisedTexture;
     private ObjectMap<DisguiseType, TextureRegion> disguises;
+    private ObjectMap<DisguiseType, Animation> disguiseAnimations;
 
     public boolean isHiding = false;
     public boolean isDisguised = false;
@@ -43,13 +40,14 @@ public class Player extends DepthActor{
     private DisguiseType disguiseType;
 
     public Player(float x, float y, float width, float height, TextureRegion tr){
-        super(x+BUFFER, y+BUFFER, width-BUFFER*2, height-(BUFFER*2), tr, 0);
+        super(x, y, width, height, tr, 0);
         setColor(Color.YELLOW);
         normalTexture = tr;
         animation = null;
         collider.set(x+(width/4), y, width/2, height/2);
         disguiseType = DisguiseType.NOSE;
         disguises = new ObjectMap<DisguiseType, TextureRegion>();
+        disguiseAnimations = new ObjectMap<DisguiseType, Animation>();
 
     }
 
@@ -60,6 +58,7 @@ public class Player extends DepthActor{
         normalTexture = animation.getKeyFrame(0f);
         disguiseType = DisguiseType.NOSE;
         disguises = new ObjectMap<DisguiseType, TextureRegion>();
+        disguiseAnimations = new ObjectMap<DisguiseType, Animation>();
     }
 
     @Override
@@ -90,13 +89,21 @@ public class Player extends DepthActor{
         }else if(isDisguised){
             //Draw Disguised and return
 
-            if(disguises.containsKey(disguiseType)){
-                textureRegion = disguises.get(disguiseType);
+            TextureRegion tr = null;
+            if(disguiseAnimations.containsKey(disguiseType)){
+
+                tr = disguiseAnimations.get(disguiseType).getKeyFrame(keyFrameTotal, true);
+            }else if(disguises.containsKey(disguiseType)){
+                tr = disguises.get(disguiseType);
             }
 
-//            if(disguisedTexture != null){
-//                textureRegion = disguisedTexture;
-//            }
+            if(tr != null){
+                boolean needsFlip = (textureRegion.isFlipX() && !tr.isFlipX()) || (!textureRegion.isFlipX() && tr.isFlipX());
+                textureRegion = tr;
+                textureRegion.flip(needsFlip, false);
+                keyFrameTotal+= delta;
+            }
+
             return;
         }else{
             if(velocity.x == 0.0f && velocity.y == 0.0f){
@@ -177,14 +184,14 @@ public class Player extends DepthActor{
         disguises.put(dType, tr);
     }
 
+    public void addDisguiseAnimation(DisguiseType dType, Animation ani){
+        disguiseAnimations.put(dType, ani);
+    }
+
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
-        //super.drawFull(batch, parentAlpha);
-        if(isRunning && velocity.x != 0f && velocity.y != 0f){
-            batch.draw(textureRegion, getX()-(BUFFER/2), getY()-(BUFFER/2), getWidth()+(BUFFER), getHeight()+(BUFFER));
-        }else{
-            batch.draw(textureRegion, getX()-BUFFER, getY()-BUFFER, getWidth()+(BUFFER*2), getHeight()+(BUFFER*2));
-        }
+
+        batch.draw(textureRegion, getX(), getY(), getWidth(), getHeight());
         if(KasetagenStateUtil.isDebugMode()){
             batch.end();
             batch.begin();

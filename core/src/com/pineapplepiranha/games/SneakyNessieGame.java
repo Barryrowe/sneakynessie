@@ -2,6 +2,7 @@ package com.pineapplepiranha.games;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +12,7 @@ import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.screen.GameScreen;
 import com.pineapplepiranha.games.screen.MenuScreen;
 import com.pineapplepiranha.games.util.AssetsUtil;
+import com.pineapplepiranha.games.util.ViewportUtil;
 
 public class SneakyNessieGame extends Game implements IGameProcessor {
 
@@ -31,6 +33,10 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
     public void create () {
         assetManager = new AssetManager();
         loadAssets();
+
+        Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+        Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
+        //Gdx.graphics.setDisplayMode(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, true);
     }
 
     @Override

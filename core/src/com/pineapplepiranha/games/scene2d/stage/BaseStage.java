@@ -2,6 +2,7 @@ package com.pineapplepiranha.games.scene2d.stage;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
@@ -19,11 +20,14 @@ public class BaseStage extends Stage {
     protected IGameProcessor gameProcessor;
 
     public BaseStage(){
-        super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
+        super(new FitViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
+        //super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
+
     }
 
     public BaseStage(IGameProcessor gameProcessor){
-        super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
+        super(new FitViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
+        //super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
         this.gameProcessor = gameProcessor;
     }
 

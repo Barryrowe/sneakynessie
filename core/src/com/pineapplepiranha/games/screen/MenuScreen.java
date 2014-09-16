@@ -3,7 +3,10 @@ package com.pineapplepiranha.games.screen;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,6 +19,7 @@ import com.pineapplepiranha.games.delegate.IStageManager;
 import com.pineapplepiranha.games.scene2d.stage.BaseStage;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.util.AssetsUtil;
+import com.pineapplepiranha.games.util.ViewportUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -86,12 +90,18 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         @Override
         public void render(float delta) {
             stage.act(delta);
+            if(Gdx.graphics.isFullscreen()){
+                fbo.begin();
+                fbo.end();
+            }
             stage.draw();
         }
 
+        private FrameBuffer fbo;
         @Override
         public void resize(int width, int height) {
-            //To change body of implemented methods use File | Settings | File Templates.
+            super.resize(width, height);
+            fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
         }
 
         @Override
@@ -120,6 +130,7 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         public void dispose() {
             //To change body of implemented methods use File | Settings | File Templates.
         }
+
 
 
         //
