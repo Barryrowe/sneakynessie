@@ -45,13 +45,13 @@ public class Patrol extends DepthActor{
         isGoingLeft = speed < 0f;
         this.depthPos = depthPos;
         this.range = range;
-        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y-(height/4), getVisionBoxWidth(), height*1.5f);
+        this.visionBox = new Rectangle(x-(getVisionBoxWidth()), y+(height/8), getVisionBoxWidth(), height*.75f);
         this.animation = ani;
         updateDirections(isGoingLeft);
     }
 
     private float getVisionBoxWidth(){
-        return getWidth()*2;
+        return getWidth()*1.5f;
     }
 
     @Override

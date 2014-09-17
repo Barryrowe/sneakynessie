@@ -53,6 +53,7 @@ public class StealthNessieStage extends BaseStage {
     public static final float TOS = 720f;
     public static final float WALKING_CYCLE_RATE = 1f / 5f;
     public static final float RUNNING_CYCLE_RATE = 1f / 6f;
+    public static final float DISGUISE_CYCLE_RATE = 1f / 4f;
     private static float LEVEL_WIDTH = 12000f;
     private static float LEVEL_HEIGHT = TOS;
 
@@ -198,8 +199,8 @@ public class StealthNessieStage extends BaseStage {
         Animation walking = new Animation(WALKING_CYCLE_RATE, atlas.findRegions("nessie/Walking"));
         Animation sadNessie = new Animation(1f/7f, atlas.findRegions("nessie/Cry"));
         Animation runNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Run"));
-        Animation fisherNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Fisherman"));
-        Animation superNessie = new Animation(RUNNING_CYCLE_RATE, atlas.findRegions("nessie/Superman"));
+        Animation fisherNessie = new Animation(DISGUISE_CYCLE_RATE, atlas.findRegions("nessie/Fisherman"));
+        Animation superNessie = new Animation(DISGUISE_CYCLE_RATE, atlas.findRegions("nessie/Superman"));
 
         TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
         hidingTr.flip(true, false);
@@ -392,8 +393,8 @@ public class StealthNessieStage extends BaseStage {
         patrolVals.add(new Vector3(10500, 720-702, 500));
         Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
 
-        float width = 75f;
-        float height = 100f;
+        float width = 105f;//75f;
+        float height = 150f;//100f;
         for(Vector3 pv:patrolVals){
             String animationName = pv.z > 500 ? "patrol/Patrol" : "patrol/PatrolA";
             Animation animation = new Animation(1f/3f, atlas.findRegions(animationName));
@@ -937,12 +938,10 @@ public class StealthNessieStage extends BaseStage {
 
         fbo.begin();
         Batch batch = getBatch();
-        batch.setProjectionMatrix(getViewport().getCamera().combined);
         batch.setShader(defaultShader);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(Gdx.graphics.isFullscreen()){
-            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
-        }
+        Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
+
         batch.begin();
 
         if(!isShowingInstructions){
@@ -965,10 +964,7 @@ public class StealthNessieStage extends BaseStage {
         batch.end();
         fbo.end();
 
-        //We have to manually set viewport if we're in fullscreenmode
-        if(Gdx.graphics.isFullscreen()){
-            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
-        }
+        Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
 
         if(!isShowingInstructions){
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

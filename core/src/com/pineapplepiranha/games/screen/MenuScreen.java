@@ -91,27 +91,16 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         @Override
         public void render(float delta) {
             stage.act(delta);
-            if(Gdx.graphics.isFullscreen()){
-//                fbo.begin();
-//                fbo.end();
-                Viewport vp = stage.getViewport();
-                int screenW = vp.getScreenWidth();
-                int screenH = vp.getScreenHeight();
-                int leftCrop = vp.getLeftGutterWidth();
-                int rightCrop = vp.getRightGutterWidth();
-                int bottomCrop = vp.getBottomGutterHeight();
-                int topCrop = vp.getTopGutterHeight();
-                int xPos = leftCrop;
-                int yPos = bottomCrop;
-                int width = screenW - (leftCrop + rightCrop);
-                int height = screenH - (bottomCrop + topCrop);
-                Gdx.app.log("Stage", "Screen Dims: " + screenW + "x" + screenH);
-                Gdx.app.log("Stage", "Crops L: " + leftCrop + " R: " + rightCrop + "  B: " + bottomCrop + " T: " + topCrop);
-                Gdx.app.log("Stage", "Viewport Dims: " + xPos + ", " + yPos + " " + width + "x" + height);
-                Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
-            }
 
+            Viewport vp = stage.getViewport();
+            int screenW = vp.getScreenWidth();
+            int screenH = vp.getScreenHeight();
+            int leftCrop = vp.getLeftGutterWidth();
+            int bottomCrop = vp.getBottomGutterHeight();
+            int xPos = leftCrop;
+            int yPos = bottomCrop;
 
+            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
             stage.draw();
         }
 
