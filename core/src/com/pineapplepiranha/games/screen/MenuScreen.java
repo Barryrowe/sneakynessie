@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pineapplepiranha.games.SneakyNessieGame;
 import com.pineapplepiranha.games.data.IDataSaver;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
@@ -91,9 +92,26 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         public void render(float delta) {
             stage.act(delta);
             if(Gdx.graphics.isFullscreen()){
-                fbo.begin();
-                fbo.end();
+//                fbo.begin();
+//                fbo.end();
+                Viewport vp = stage.getViewport();
+                int screenW = vp.getScreenWidth();
+                int screenH = vp.getScreenHeight();
+                int leftCrop = vp.getLeftGutterWidth();
+                int rightCrop = vp.getRightGutterWidth();
+                int bottomCrop = vp.getBottomGutterHeight();
+                int topCrop = vp.getTopGutterHeight();
+                int xPos = leftCrop;
+                int yPos = bottomCrop;
+                int width = screenW - (leftCrop + rightCrop);
+                int height = screenH - (bottomCrop + topCrop);
+                Gdx.app.log("Stage", "Screen Dims: " + screenW + "x" + screenH);
+                Gdx.app.log("Stage", "Crops L: " + leftCrop + " R: " + rightCrop + "  B: " + bottomCrop + " T: " + topCrop);
+                Gdx.app.log("Stage", "Viewport Dims: " + xPos + ", " + yPos + " " + width + "x" + height);
+                Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
             }
+
+
             stage.draw();
         }
 
@@ -101,7 +119,10 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
         @Override
         public void resize(int width, int height) {
             super.resize(width, height);
+            Gdx.app.log("MENU SCREEN", "Resizing to W: " + width + " H: " + height);
+            stage.getViewport().update(width, height);
             fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
+
         }
 
         @Override

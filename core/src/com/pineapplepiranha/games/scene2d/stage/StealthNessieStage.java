@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 import com.pineapplepiranha.games.scene2d.GenericGroup;
@@ -823,9 +824,6 @@ public class StealthNessieStage extends BaseStage {
         adjustCamera();
         instructions.setVisible(true);
         isShowingInstructions = true;
-
-//        bgMusic.play();
-
     }
 
     /*SHADER MAGIC*/
@@ -836,7 +834,6 @@ public class StealthNessieStage extends BaseStage {
     private Texture light;
     private TextureRegion lightRegion;
     private Texture alienLight;
-    private Texture bg;
 
     public static final float ambientIntensity = .7f;
     public static final Vector3 ambientColor = new Vector3(0.3f, 0.3f, 0.7f);
@@ -920,6 +917,7 @@ public class StealthNessieStage extends BaseStage {
     public void resize(int width, int height) {
         fbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
 
+        getViewport().update(width, height);
         finalShader.begin();
         finalShader.setUniformf("resolution", width, height);
         finalShader.end();
@@ -929,10 +927,22 @@ public class StealthNessieStage extends BaseStage {
     @Override
     public void draw() {
 
+        Viewport vp = getViewport();
+        int screenW = vp.getScreenWidth();
+        int screenH = vp.getScreenHeight();
+        int leftCrop = vp.getLeftGutterWidth();
+        int bottomCrop = vp.getBottomGutterHeight();
+        int xPos = leftCrop;
+        int yPos = bottomCrop;
+
         fbo.begin();
         Batch batch = getBatch();
+        batch.setProjectionMatrix(getViewport().getCamera().combined);
         batch.setShader(defaultShader);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(Gdx.graphics.isFullscreen()){
+            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
+        }
         batch.begin();
 
         if(!isShowingInstructions){
@@ -955,9 +965,15 @@ public class StealthNessieStage extends BaseStage {
         batch.end();
         fbo.end();
 
+        //We have to manually set viewport if we're in fullscreenmode
+        if(Gdx.graphics.isFullscreen()){
+            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
+        }
+
         if(!isShowingInstructions){
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.setShader(finalShader);
+
             batch.begin();
             fbo.getColorBufferTexture().bind(1); //this is important! bind the FBO to the 2nd texture unit
             light.bind(0); //we force the binding of a texture on first texture unit to avoid artefacts
