@@ -84,7 +84,8 @@ public class StealthNessieStage extends BaseStage {
 
     private static float ICON_SIZE = 75f;
 
-    private static Vector2 playerPos, playerSize, distantParalaxPos,farParallaxPos, nearParallaxPos, initialMoonPos, powerupsPos, pickupPointPos;
+    private static Vector2 playerPos, playerSize, distantParalaxPos,farParallaxPos, nearParallaxPos,
+                           initialMoonPos, powerupsPos, pickupPointPos, phoneboothPos;
 
     private boolean isShowingInstructions = true;
 
@@ -97,6 +98,7 @@ public class StealthNessieStage extends BaseStage {
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2(ICON_SIZE/2f, ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.25f));
         pickupPointPos = new Vector2(10840  , 0f);
+        phoneboothPos = new Vector2(5750f, MAX_Y-50f);
     }
 
     //Actor Groups
@@ -135,6 +137,7 @@ public class StealthNessieStage extends BaseStage {
     public GenericGroup lampPost;
     public AnimatedActor raincoat;
     public GenericActor hanger;
+    public Cover phonebooth;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -211,25 +214,21 @@ public class StealthNessieStage extends BaseStage {
 
         TextureRegion disguisedTr = atlas.findRegion("nessie/Disguised");
         disguisedTr.flip(true, false);
-//        TextureRegion fishermanTr = atlas.findRegion("nessie/Fisherman_Disguise");
-//        fishermanTr.flip(true, false);
 
         player = new Player(playerPos.x, playerPos.y, playerSize.x, playerSize.y, walking);
         player.sadAnimation = sadNessie;
         player.runningAnimation = runNessie;
         player.setHidingTexture(hidingTr);
         player.setNormalTexture(normalTr);
-        //player.disguisedTexture = disguisedTr;
-        //player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
-        //player.addDisguiseTexture(DisguiseType.FISHERMAN, fishermanTr);
-        player.addDisguiseAnimation(DisguiseType.NOSE, superNessie);
+        player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
         player.addDisguiseAnimation(DisguiseType.FISHERMAN, fisherNessie);
         player.addDisguiseAnimation(DisguiseType.SUPERMAN, superNessie);
         addActor(player);
 
-        initializeDisguises(am);
+
         initializePatrols(am);
         initializeCover(am);
+        initializeDisguises(am);
         initializeStars(am);
         initializeBlockingComponents();
 
@@ -321,7 +320,7 @@ public class StealthNessieStage extends BaseStage {
         Array<Vector2> barrellPositions = new Array<Vector2>();
         barrellPositions.add(new Vector2(3039, 720-516));
         barrellPositions.add(new Vector2(3144, 720-717));
-        barrellPositions.add(new Vector2(3450, 720-540));
+        //barrellPositions.add(new Vector2(3450, 720-540));
 
         barrellPositions.add(new Vector2(4575, 720-512));
         barrellPositions.add(new Vector2(5356, 720-638));
@@ -372,6 +371,10 @@ public class StealthNessieStage extends BaseStage {
             addActor(c);
         }
 
+        TextureRegion pbRegion = new TextureRegion(am.get(AssetsUtil.PHONE_BOOTH, AssetsUtil.TEXTURE));
+        phonebooth = new Cover(phoneboothPos.x, phoneboothPos.y, pbRegion.getRegionWidth(), pbRegion.getRegionHeight(), pbRegion, 0);
+        availableCover.add(phonebooth);
+        addActor(phonebooth);
     }
 
     private void initializePatrols(AssetManager am){
@@ -410,12 +413,17 @@ public class StealthNessieStage extends BaseStage {
 
     private void initializeDisguises(AssetManager am){
         Texture disguiseTexture = am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE);
-        for(int i=0;i<MAX_DISGUISE;i++){
-            float adjust = (background.getWidth()/2)/3;
-            Disguise d = new Disguise(background.getWidth()/2 +(i*adjust), MAX_Y-ICON_SIZE, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.NOSE);
-            disguises.add(d);
-            addActor(d);
-        }
+//        for(int i=0;i<MAX_DISGUISE;i++){
+//            float adjust = (background.getWidth()/2)/3;
+//            Disguise d = new Disguise(background.getWidth()/2 +(i*adjust), MAX_Y-ICON_SIZE, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.NOSE);
+//            disguises.add(d);
+//            addActor(d);
+//        }
+
+
+        Disguise d = new Disguise(phonebooth.getX()+phonebooth.getWidth()/2, phonebooth.getY() + ICON_SIZE/2, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.SUPERMAN);
+        disguises.add(d);
+        addActor(d);
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
@@ -562,6 +570,25 @@ public class StealthNessieStage extends BaseStage {
             player.setY(MIN_Y);
         }else if(player.getY() > MAX_Y && !isComplete){
             player.setY(MAX_Y);
+        }
+
+        //This isn't ready yet. Not even close for prime-time. Need real collision detection.
+        Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        if(player.getY() >= phonebooth.getY() && playerRect.overlaps(phonebooth.collider)){
+            float playerVel = player.velocity.x;
+            float phoneboothRight = (phonebooth.getX() + phonebooth.getWidth());
+            if(playerVel > 0){
+                //Coming in from the right
+                if((player.getX() + player.getWidth()) > phoneboothRight){
+                    player.setX(phoneboothRight-player.getWidth());
+                    player.setXVelocity(0f);
+                }
+            }else if(playerVel < 0){
+                //Coming in from the left
+                if((player.getX() < phoneboothRight) && (player.getX() + player.getWidth()) > phoneboothRight) {
+                    player.setXVelocity(0f);
+                }
+            }
         }
 
         reorderDepthActors();

@@ -44,6 +44,7 @@ public class AssetsUtil {
     public static final String LAMP_POST = "images/Lamp_Post.png";
     public static final String LANTERN = "images/Lantern.png";
     public static final String HANGER = "images/Hanger.png";
+    public static final String PHONE_BOOTH = "images/Phonebooth.png";
 
 
     //Font Paths

@@ -75,7 +75,7 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
             float fontScale = 2f;
             style.font.setScale(fontScale);
 
-            startGameButton = new TextButton("Start Sneakin'", style);
+            startGameButton = new TextButton("Press A to Start", style);
             startGameButton.addListener(listener);
             startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, -5f);
 
