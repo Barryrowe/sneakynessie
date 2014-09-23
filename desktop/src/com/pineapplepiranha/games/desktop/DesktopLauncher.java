@@ -14,7 +14,6 @@ public class DesktopLauncher {
         config.title = "Sneaky Nessie";
         config.width = ViewportUtil.VP_WIDTH;
         config.height = ViewportUtil.VP_HEIGHT;
-
         //config.fullscreen = true;
 
 		new LwjglApplication(new SneakyNessieGame(), config);

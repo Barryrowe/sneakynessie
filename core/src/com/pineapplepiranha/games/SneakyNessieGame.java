@@ -38,6 +38,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
         Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
         Gdx.graphics.setVSync(true);
+        Gdx.input.setCursorCatched(true);
     }
 
     @Override
