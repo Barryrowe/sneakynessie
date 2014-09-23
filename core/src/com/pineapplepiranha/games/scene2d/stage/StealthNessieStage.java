@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
@@ -673,17 +675,21 @@ public class StealthNessieStage extends BaseStage {
                 float totalDuration = 1f;
                 float elapsedTime = 0f;
                 RotateByAction rotateBackToZero;
+
                 @Override
                 public void applyAdjustment(Actor a, float delta) {
                     if(elapsedTime < totalDuration){
-                        a.rotateBy(-720f*delta);
+                        a.rotateBy(-1080f*delta);
                         elapsedTime += delta;
                     }else if(a.getRotation() != 0f && rotateBackToZero == null){
                         rotateBackToZero = new RotateByAction();
-                        rotateBackToZero.setDuration(500f);
-                        rotateBackToZero.setAmount(a.getRotation() * -1f);
+                        rotateBackToZero.setDuration(0.5f);
+
+                        float newRotation = a.getRotation()%360;
+                        rotateBackToZero.setAmount(newRotation);
                         a.addAction(rotateBackToZero);
                     }
+                    Gdx.app.log("Hanger", "Rotation: " + a.getRotation() + " Speed: " + ((GenericActor) a).getRotationSpeed());
                 }
             });
 

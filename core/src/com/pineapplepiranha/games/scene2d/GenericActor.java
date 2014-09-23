@@ -62,6 +62,10 @@ public class GenericActor extends KasetagenActor {
         setRotation(getRotation() + (rotationSpeed * delta));
     }
 
+    public float getRotationSpeed(){
+        return rotationSpeed;
+    }
+
     public void setRotationSpeed(float newSpeed){
         rotationSpeed = newSpeed;
     }

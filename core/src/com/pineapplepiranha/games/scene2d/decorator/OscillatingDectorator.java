@@ -29,7 +29,15 @@ public class OscillatingDectorator implements ActorDecorator {
     @Override
     public void applyAdjustment(Actor a, float delta) {
 
-        if(a.getRotation() >= maxRotation || a.getRotation() <= minRotation){
+        boolean isAboveMax = a.getRotation() >= maxRotation;
+        boolean isBelowMin = a.getRotation() <= minRotation;
+
+        if(isAboveMax || isBelowMin){
+            if(isAboveMax){
+                a.setRotation(maxRotation);
+            }else{
+                a.setRotation(minRotation);
+            }
             rotationSpeed *= -1;
         }
 
