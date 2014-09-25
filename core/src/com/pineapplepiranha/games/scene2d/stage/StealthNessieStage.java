@@ -85,7 +85,8 @@ public class StealthNessieStage extends BaseStage {
     private static float ICON_SIZE = 75f;
 
     private static Vector2 playerPos, playerSize, distantParalaxPos,farParallaxPos, nearParallaxPos,
-                           initialMoonPos, powerupsPos, pickupPointPos, phoneboothPos;
+                           initialMoonPos, powerupsPos, pickupPointPos, phoneboothPos,
+                           cornBackPos, cornMidPos, cornFrontPos;
 
     private boolean isShowingInstructions = true;
 
@@ -99,6 +100,9 @@ public class StealthNessieStage extends BaseStage {
         powerupsPos = new Vector2(ICON_SIZE/2f, ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.25f));
         pickupPointPos = new Vector2(10840  , 0f);
         phoneboothPos = new Vector2(5750f, MAX_Y-50f);
+        cornBackPos = new Vector2(10500f, MAX_Y-50f);
+        cornMidPos = new Vector2(10500f, MAX_Y - 150f);
+        cornFrontPos = new Vector2(10500f, -100f);
     }
 
     //Actor Groups
@@ -137,7 +141,11 @@ public class StealthNessieStage extends BaseStage {
     public GenericGroup lampPost;
     public AnimatedActor raincoat;
     public GenericActor hanger;
+    public Disguise superManCostume;
     public Cover phonebooth;
+    public GenericActor cornBack;
+    public GenericActor cornMid;
+    public GenericActor cornFront;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -244,6 +252,18 @@ public class StealthNessieStage extends BaseStage {
         grass = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
         addActor(grass);
 
+        TextureRegion cornBackRegion = new TextureRegion(am.get(AssetsUtil.CORN_BACK, AssetsUtil.TEXTURE));
+        cornBack = new GenericActor(cornBackPos.x, cornBackPos.y, cornBackRegion.getRegionWidth(), cornBackRegion.getRegionHeight(), cornBackRegion, Color.YELLOW);
+        addActor(cornBack);
+
+        TextureRegion cornMidRegion = new TextureRegion(am.get(AssetsUtil.CORN_MID, AssetsUtil.TEXTURE));
+        cornMid = new GenericActor(cornMidPos.x, cornMidPos.y, cornBackRegion.getRegionWidth(), cornBackRegion.getRegionHeight(), cornMidRegion, Color.YELLOW);
+        addActor(cornMid);
+
+        TextureRegion cornFrontRegion = new TextureRegion(am.get(AssetsUtil.CORN_FRONT, AssetsUtil.TEXTURE));
+        cornFront = new GenericActor(cornFrontPos.x, cornFrontPos.y, cornBackRegion.getRegionWidth(), cornBackRegion.getRegionHeight(), cornFrontRegion, Color.YELLOW);
+        addActor(cornFront);
+
         initializeInputListeners();
         sharderStuff();
     }
@@ -260,7 +280,8 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void initializeInstructions(AssetManager am, TextureAtlas atlas) {
-        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
+//        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
+        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS_CTRL, AssetsUtil.TEXTURE));
         instructions = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, LEVEL_HEIGHT, instructionRegion, Color.BLUE);
         addActor(instructions);
 
@@ -421,9 +442,9 @@ public class StealthNessieStage extends BaseStage {
 //        }
 
 
-        Disguise d = new Disguise(phonebooth.getX()+phonebooth.getWidth()/2, phonebooth.getY() + ICON_SIZE/2, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.SUPERMAN);
-        disguises.add(d);
-        addActor(d);
+        superManCostume = new Disguise(phonebooth.getX()+phonebooth.getWidth()/2, phonebooth.getY() + ICON_SIZE/2, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.SUPERMAN);
+        //disguises.add(d);
+        addActor(superManCostume);
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation coat = new Animation(1f/2f, atlas.findRegions("disguises/raincoat"));
@@ -723,6 +744,12 @@ public class StealthNessieStage extends BaseStage {
             addActor(hanger);
         }
 
+        if(superManCostume != null && player.collider.overlaps(superManCostume.collider) && player.getY() >= phonebooth.getY()){
+            disguisePowerUps.addIndicator(superManCostume.disguiseType);
+            superManCostume.remove();
+            superManCostume = null;
+        }
+
 
         Disguise toRemove = null;
         for(Disguise d:disguises){
@@ -743,7 +770,7 @@ public class StealthNessieStage extends BaseStage {
         for(Cover c:availableCover){
 
             if(player.collider.overlaps(c.collider)){
-                if(player.collider.y > c.getY()){
+                if(player.collider.y > c.getY() && !player.isRunning){
                     player.isHiding = true;
                 }
             }
@@ -772,6 +799,7 @@ public class StealthNessieStage extends BaseStage {
             spaceship.setZIndex(initialZ--);
         }
         grass.setZIndex(initialZ--);
+        cornFront.setZIndex(initialZ--);
         waves.setZIndex(initialZ--);
         lampPost.setZIndex(initialZ--);
         for(DepthActor d:depths){
@@ -784,7 +812,9 @@ public class StealthNessieStage extends BaseStage {
         distantParallax.setZIndex(index++);
         farParallax.setZIndex(index++);
         nearParallax.setZIndex(index++);
+        cornBack.setZIndex(index++);
         background.setZIndex(index++);
+        cornMid.setZIndex(index++);
         landingPad.setZIndex(index);
     }
 
@@ -824,6 +854,9 @@ public class StealthNessieStage extends BaseStage {
             d.remove();
         }
         disguises.clear();
+        if(superManCostume != null){
+            superManCostume.remove();
+        }
 
         //Clean up shoreline
         if(hanger != null){

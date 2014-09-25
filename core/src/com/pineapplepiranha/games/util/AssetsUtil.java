@@ -38,6 +38,7 @@ public class AssetsUtil {
     public static final String LIGHT = "images/light-2.png";
     public static final String MOON = "images/Moon.png";
     public static final String INSTRUCTIONS = "images/Instruction_Screen.jpg";
+    public static final String INSTRUCTIONS_CTRL = "images/Instruction_Screen_Joystick.jpg";
     public static final String ALIEN_LIGHT = "images/alien-light.png";
     public static final String SPEECH_BUBBLE = "images/WHN_Speech.png";
     public static final String BARREL = "images/Barrel.png";
@@ -45,6 +46,9 @@ public class AssetsUtil {
     public static final String LANTERN = "images/Lantern.png";
     public static final String HANGER = "images/Hanger.png";
     public static final String PHONE_BOOTH = "images/Phonebooth.png";
+    public static final String CORN_BACK = "images/Corn_Back.png";
+    public static final String CORN_MID = "images/Corn_Middle.png";
+    public static final String CORN_FRONT = "images/Corn_Front.png";
 
 
     //Font Paths
