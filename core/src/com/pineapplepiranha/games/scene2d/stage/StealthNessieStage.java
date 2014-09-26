@@ -146,6 +146,7 @@ public class StealthNessieStage extends BaseStage {
     public GenericActor cornMid;
     public GenericActor cornFront;
     public GenericActor bridgeFront;
+    private Array<Vector2> lampPostPositions;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -246,7 +247,7 @@ public class StealthNessieStage extends BaseStage {
         addActor(player);
 
 
-        //initializePatrols(am);
+        initializePatrols(am);
         initializeCover(am);
         initializeDisguises(am);
         initializeStars(am);
@@ -317,7 +318,7 @@ public class StealthNessieStage extends BaseStage {
         Array<Vector2> bushPositions = new Array<Vector2>();
         bushPositions.add(new Vector2(940, 720-540));
         bushPositions.add(new Vector2(2040, 720-495));
-        bushPositions.add(new Vector2(2060, 720-700));
+        bushPositions.add(new Vector2(2080, 720-700));
         bushPositions.add(new Vector2(2575, 720-512));
         bushPositions.add(new Vector2(3356, 720-638));
         bushPositions.add(new Vector2(3682, 720-541));
@@ -340,36 +341,34 @@ public class StealthNessieStage extends BaseStage {
         treePositions.add(new Vector2(2940, 720-651));
 
         Array<Vector2> barrelPositions = new Array<Vector2>();
-        barrelPositions.add(new Vector2(3039, 720 - 516));
-        barrelPositions.add(new Vector2(3144, 720 - 717));
-
-        barrelPositions.add(new Vector2(4575, 720 - 512));
+        barrelPositions.add(new Vector2(3139, 720 - 516));
+        barrelPositions.add(new Vector2(3244, 720 - 717));
         barrelPositions.add(new Vector2(5356, 720 - 638));
-        barrelPositions.add(new Vector2(7682, 720 - 541));
+        barrelPositions.add(new Vector2(8282, 720 - 640));
         barrelPositions.add(new Vector2(7816, 720 - 585));
-        barrelPositions.add(new Vector2(6378, 720 - 500));
-        barrelPositions.add(new Vector2(6570, 720 - 510));
+        barrelPositions.add(new Vector2(6570, 720 - 520));
 
-        barrelPositions.add(new Vector2(8575, 720 - 512));
+        barrelPositions.add(new Vector2(8575, 720 - 600));
         barrelPositions.add(new Vector2(9356, 720 - 535));
         barrelPositions.add(new Vector2(9378, 720 - 710));
-        barrelPositions.add(new Vector2(9570, 720 - 590));
 
 
-        Array<Vector2> lampPostPositions = new Array<Vector2>();
-        lampPostPositions.add(new Vector2(phoneboothPos.x + 1000f, phoneboothPos.y));
+        lampPostPositions = new Array<Vector2>();
+        lampPostPositions.add(new Vector2(phoneboothPos.x -800f, MAX_Y-30f));//1350f, MAX_Y-30f));
+        lampPostPositions.add(new Vector2(phoneboothPos.x + 2200f, MAX_Y-30f));
 
         Array<Vector2> cratePositions = new Array<Vector2>();
+        cratePositions.add(new Vector2(6378, 720-620));
+        cratePositions.add(new Vector2(7378, 720-700));
+        cratePositions.add(new Vector2(7570, 720-590));
         cratePositions.add(new Vector2(8682, 720-541));
         cratePositions.add(new Vector2(9816, 720-585));
-        cratePositions.add(new Vector2(7378, 720-500));
-        cratePositions.add(new Vector2(7570, 720-510));
 
         Array<Vector2> darkCratePositions = new Array<Vector2>();
+        darkCratePositions.add(new Vector2(3744, 720 - 717));
         darkCratePositions.add(new Vector2(9575, 720-512));
         darkCratePositions.add(new Vector2(10356, 720-535));
         darkCratePositions.add(new Vector2(10378, 720-710));
-        darkCratePositions.add(new Vector2(10570, 720-590));
 
         TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
         float width = 129f;
@@ -443,18 +442,18 @@ public class StealthNessieStage extends BaseStage {
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
         Array<Vector3> patrolVals = new Array<Vector3>();
-        patrolVals.add(new Vector3(1926, 720-504, 600));
+        patrolVals.add(new Vector3(1926, 720-534, 600));
         patrolVals.add(new Vector3(2598, 720-596, 500));
         patrolVals.add(new Vector3(4050, 720-562, 800));
-        patrolVals.add(new Vector3(5012, 720-500, 750));
+        patrolVals.add(new Vector3(5012, 720-530, 750));
         patrolVals.add(new Vector3(5620, 720-660, 1500));
         patrolVals.add(new Vector3(6482, 720-578, 500));
-        patrolVals.add(new Vector3(7012, 720-500, 750));
+        patrolVals.add(new Vector3(7012, 720-530, 750));
         patrolVals.add(new Vector3(7620, 720-660, 1500));
         patrolVals.add(new Vector3(8482, 720-578, 300));
         patrolVals.add(new Vector3(9500, 720-715, 800));
         patrolVals.add(new Vector3(9000, 720-560, 200));
-        patrolVals.add(new Vector3(10500, 720-502, 500));
+        patrolVals.add(new Vector3(10500, 720-532, 500));
         patrolVals.add(new Vector3(10500, 720-602, 500));
         patrolVals.add(new Vector3(10500, 720-702, 500));
         Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
@@ -500,20 +499,6 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void initializeBlockingComponents(){
-
-//        BlockingActor verticalBlock = new BlockingActor(0f, MAX_Y, 12000f, 300f);
-//        blockingActors.add(verticalBlock);
-//        addActor(verticalBlock);
-//
-//
-//        BlockingActor startingBlock = new BlockingActor(500f, 0f, 20f, 720f);
-//        blockingActors.add(startingBlock);
-//        addActor(startingBlock);
-//
-//        //End Wall
-//        BlockingActor ba = new BlockingActor(12000f, 0f, 10f, 720f);
-//        blockingActors.add(ba);
-//        addActor(ba);
     }
 
     private void initializeInputListeners(){
@@ -768,7 +753,6 @@ public class StealthNessieStage extends BaseStage {
                         rotateBackToZero.setAmount(newRotation);
                         a.addAction(rotateBackToZero);
                     }
-                    Gdx.app.log("Hanger", "Rotation: " + a.getRotation() + " Speed: " + ((GenericActor) a).getRotationSpeed());
                 }
             });
 
@@ -916,6 +900,10 @@ public class StealthNessieStage extends BaseStage {
         }
         disguisePowerUps.addIndicator(DisguiseType.NOSE);//, new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE)));
 
+        if(lampPostPositions != null){
+            lampPostPositions.clear();
+        }
+
         initializeCover(gameProcessor.getAssetManager());
         initializePatrols(gameProcessor.getAssetManager());
         initializeDisguises(gameProcessor.getAssetManager());
@@ -1055,6 +1043,11 @@ public class StealthNessieStage extends BaseStage {
                            1f+p.getCurrentAdjustment(), 1f+p.getCurrentAdjustment(), 0f);
             }
 
+            if(lampPostPositions != null){
+                for(Vector2 v:lampPostPositions){
+                    batch.draw(lightRegion, v.x-100f, v.y, 247f, 292f);
+                }
+            }
             if(isComplete && player.isVisible() &&  spaceship != null && player.getY() < spaceship.getY()){
                 batch.draw(alienLight, player.getX()-10f, 0f, player.getWidth() + 20f, spaceship.getY() + 30f);
             }
