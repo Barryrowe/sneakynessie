@@ -14,9 +14,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Cover extends DepthActor {
 
 
-    public Cover(float x, float y, float width, float height, TextureRegion tr, int depthPos){
+    public CoverType coverType;
+    public Cover(float x, float y, float width, float height, TextureRegion tr, int depthPos, CoverType cType){
         super(x, y, width, height, tr, depthPos);
         setColor(Color.GREEN);
+        coverType = cType;
     }
 
     @Override

@@ -49,6 +49,10 @@ public class AssetsUtil {
     public static final String CORN_BACK = "images/Corn_Back.png";
     public static final String CORN_MID = "images/Corn_Middle.png";
     public static final String CORN_FRONT = "images/Corn_Front.png";
+    public static final String BRIDGE_FRONT = "images/Brick_Wall.png";
+    public static final String METAL_LAMP_POST = "images/Metal_Light_Pole.png";
+    public static final String CRATE_1 = "images/Crate_1.png";
+    public static final String CRATE_2 = "images/Crate_2.png";
 
 
     //Font Paths

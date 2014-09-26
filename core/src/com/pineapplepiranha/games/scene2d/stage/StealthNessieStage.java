@@ -18,14 +18,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pineapplepiranha.games.delegate.IGameProcessor;
@@ -86,7 +83,7 @@ public class StealthNessieStage extends BaseStage {
 
     private static Vector2 playerPos, playerSize, distantParalaxPos,farParallaxPos, nearParallaxPos,
                            initialMoonPos, powerupsPos, pickupPointPos, phoneboothPos,
-                           cornBackPos, cornMidPos, cornFrontPos;
+                           cornBackPos, cornMidPos, cornFrontPos, bridgeFrontPos;
 
     private boolean isShowingInstructions = true;
 
@@ -99,10 +96,12 @@ public class StealthNessieStage extends BaseStage {
         initialMoonPos = new Vector2(ViewportUtil.VP_WIDTH/2, (ViewportUtil.VP_HEIGHT/4)*3);
         powerupsPos = new Vector2(ICON_SIZE/2f, ViewportUtil.VP_HEIGHT - (ICON_SIZE*1.25f));
         pickupPointPos = new Vector2(10840  , 0f);
-        phoneboothPos = new Vector2(5750f, MAX_Y-50f);
-        cornBackPos = new Vector2(10500f, MAX_Y-50f);
-        cornMidPos = new Vector2(10500f, MAX_Y - 150f);
-        cornFrontPos = new Vector2(10500f, -100f);
+        phoneboothPos = new Vector2(5750f, MAX_Y-75f);
+        cornBackPos = new Vector2(10500f, 0f);
+        cornMidPos = new Vector2(10500f, 0f);
+        cornFrontPos = new Vector2(10500f, 0f);
+        bridgeFrontPos = new Vector2(5400f, -30f);
+
     }
 
     //Actor Groups
@@ -146,6 +145,7 @@ public class StealthNessieStage extends BaseStage {
     public GenericActor cornBack;
     public GenericActor cornMid;
     public GenericActor cornFront;
+    public GenericActor bridgeFront;
 
     public StealthNessieStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -215,8 +215,13 @@ public class StealthNessieStage extends BaseStage {
         Animation fisherNessie = new Animation(DISGUISE_CYCLE_RATE, atlas.findRegions("nessie/Fisherman"));
         Animation superNessie = new Animation(DISGUISE_CYCLE_RATE, atlas.findRegions("nessie/Superman"));
 
-        TextureRegion hidingTr = atlas.findRegion("nessie/Cammo");
-        hidingTr.flip(true, false);
+        TextureRegion defaultCoverTr = atlas.findRegion("nessie/Cammo");
+        defaultCoverTr.flip(true, false);
+        TextureRegion bushCoverTr = atlas.findRegion("nessie/Branch");
+        bushCoverTr.flip(true, false);
+        TextureRegion shortCoverTr = atlas.findRegion("nessie/Cover");
+        shortCoverTr.flip(true, false);
+
         TextureRegion normalTr = atlas.findRegion("nessie/Stills");
         normalTr.flip(true, false);
 
@@ -226,15 +231,22 @@ public class StealthNessieStage extends BaseStage {
         player = new Player(playerPos.x, playerPos.y, playerSize.x, playerSize.y, walking);
         player.sadAnimation = sadNessie;
         player.runningAnimation = runNessie;
-        player.setHidingTexture(hidingTr);
+
+        player.setHidingTexture(defaultCoverTr);
         player.setNormalTexture(normalTr);
+
+        player.addCoverPose(CoverType.DFLT, defaultCoverTr);
+        player.addCoverPose(CoverType.BRANCH, bushCoverTr);
+        player.addCoverPose(CoverType.SHORT, shortCoverTr);
+
+
         player.addDisguiseTexture(DisguiseType.NOSE, disguisedTr);
         player.addDisguiseAnimation(DisguiseType.FISHERMAN, fisherNessie);
         player.addDisguiseAnimation(DisguiseType.SUPERMAN, superNessie);
         addActor(player);
 
 
-        initializePatrols(am);
+        //initializePatrols(am);
         initializeCover(am);
         initializeDisguises(am);
         initializeStars(am);
@@ -251,6 +263,10 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion tr = new TextureRegion(am.get(AssetsUtil.GRASS, AssetsUtil.TEXTURE));
         grass = new GenericActor(0f, 0f, tr.getRegionWidth(), tr.getRegionHeight(), tr, Color.WHITE);
         addActor(grass);
+
+        TextureRegion bridgeRegion = new TextureRegion(am.get(AssetsUtil.BRIDGE_FRONT, AssetsUtil.TEXTURE));
+        bridgeFront = new GenericActor(bridgeFrontPos.x, bridgeFrontPos.y, bridgeRegion.getRegionWidth(), bridgeRegion.getRegionHeight(), bridgeRegion, Color.GRAY);
+        addActor(bridgeFront);
 
         TextureRegion cornBackRegion = new TextureRegion(am.get(AssetsUtil.CORN_BACK, AssetsUtil.TEXTURE));
         cornBack = new GenericActor(cornBackPos.x, cornBackPos.y, cornBackRegion.getRegionWidth(), cornBackRegion.getRegionHeight(), cornBackRegion, Color.YELLOW);
@@ -309,18 +325,6 @@ public class StealthNessieStage extends BaseStage {
         bushPositions.add(new Vector2(4378, 720-500));
         bushPositions.add(new Vector2(4570, 720-510));
 
-//        bushPositions.add(new Vector2(4575, 720-512));
-//        bushPositions.add(new Vector2(5356, 720-638));
-//        bushPositions.add(new Vector2(7682, 720-541));
-//        bushPositions.add(new Vector2(7816, 720-585));
-//        bushPositions.add(new Vector2(6378, 720-500));
-//        bushPositions.add(new Vector2(6570, 720-510));
-
-//        bushPositions.add(new Vector2(8575, 720-512));
-//        bushPositions.add(new Vector2(9356, 720-535));
-//        bushPositions.add(new Vector2(9378, 720-710));
-//        bushPositions.add(new Vector2(9570, 720-590));
-
 
         Array<Vector2> pineTreePositions = new Array<Vector2>();
         pineTreePositions.add(new Vector2(1260, 720-504));
@@ -334,33 +338,44 @@ public class StealthNessieStage extends BaseStage {
         treePositions.add(new Vector2(2730, 720-666));
         treePositions.add(new Vector2(2805, 720-552));
         treePositions.add(new Vector2(2940, 720-651));
-//        treePositions.add(new Vector2(3039, 720-516));
-//        treePositions.add(new Vector2(3144, 720-717));
-//        treePositions.add(new Vector2(3450, 720-540));
 
-        Array<Vector2> barrellPositions = new Array<Vector2>();
-        barrellPositions.add(new Vector2(3039, 720-516));
-        barrellPositions.add(new Vector2(3144, 720-717));
-        //barrellPositions.add(new Vector2(3450, 720-540));
+        Array<Vector2> barrelPositions = new Array<Vector2>();
+        barrelPositions.add(new Vector2(3039, 720 - 516));
+        barrelPositions.add(new Vector2(3144, 720 - 717));
 
-        barrellPositions.add(new Vector2(4575, 720-512));
-        barrellPositions.add(new Vector2(5356, 720-638));
-        barrellPositions.add(new Vector2(7682, 720-541));
-        barrellPositions.add(new Vector2(7816, 720-585));
-        barrellPositions.add(new Vector2(6378, 720-500));
-        barrellPositions.add(new Vector2(6570, 720-510));
+        barrelPositions.add(new Vector2(4575, 720 - 512));
+        barrelPositions.add(new Vector2(5356, 720 - 638));
+        barrelPositions.add(new Vector2(7682, 720 - 541));
+        barrelPositions.add(new Vector2(7816, 720 - 585));
+        barrelPositions.add(new Vector2(6378, 720 - 500));
+        barrelPositions.add(new Vector2(6570, 720 - 510));
 
-        barrellPositions.add(new Vector2(8575, 720-512));
-        barrellPositions.add(new Vector2(9356, 720-535));
-        barrellPositions.add(new Vector2(9378, 720-710));
-        barrellPositions.add(new Vector2(9570, 720-590));
+        barrelPositions.add(new Vector2(8575, 720 - 512));
+        barrelPositions.add(new Vector2(9356, 720 - 535));
+        barrelPositions.add(new Vector2(9378, 720 - 710));
+        barrelPositions.add(new Vector2(9570, 720 - 590));
 
+
+        Array<Vector2> lampPostPositions = new Array<Vector2>();
+        lampPostPositions.add(new Vector2(phoneboothPos.x + 1000f, phoneboothPos.y));
+
+        Array<Vector2> cratePositions = new Array<Vector2>();
+        cratePositions.add(new Vector2(8682, 720-541));
+        cratePositions.add(new Vector2(9816, 720-585));
+        cratePositions.add(new Vector2(7378, 720-500));
+        cratePositions.add(new Vector2(7570, 720-510));
+
+        Array<Vector2> darkCratePositions = new Array<Vector2>();
+        darkCratePositions.add(new Vector2(9575, 720-512));
+        darkCratePositions.add(new Vector2(10356, 720-535));
+        darkCratePositions.add(new Vector2(10378, 720-710));
+        darkCratePositions.add(new Vector2(10570, 720-590));
 
         TextureRegion bushRegion = new TextureRegion(am.get(AssetsUtil.BUSH, AssetsUtil.TEXTURE));
         float width = 129f;
         float height = 121f;
         for(Vector2 bv:bushPositions){
-            Cover c = new Cover(bv.x, bv.y, width, height, bushRegion, 0);
+            Cover c = new Cover(bv.x, bv.y, width, height, bushRegion, 0, CoverType.BRANCH);
             availableCover.add(c);
             addActor(c);
         }
@@ -369,7 +384,7 @@ public class StealthNessieStage extends BaseStage {
         width = 161f;
         height = 279f;
         for(Vector2 ptv:pineTreePositions){
-            Cover c = new Cover(ptv.x, ptv.y, width, height, ptRegion, 0);
+            Cover c = new Cover(ptv.x, ptv.y, width, height, ptRegion, 0, CoverType.DFLT);
             availableCover.add(c);
             addActor(c);
         }
@@ -378,7 +393,7 @@ public class StealthNessieStage extends BaseStage {
         width = 150f;
         height = 254f;
         for(Vector2 tv:treePositions){
-            Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0);
+            Cover c = new Cover(tv.x, tv.y, width, height, tRegion, 0, CoverType.DFLT);
             availableCover.add(c);
             addActor(c);
         }
@@ -386,14 +401,39 @@ public class StealthNessieStage extends BaseStage {
         TextureRegion bRegion = new TextureRegion(am.get(AssetsUtil.BARREL, AssetsUtil.TEXTURE));
         width = 85f;
         height = 110f;
-        for(Vector2 bv:barrellPositions){
-            Cover c = new Cover(bv.x, bv.y, width, height, bRegion, 0);
+        for(Vector2 bv:barrelPositions){
+            Cover c = new Cover(bv.x, bv.y, width, height, bRegion, 0, CoverType.BRANCH);
+            availableCover.add(c);
+            addActor(c);
+        }
+
+        TextureRegion lampRegion = new TextureRegion(am.get(AssetsUtil.METAL_LAMP_POST, AssetsUtil.TEXTURE));
+        width = 47f;
+        height = 292f;
+        for(Vector2 lv:lampPostPositions){
+            Cover c = new Cover(lv.x, lv.y, width, height, lampRegion, 0, CoverType.BRANCH);
+            availableCover.add(c);
+            addActor(c);
+        }
+
+        TextureRegion crateRegion = new TextureRegion(am.get(AssetsUtil.CRATE_1, AssetsUtil.TEXTURE));
+        width = 146f;
+        height = 118f;
+        for(Vector2 cv:cratePositions){
+            Cover c = new Cover(cv.x, cv.y, width, height, crateRegion, 0, CoverType.SHORT);
+            availableCover.add(c);
+            addActor(c);
+        }
+
+        TextureRegion darkCrateRegion = new TextureRegion(am.get(AssetsUtil.CRATE_2, AssetsUtil.TEXTURE));
+        for(Vector2 c2v:darkCratePositions){
+            Cover c = new Cover(c2v.x, c2v.y, width, height, darkCrateRegion, 0, CoverType.SHORT);
             availableCover.add(c);
             addActor(c);
         }
 
         TextureRegion pbRegion = new TextureRegion(am.get(AssetsUtil.PHONE_BOOTH, AssetsUtil.TEXTURE));
-        phonebooth = new Cover(phoneboothPos.x, phoneboothPos.y, pbRegion.getRegionWidth(), pbRegion.getRegionHeight(), pbRegion, 0);
+        phonebooth = new Cover(phoneboothPos.x, phoneboothPos.y, pbRegion.getRegionWidth(), pbRegion.getRegionHeight(), pbRegion, 0, CoverType.BRANCH);
         availableCover.add(phonebooth);
         addActor(phonebooth);
     }
@@ -419,8 +459,8 @@ public class StealthNessieStage extends BaseStage {
         patrolVals.add(new Vector3(10500, 720-702, 500));
         Texture flTexture = am.get(AssetsUtil.FLASHLIGHT, AssetsUtil.TEXTURE);
 
-        float width = 105f;//75f;
-        float height = 150f;//100f;
+        float width = 105f;
+        float height = 150f;
         for(Vector3 pv:patrolVals){
             String animationName = pv.z > 500 ? "patrol/Patrol" : "patrol/PatrolA";
             Animation animation = new Animation(1f/3f, atlas.findRegions(animationName));
@@ -434,16 +474,7 @@ public class StealthNessieStage extends BaseStage {
 
     private void initializeDisguises(AssetManager am){
         Texture disguiseTexture = am.get(AssetsUtil.MASK_ICON, AssetsUtil.TEXTURE);
-//        for(int i=0;i<MAX_DISGUISE;i++){
-//            float adjust = (background.getWidth()/2)/3;
-//            Disguise d = new Disguise(background.getWidth()/2 +(i*adjust), MAX_Y-ICON_SIZE, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.NOSE);
-//            disguises.add(d);
-//            addActor(d);
-//        }
-
-
         superManCostume = new Disguise(phonebooth.getX()+phonebooth.getWidth()/2, phonebooth.getY() + ICON_SIZE/2, ICON_SIZE, ICON_SIZE/2, disguiseTexture, DisguiseType.SUPERMAN);
-        //disguises.add(d);
         addActor(superManCostume);
 
         TextureAtlas atlas = am.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
@@ -772,6 +803,7 @@ public class StealthNessieStage extends BaseStage {
             if(player.collider.overlaps(c.collider)){
                 if(player.collider.y > c.getY() && !player.isRunning){
                     player.isHiding = true;
+                    player.setCurrentCover(c.coverType);
                 }
             }
         }
@@ -799,6 +831,7 @@ public class StealthNessieStage extends BaseStage {
             spaceship.setZIndex(initialZ--);
         }
         grass.setZIndex(initialZ--);
+        bridgeFront.setZIndex(initialZ--);
         cornFront.setZIndex(initialZ--);
         waves.setZIndex(initialZ--);
         lampPost.setZIndex(initialZ--);
@@ -812,8 +845,8 @@ public class StealthNessieStage extends BaseStage {
         distantParallax.setZIndex(index++);
         farParallax.setZIndex(index++);
         nearParallax.setZIndex(index++);
-        cornBack.setZIndex(index++);
         background.setZIndex(index++);
+        cornBack.setZIndex(index++);
         cornMid.setZIndex(index++);
         landingPad.setZIndex(index);
     }

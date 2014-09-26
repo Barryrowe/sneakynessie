@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.pineapplepiranha.games.scene2d.GenericActor;
 
+import java.util.Iterator;
+
 /**
  * Created with IntelliJ IDEA.
  * User: barry
@@ -31,25 +33,16 @@ public class Player extends DepthActor{
     public TextureRegion normalTexture;
     private ObjectMap<DisguiseType, TextureRegion> disguises;
     private ObjectMap<DisguiseType, Animation> disguiseAnimations;
+    private ObjectMap<CoverType, TextureRegion> coverPoses;
 
     public boolean isHiding = false;
     public boolean isDisguised = false;
     protected boolean isFound = false;
     public boolean isRunning = false;
 
+
     private DisguiseType disguiseType;
-
-    public Player(float x, float y, float width, float height, TextureRegion tr){
-        super(x, y, width, height, tr, 0);
-        setColor(Color.YELLOW);
-        normalTexture = tr;
-        animation = null;
-        collider.set(x+(width/4), y, width/2, height/2);
-        disguiseType = DisguiseType.NOSE;
-        disguises = new ObjectMap<DisguiseType, TextureRegion>();
-        disguiseAnimations = new ObjectMap<DisguiseType, Animation>();
-
-    }
+    private CoverType currentCover;
 
     public Player(float x, float y, float width, float height, Animation anim){
         super(x, y, width, height, 0);
@@ -59,6 +52,8 @@ public class Player extends DepthActor{
         disguiseType = DisguiseType.NOSE;
         disguises = new ObjectMap<DisguiseType, TextureRegion>();
         disguiseAnimations = new ObjectMap<DisguiseType, Animation>();
+        coverPoses = new ObjectMap<CoverType, TextureRegion>();
+        currentCover = CoverType.DFLT;
     }
 
     @Override
@@ -109,7 +104,7 @@ public class Player extends DepthActor{
             if(velocity.x == 0.0f && velocity.y == 0.0f){
                 //
                 if(isHiding){
-                    textureRegion = hidingTexture;
+                    textureRegion = coverPoses.size > 0 ? coverPoses.get(currentCover) : hidingTexture;
                 }else {
                     textureRegion = normalTexture;
                 }
@@ -135,6 +130,13 @@ public class Player extends DepthActor{
                 if(!normalTexture.isFlipX()){
                     normalTexture.flip(true, false);
                 }
+
+                for(ObjectMap.Entry<CoverType, TextureRegion> e:coverPoses.entries()){
+                    if(!e.value.isFlipX()){
+                        e.value.flip(true, false);
+                    }
+                }
+
             }else if(velocity.x < 0.0f){
                 if(textureRegion.isFlipX()){
                     textureRegion.flip(true, false);
@@ -146,6 +148,12 @@ public class Player extends DepthActor{
 
                 if(normalTexture.isFlipX()){
                     normalTexture.flip(true, false);
+                }
+
+                for(ObjectMap.Entry<CoverType, TextureRegion> e:coverPoses.entries()){
+                    if(e.value.isFlipX()){
+                        e.value.flip(true, false);
+                    }
                 }
             }
         }
@@ -186,6 +194,14 @@ public class Player extends DepthActor{
 
     public void addDisguiseAnimation(DisguiseType dType, Animation ani){
         disguiseAnimations.put(dType, ani);
+    }
+
+    public void addCoverPose(CoverType cType, TextureRegion tr){
+        coverPoses.put(cType, tr);
+    }
+
+    public void setCurrentCover(CoverType cType){
+        currentCover = cType;
     }
 
     @Override

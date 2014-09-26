@@ -34,32 +34,11 @@ bg/FTree
   index: 2
 bg/Glow
   rotate: false
-  xy: 3520, 273
+  xy: 3520, 14
   size: 511, 107
   orig: 511, 107
   offset: 0, 0
   index: 1
-bg/Glow
-  rotate: false
-  xy: 3520, 164
-  size: 511, 107
-  orig: 511, 107
-  offset: 0, 0
-  index: 2
-bg/Glow
-  rotate: false
-  xy: 3520, 164
-  size: 511, 107
-  orig: 511, 107
-  offset: 0, 0
-  index: 4
-bg/Glow
-  rotate: false
-  xy: 3520, 55
-  size: 511, 107
-  orig: 511, 107
-  offset: 0, 0
-  index: 3
 bg/Mountains
   rotate: false
   xy: 0, 2072
@@ -87,14 +66,14 @@ disguises/raincoat
   size: 111, 138
   orig: 111, 138
   offset: 0, 0
-  index: 3
+  index: 5
 disguises/raincoat
   rotate: false
   xy: 3858, 456
   size: 111, 138
   orig: 111, 138
   offset: 0, 0
-  index: 5
+  index: 3
 disguises/raincoat
   rotate: false
   xy: 3901, 2169
@@ -116,149 +95,163 @@ disguises/raincoat
   orig: 111, 138
   offset: 0, 0
   index: 4
-nessie/Cammo
+nessie/Branch
   rotate: false
   xy: 3493, 2713
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: -1
-nessie/Cry
+nessie/Cammo
   rotate: false
   xy: 3124, 1813
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 1
-nessie/Cry
+  index: -1
+nessie/Cover
   rotate: false
   xy: 3124, 1554
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 2
+  index: -1
 nessie/Cry
   rotate: false
   xy: 3124, 1295
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 3
+  index: 1
 nessie/Cry
   rotate: false
   xy: 3081, 1036
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 4
+  index: 2
 nessie/Cry
   rotate: false
   xy: 3081, 777
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 5
+  index: 3
 nessie/Cry
   rotate: false
   xy: 3320, 2388
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 6
+  index: 4
 nessie/Cry
   rotate: false
   xy: 3320, 2129
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 7
-nessie/Disguised
+  index: 5
+nessie/Cry
   rotate: false
   xy: 3081, 518
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: -1
-nessie/Fisherman
+  index: 6
+nessie/Cry
   rotate: false
   xy: 3002, 259
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 1
-nessie/Fisherman
+  index: 7
+nessie/Disguised
   rotate: false
   xy: 3002, 0
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 2
+  index: -1
 nessie/Fisherman
   rotate: false
   xy: 3383, 1870
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 3
+  index: 1
 nessie/Fisherman
   rotate: false
   xy: 3383, 1611
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 4
+  index: 2
 nessie/Fisherman
   rotate: false
   xy: 3383, 1352
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 5
+  index: 3
 nessie/Fisherman
   rotate: false
   xy: 3579, 2454
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
-  index: 6
+  index: 4
 nessie/Fisherman
   rotate: false
   xy: 3579, 2195
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
+  index: 5
+nessie/Fisherman
+  rotate: false
+  xy: 3752, 2713
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
+  index: 6
+nessie/Fisherman
+  rotate: false
+  xy: 3642, 1936
+  size: 257, 257
+  orig: 257, 257
+  offset: 0, 0
   index: 7
 nessie/Fisherman_Disguise
   rotate: false
-  xy: 3752, 2713
+  xy: 3642, 1677
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: -1
 nessie/Run
   rotate: false
-  xy: 3642, 1936
+  xy: 3642, 1418
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 1
 nessie/Run
   rotate: false
-  xy: 3642, 1936
+  xy: 3642, 1418
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 3
 nessie/Run
   rotate: false
-  xy: 3642, 1677
+  xy: 3261, 259
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 2
 nessie/Run
   rotate: false
-  xy: 3642, 1418
+  xy: 3261, 0
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
@@ -272,35 +265,35 @@ nessie/Still
   index: -1
 nessie/Stills
   rotate: false
-  xy: 3261, 259
+  xy: 3642, 1159
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: -1
 nessie/Superman
   rotate: false
-  xy: 3261, 0
+  xy: 3383, 1093
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 1
 nessie/Superman
   rotate: false
-  xy: 3261, 0
+  xy: 3383, 1093
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 3
 nessie/Superman
   rotate: false
-  xy: 3642, 1159
+  xy: 3340, 834
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 2
 nessie/Superman
   rotate: false
-  xy: 3383, 1093
+  xy: 3340, 575
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
@@ -342,35 +335,35 @@ nessie/Walk
   index: 5
 nessie/Walking
   rotate: false
-  xy: 3340, 834
+  xy: 3642, 900
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 1
 nessie/Walking
   rotate: false
-  xy: 3340, 575
+  xy: 3599, 641
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 2
 nessie/Walking
   rotate: false
-  xy: 3642, 900
+  xy: 3599, 382
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 3
 nessie/Walking
   rotate: false
-  xy: 3599, 641
+  xy: 3520, 123
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
   index: 4
 nessie/Walking
   rotate: false
-  xy: 3599, 382
+  xy: 3779, 123
   size: 257, 257
   orig: 257, 257
   offset: 0, 0
@@ -489,61 +482,75 @@ star/Star
   index: 4
 
 animations2.png
-size: 3002,3610
+size: 3515,3719
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bg/Background
   rotate: false
-  xy: 0, 2888
+  xy: 0, 2997
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 1
 bg/Background
   rotate: false
-  xy: 0, 2166
+  xy: 0, 2275
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 2
 bg/Background
   rotate: false
-  xy: 0, 1444
+  xy: 0, 1553
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 3
 bg/Background
   rotate: false
-  xy: 0, 722
+  xy: 0, 831
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
   index: 4
-clouds/Clouds
+bg/Backgroundold
   rotate: false
-  xy: 0, 0
+  xy: 0, 109
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
-  index: 1
+  index: 4
+bg/Glow
+  rotate: false
+  xy: 3002, 3610
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 2
+bg/Glow
+  rotate: false
+  xy: 3002, 3610
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 4
+bg/Glow
+  rotate: false
+  xy: 0, 0
+  size: 511, 107
+  orig: 511, 107
+  offset: 0, 0
+  index: 3
 
 animations3.png
 size: 3002,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-bg/BTree
-  rotate: false
-  xy: 0, 0
-  size: 2900, 720
-  orig: 2900, 720
-  offset: 0, 0
-  index: 1
 bg/FTree
   rotate: false
-  xy: 0, 722
+  xy: 0, 0
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
@@ -554,27 +561,41 @@ clouds/Clouds
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
-  index: 2
+  index: 1
 clouds/Clouds
   rotate: false
   xy: 0, 2166
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
-  index: 3
+  index: 2
 clouds/Clouds
   rotate: false
   xy: 0, 1444
   size: 3000, 720
   orig: 3000, 720
   offset: 0, 0
+  index: 3
+clouds/Clouds
+  rotate: false
+  xy: 0, 722
+  size: 3000, 720
+  orig: 3000, 720
+  offset: 0, 0
   index: 4
 
 animations4.png
-size: 2219,575
+size: 2902,1297
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+bg/BTree
+  rotate: false
+  xy: 0, 575
+  size: 2900, 720
+  orig: 2900, 720
+  offset: 0, 0
+  index: 1
 bg/Mountains
   rotate: false
   xy: 0, 0

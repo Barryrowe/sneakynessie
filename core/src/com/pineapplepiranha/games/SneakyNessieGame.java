@@ -36,9 +36,9 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
 
         Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
         Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
-        Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+        //Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
         Gdx.graphics.setVSync(true);
-        Gdx.input.setCursorCatched(true);
+        //Gdx.input.setCursorCatched(true);
     }
 
     @Override
@@ -87,6 +87,11 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.CORN_BACK, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.CORN_MID, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.CORN_FRONT, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.BRIDGE_FRONT, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.METAL_LAMP_POST, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.CRATE_1, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.CRATE_2, AssetsUtil.TEXTURE);
+
 
 
         assetManager.load(AssetsUtil.ALIEN_UP, AssetsUtil.SOUND);
