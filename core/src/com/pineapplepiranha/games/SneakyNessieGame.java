@@ -1,9 +1,6 @@
 package com.pineapplepiranha.games;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
@@ -14,7 +11,7 @@ import com.pineapplepiranha.games.screen.MenuScreen;
 import com.pineapplepiranha.games.util.AssetsUtil;
 import com.pineapplepiranha.games.util.ViewportUtil;
 
-public class SneakyNessieGame extends Game implements IGameProcessor {
+public class SneakyNessieGame extends Game implements IGameProcessor, InputProcessor {
 
     private static final String CITY_LIGHTS_DATA_NAME = "SneakyNessieGame";
 
@@ -28,17 +25,28 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
 
     private MenuScreen menu;
     private GameScreen gameScreen;
+    private InputMultiplexer inputs;
+
+    boolean isForcedFullscreen = false;
+
+    public SneakyNessieGame(boolean forceFullscreen){
+        super();
+        isForcedFullscreen = forceFullscreen;
+        inputs = new InputMultiplexer();
+    }
 
     @Override
     public void create () {
         assetManager = new AssetManager();
         loadAssets();
 
-        Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
-        Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
-        Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
-        Gdx.graphics.setVSync(true);
-        Gdx.input.setCursorCatched(true);
+        if(isForcedFullscreen){
+            Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+            Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
+            Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+            Gdx.graphics.setVSync(true);
+            Gdx.input.setCursorCatched(true);
+        }
     }
 
     @Override
@@ -46,6 +54,7 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         if(assetManager.update()){
 
             if(!isInitialized){
+
                 KasetagenStateUtil.setDebugMode(false);
                 changeToScreen(MENU);
                 isInitialized = true;
@@ -112,13 +121,15 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
 
     @Override
     public void changeToScreen(String screenName) {
+        inputs.clear();
+        inputs.addProcessor(this);
         if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
                 menu = new MenuScreen(this);
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu);
+            inputs.addProcessor(menu);
 
         }else if(GAME.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
@@ -127,8 +138,11 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
             }
 
             setScreen(gameScreen);
-            Gdx.input.setInputProcessor(gameScreen.getStage());
+            inputs.addProcessor(gameScreen.getStage());
+
         }
+
+        Gdx.input.setInputProcessor(inputs);
     }
 
     @Override
@@ -166,5 +180,48 @@ public class SneakyNessieGame extends Game implements IGameProcessor {
         Preferences preferences = Gdx.app.getPreferences(CITY_LIGHTS_DATA_NAME);
         saver.updatePreferences(preferences);
         preferences.flush();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.ESCAPE){
+            Gdx.app.exit();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

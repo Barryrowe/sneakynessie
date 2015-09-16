@@ -16,6 +16,6 @@ public class DesktopLauncher {
         config.height = ViewportUtil.VP_HEIGHT;
         //config.fullscreen = true;
 
-		new LwjglApplication(new SneakyNessieGame(), config);
+		new LwjglApplication(new SneakyNessieGame(true), config);
 	}
 }
