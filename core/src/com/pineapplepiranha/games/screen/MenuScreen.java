@@ -72,13 +72,14 @@ public class MenuScreen extends ApplicationAdapter implements Screen, InputProce
             style.fontColor =  Color.WHITE;
             style.overFontColor = Color.TEAL;
             style.downFontColor = Color.WHITE;
-            float fontScale = 2f;
-            style.font.setScale(fontScale);
+            //float fontScale = 2f;
 
-            startGameButton = new TextButton("Press A to Start", style);
+            //style.font.setScale(fontScale);
+
+            startGameButton = new TextButton("Press Space to Start", style);
             startGameButton.addListener(listener);
             startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, -5f);
-
+            startGameButton.setScale(4f);
             stage.addActor(startGameButton);
 
 //            optionsButton = new TextButton("Options", style);

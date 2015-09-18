@@ -297,8 +297,8 @@ public class StealthNessieStage extends BaseStage {
     }
 
     private void initializeInstructions(AssetManager am, TextureAtlas atlas) {
-//        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
-        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS_CTRL, AssetsUtil.TEXTURE));
+        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS, AssetsUtil.TEXTURE));
+//        TextureRegion instructionRegion = new TextureRegion(am.get(AssetsUtil.INSTRUCTIONS_CTRL, AssetsUtil.TEXTURE));
         instructions = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, LEVEL_HEIGHT, instructionRegion, Color.BLUE);
         addActor(instructions);
 
@@ -648,10 +648,10 @@ public class StealthNessieStage extends BaseStage {
                 for(Patrol p: patrols){
                     p.velocity.x = 1000f;
                     float targetX = p.getX();
-                    if(p.getX() >= player.getCenterX() + player.getWidth()){
-                        targetX = player.getCenterX() + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
-                    }else if(p.getX() < player.getCenterX()- player.getWidth()){
-                        targetX = player.getCenterX() - (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
+                    if(p.getX() >= (player.getX() + (player.getWidth()*1.5f))){
+                        targetX = (player.getX()+(player.getWidth()/2f)) + (player.getWidth()/2 + rand.nextInt((int)p.getWidth()*2));
+                    }else if(p.getX() < (player.getX() + (player.getWidth()/2f))- player.getWidth()){
+                        targetX = (player.getX() + (player.getWidth()/2f))- (player.getWidth()/2 +rand.nextInt((int)p.getWidth()*2));
                     }
 
                     p.sendToNessie(targetX);
@@ -1032,8 +1032,10 @@ public class StealthNessieStage extends BaseStage {
         batch.begin();
 
         if(!isShowingInstructions){
-            batch.draw(light, moon.getCenterX() - lightSize*0.5f + 0.5f,
-                    moon.getCenterY() + 0.5f - lightSize*0.5f,
+            float moonCenterX = (moon.getX() + (moon.getWidth()/2f));
+            float moonCenterY = (moon.getY() + (moon.getHeight()/2f));
+            batch.draw(light, moonCenterX - lightSize*0.5f + 0.5f,
+                    moonCenterY + 0.5f - lightSize*0.5f,
                     lightSize, lightSize);
             for(Patrol p: patrols){
                 float originX = p.visionBox.width/2;
